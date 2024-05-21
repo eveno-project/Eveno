@@ -6,7 +6,8 @@ export const createEvent = async (
     title: string,
     description: string,
     linkTicketing: string,
-    adult: boolean
+    adult: boolean,
+    publishAt: Date
 ) => {
     try {
         const newEvent = await prisma.event.create({
@@ -14,7 +15,13 @@ export const createEvent = async (
                 title,
                 description,
                 linkTicketing,
-                adult
+                adult,
+                userId: 1,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                publishAt,
+                published: false,
+                isValid: false
             }
         });
         return newEvent;
