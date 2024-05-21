@@ -1,0 +1,84 @@
+@import url('variables.css');
+
+button {
+    align-items: center;
+
+    border-width: 0.125rem;
+    border-radius: 1rem 1rem;
+    border-style: solid;
+    border-color: var(--BLACK);
+    
+    box-shadow: 0.125rem 0.125rem var(--BLACK);
+
+    display: flex;
+    
+    font-family: 'Luciole-Bold';
+    font-size: 1rem;
+    letter-spacing: 0;
+    
+    padding: 1rem 1rem;
+}
+
+button:active {
+    box-shadow: none;
+    transform: translate3d(2px, 2px, 0);
+    transition-duration: 60ms;
+    transition-timing-function: ease-in-out;
+}
+
+button.primary {
+    background-color: var(--PRIMARY);
+    color: var(--BLACK);
+}
+
+button.secondary {
+    background-color: var(--SECONDARY);
+    color: var(--BLACK);
+}
+
+button.tertiary {
+    background-color: var(--TERTIARY);
+    color: var(--BLACK);
+}
+
+button.outline.primary {
+    background-color: var(--WHITE);
+    border-color: var(--PRIMARY);
+    color: var(--PRIMARY);
+}
+
+button.outline.secondary {
+    background-color: var(--WHITE);
+    border-color: var(--SECONDARY);
+    color: var(--SECONDARY);
+}
+
+button.outline.tertiary {
+    background-color: var(--WHITE);
+    border-color: var(--TERTIARY);
+    color: var(--TERTIARY);
+}
+
+button svg {
+    margin-bottom: 0.1875rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    button.outline.primary {
+        background-color: var(--BLACK);
+        border-color: var(--PRIMARY);
+        color: var(--PRIMARY);
+    }
+    
+    button.outline.secondary {
+        background-color: var(--BLACK);
+        border-color: var(--SECONDARY);
+        color: var(--SECONDARY);
+    }
+    
+    button.outline.tertiary {
+        background-color: var(--BLACK);
+        border-color: var(--TERTIARY);
+        color: var(--TERTIARY);
+    }
+  }

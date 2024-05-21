@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { LUCIOLE } from "@common/constants/font";
+import { ThemeProvider, THEME_ID, createTheme } from '@mui/material/styles';
 
-const inter = Inter({ subsets: ["latin"] });
+// const materialTheme = createTheme();
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,8 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={LUCIOLE.className}>
-      <body className={inter.className}>{children}</body>
-    </html>
+    // <ThemeProvider theme={null}>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    // </ThemeProvider>
   );
 }
