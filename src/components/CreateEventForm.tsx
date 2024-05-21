@@ -41,7 +41,7 @@ const CreateEventForm = () => {
 
 
     return (
-        <div className="connect-user-form">
+        <section className="create-event-form">
             <h2>Créer un évènement</h2>
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
@@ -67,7 +67,7 @@ const CreateEventForm = () => {
                 </div>
                 <button type="submit">Créer un évènement</button>
             </form>
-        </div>
+        </section>
     );
 };
 
