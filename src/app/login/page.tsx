@@ -11,15 +11,11 @@ export default function LoginPage() {
 
 	const handleSubmit = async (e: { preventDefault: () => void; }) => {
 		e.preventDefault();
-
-		console.log('Trying to sign in with:', { email, password });
-
 		const result = await signIn("credentials", {
 			redirect: false,
 			email,
 			password,
 		});
-		console.log('Sign in result:', result);
 
 		if (result?.error) {
 			setError(result.error);
