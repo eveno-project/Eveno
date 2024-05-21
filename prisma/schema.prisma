@@ -27,3 +27,162 @@ model Tag {
   eventTags  EventTag[]
   tagFollows TagFollow[]
 }
+
+model User {
+  id       Int      @id @default(autoincrement())
+  username String
+  password String
+  email    String
+  token    String
+  image    Int?
+  adult    Boolean
+  birthday DateTime
+  roleId   Int
+
+  role           Role            @relation(fields: [roleId], references: [id])
+  comments       Comment[]
+  events         Event[]
+  tagFollows     TagFollow[]
+  eventFollows   EventFollow[]
+  eventRegisters EventRegister[]
+  regionFollows  RegionFollow[]
+  eventNotes     EventNote[]
+}
+
+model Comment {
+  id       Int    @id @default(autoincrement())
+  eventId  Int
+  userId   Int
+  content  String
+  parentId Int? // pour commenter sur un autre commentaire
+
+  event   Event     @relation(fields: [eventId], references: [id])
+  user    User      @relation(fields: [userId], references: [id])
+  replies Comment[] @relation("CommentReplies")
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+}
+
+model Event {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  createdAt     DateTime
+  updatedAt     DateTime
+  publishAt     DateTime
+  published     Boolean
+  title         String
+  description   String
+  image         Int?
+  linkTicketing String?
+  adult         Boolean
+  isValid       Boolean
+
+  user               User                @relation(fields: [userId], references: [id])
+  comments           Comment[]
+  eventTags          EventTag[]
+  eventNetworks      EventNetwork[]
+  eventLocalizations EventLocalization[]
+  images             Image[]
+  eventFollows       EventFollow[]
+  eventRegisters     EventRegister[]
+  eventNotes         EventNote[]
+}
+
+model EventTag {
+  id      Int @id @default(autoincrement())
+  eventId Int
+  tagId   Int
+
+  event Event @relation(fields: [eventId], references: [id])
+  tag   Tag   @relation(fields: [tagId], references: [id])
+}
+
+model EventNetwork {
+  id        Int    @id @default(autoincrement())
+  networkId Int
+  eventId   Int
+  link      String
+
+  event   Event   @relation(fields: [eventId], references: [id])
+  network Network @relation(fields: [networkId], references: [id])
+}
+
+model Network {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  eventNetworks EventNetwork[]
+}
+
+model EventLocalization {
+  id       Int    @id @default(autoincrement())
+  eventId  Int
+  address  String
+  city     String
+  zipCode  String
+  regionId Int
+
+  event  Event  @relation(fields: [eventId], references: [id])
+  region Region @relation(fields: [regionId], references: [id])
+}
+
+model Region {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  eventLocalizations EventLocalization[]
+  regionFollows      RegionFollow[]
+}
+
+model Image {
+  id   Int    @id @default(autoincrement())
+  path String
+  alt  String
+
+  events Event[]
+}
+
+model TagFollow {
+  id     Int @id @default(autoincrement())
+  userId Int
+  tagId  Int
+
+  user User @relation(fields: [userId], references: [id])
+  tag  Tag  @relation(fields: [tagId], references: [id])
+}
+
+model EventFollow {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  eventId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model EventRegister {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  eventId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model EventNote {
+  id      Int @id @default(autoincrement())
+  eventId Int
+  userId  Int
+  value   Int
+
+  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+}
+
+model RegionFollow {
+  id       Int @id @default(autoincrement())
+  userId   Int
+  regionId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  region Region @relation(fields: [regionId], references: [id])
+}
