@@ -1,14 +1,15 @@
 "use client";
 
 import { createEvent } from "@common/actions/Events";
-import prisma from "@common/utils/db";
 import { useState } from "react";
 
 const CreateEventForm = () => {
+    const today = new Date().toISOString().split('T')[0];
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [linkTicketing, setLinkTicketing] = useState("");
     const [adult, setAdult] = useState(false);
+    const [publishAt, setPublishAt] = useState(today);
     const [error, setError] = useState("");
 
     const handleChangeTitle = (event: any) => {
@@ -23,20 +24,25 @@ const CreateEventForm = () => {
     const handleChangeAdult = (event: any) => {
         setAdult(event.target.checked);
     };
+    const handlePublishAt = (event: any) => {
+        setPublishAt(event.target.value);
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            const response = await createEvent(title, description, linkTicketing, adult);
+            const response = await createEvent(title, description, linkTicketing, adult, new Date(publishAt));
             console.log(response);
         } catch (error) {
             alert(error);
         }
     };
 
+
+
     return (
         <div className="connect-user-form">
-            <h2>Créer un utilisateur</h2>
+            <h2>Créer un évènement</h2>
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -54,6 +60,10 @@ const CreateEventForm = () => {
                 <div className="form-group">
                     <label htmlFor="adult">Contenu adulte ?</label>
                     <input type="checkbox" id="adult" checked={adult} onChange={handleChangeAdult} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="publishAt">Publication pour le :</label>
+                    <input type="date" id="publishAt" value={publishAt} onChange={handlePublishAt} min={today} />
                 </div>
                 <button type="submit">Créer un évènement</button>
             </form>
