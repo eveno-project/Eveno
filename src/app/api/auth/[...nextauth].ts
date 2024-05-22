@@ -13,21 +13,24 @@ export const AuthOptions : NextAuthOptions = {
 				password: {label: "Password", type: "password"}
 			},
 			authorize: async (credentials): Promise<any> => {
-				if (!credentials) {
+				console.log("Connexion ?");
+
+				if (!credentials?.email || !credentials?.password) {
 					return null;
 				}
 
 				const user = await prisma.user.findUnique({
 					where: { email: credentials.email },
 				});
-				
+
 				if (!user) {
 					throw new Error('No user found');
 				}
 
 				if (user && credentials?.password) {
 					// Vérification du mot de passe
-					const isValid = await compare(credentials.password, user.password);
+					// const isValid = await compare(credentials.password, user.password);
+					const isValid = credentials.password === user.password;
 					if (isValid) {
 						return user;
 					}
@@ -38,10 +41,14 @@ export const AuthOptions : NextAuthOptions = {
 			}
 		})
 	],
-	pages: {
-		signIn: '/login',
-
+	session: {
+		strategy: 'jwt',
 	}
+
+	// pages: {
+	// 	signIn: '/login',
+	//
+	// }
 };
 
 const handler = NextAuth(AuthOptions);
