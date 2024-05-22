@@ -7,24 +7,39 @@ export const createEvent = async (
     description: string,
     linkTicketing: string,
     adult: boolean,
-    publishAt: Date
-) => {
+    publishAt: Date,
+    address: string,
+    city: string,
+    zipCode: number,
+    regionName: string
+): Promise<void> => {
     try {
-        const newEvent = await prisma.event.create({
+        const eventLocalizationsData = address && city && zipCode && regionName ? {
+            create: {
+                address,
+                city,
+                zipCode,
+                regionName,
+                latitude: 0,
+                longitude: 0
+            }
+        } : undefined;
+
+        await prisma.event.create({
             data: {
                 title,
                 description,
                 linkTicketing,
                 adult,
-                userId: 1,
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 publishAt,
                 published: false,
-                isValid: false
+                isValid: false,
+                userId: 2,
+                ...(eventLocalizationsData && { eventLocalizations: eventLocalizationsData })
             }
         });
-        return newEvent;
     } catch (e) {
         throw e;
     }

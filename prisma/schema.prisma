@@ -108,7 +108,7 @@ model EventLocalization {
   eventId    Int
   address    String
   city       String
-  zipCode    String
+  zipCode    Int
   regionName String
   latitude   Float
   longitude  Float
