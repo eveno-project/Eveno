@@ -1,10 +1,8 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcryptjs';
-import prisma from "./../../../utils/db";
+import { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "@common/utils/db";
 
-
-export const AuthOptions : NextAuthOptions = {
+export const authOptions : NextAuthOptions = {
 	providers: [
 		CredentialsProvider({
 			name: 'Credentials',
@@ -50,7 +48,3 @@ export const AuthOptions : NextAuthOptions = {
 	//
 	// }
 };
-
-const handler = NextAuth(AuthOptions);
-
-export { handler as GET, handler as POST };
