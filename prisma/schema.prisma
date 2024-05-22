@@ -28,19 +28,17 @@ model User {
   password String
   email    String   @unique
   token    String   @unique
-  image    Int?
+  image    String?
   adult    Boolean
   birthday DateTime
   roleId   Int
 
-  role           Role            @relation(fields: [roleId], references: [id])
-  comments       Comment[]
-  events         Event[]
-  tagFollows     TagFollow[]
-  eventFollows   EventFollow[]
-  eventRegisters EventRegister[]
-  regionFollows  RegionFollow[]
-  eventNotes     EventNote[]
+  role            Role             @relation(fields: [roleId], references: [id])
+  comments        Comment[]
+  events          Event[]
+  tagFollows      TagFollow[]
+  eventSubscribes EventSubscribe[]
+  eventNotes      EventNote[]
 }
 
 model Comment {
@@ -65,7 +63,7 @@ model Event {
   published     Boolean
   title         String
   description   String
-  image         Int?
+  image         Json?
   linkTicketing String?
   adult         Boolean
   isValid       Boolean
@@ -75,9 +73,7 @@ model Event {
   eventTags          EventTag[]
   eventNetworks      EventNetwork[]
   eventLocalizations EventLocalization[]
-  images             Image[]
-  eventFollows       EventFollow[]
-  eventRegisters     EventRegister[]
+  eventSubscribes    EventSubscribe[]
   eventNotes         EventNote[]
 }
 
@@ -108,31 +104,14 @@ model Network {
 }
 
 model EventLocalization {
-  id       Int    @id @default(autoincrement())
-  eventId  Int
-  address  String
-  city     String
-  zipCode  String
-  regionId Int
+  id         Int    @id @default(autoincrement())
+  eventId    Int
+  address    String
+  city       String
+  zipCode    String
+  regionName String
 
-  event  Event  @relation(fields: [eventId], references: [id])
-  region Region @relation(fields: [regionId], references: [id])
-}
-
-model Region {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  eventLocalizations EventLocalization[]
-  regionFollows      RegionFollow[]
-}
-
-model Image {
-  id   Int    @id @default(autoincrement())
-  path String
-  alt  String
-
-  events Event[]
+  event Event @relation(fields: [eventId], references: [id])
 }
 
 model TagFollow {
@@ -144,19 +123,11 @@ model TagFollow {
   tag  Tag  @relation(fields: [tagId], references: [id])
 }
 
-model EventFollow {
-  id      Int @id @default(autoincrement())
+model EventSubscribe {
+  id      Int    @id @default(autoincrement())
   userId  Int
   eventId Int
-
-  user  User  @relation(fields: [userId], references: [id])
-  event Event @relation(fields: [eventId], references: [id])
-}
-
-model EventRegister {
-  id      Int @id @default(autoincrement())
-  userId  Int
-  eventId Int
+  type    String
 
   user  User  @relation(fields: [userId], references: [id])
   event Event @relation(fields: [eventId], references: [id])
@@ -170,13 +141,4 @@ model EventNote {
 
   event Event @relation(fields: [eventId], references: [id])
   user  User  @relation(fields: [userId], references: [id])
-}
-
-model RegionFollow {
-  id       Int @id @default(autoincrement())
-  userId   Int
-  regionId Int
-
-  user   User   @relation(fields: [userId], references: [id])
-  region Region @relation(fields: [regionId], references: [id])
 }
