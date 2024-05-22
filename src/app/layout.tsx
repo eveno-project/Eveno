@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider, THEME_ID, createTheme } from '@mui/material/styles';
-
-// const materialTheme = createTheme();
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,10 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <ThemeProvider theme={null}>
       <html lang="en">
         <body>{children}</body>
       </html>
-    // </ThemeProvider>
   );
 }
