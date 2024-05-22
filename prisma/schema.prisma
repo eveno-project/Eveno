@@ -110,6 +110,8 @@ model EventLocalization {
   city       String
   zipCode    String
   regionName String
+  latitude   Float
+  longitude  Float
 
   event Event @relation(fields: [eventId], references: [id])
 }
