@@ -1,9 +1,9 @@
+import Image from "next/image";
+import styles from "./page.module.css";
 import CreateEventForm from "@common/components/CreateEventForm";
 
-const CreateEventIndex = async () => {
+export default function CreateEvent() {
     return (
         <CreateEventForm />
     );
-};
-
-// export.default CreateEventIndex;
+}
