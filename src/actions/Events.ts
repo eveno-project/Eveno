@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@common/utils/db";
+import { Prisma } from "@prisma/client";
 
 export const createEvent = async (
     title: string,
@@ -8,23 +9,22 @@ export const createEvent = async (
     linkTicketing: string,
     adult: boolean,
     publishAt: Date
-) => {
+): Promise<void> => {
     try {
-        const newEvent = await prisma.event.create({
+        await prisma.event.create({
             data: {
                 title,
                 description,
                 linkTicketing,
                 adult,
-                userId: 1,
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 publishAt,
                 published: false,
-                isValid: false
+                isValid: false,
+                userId: 1
             }
         });
-        return newEvent;
     } catch (e) {
         throw e;
     }
