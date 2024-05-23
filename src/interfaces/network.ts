@@ -1,4 +1,4 @@
-import { EventNetwork } from "./eventNetwork";
+import { EventNetwork } from "./event/event-network";
 
 export interface Network {
     id: number;

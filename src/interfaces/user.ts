@@ -1,9 +1,9 @@
 import { Comment } from "./comment";
-import { Event } from "./event";
-import { EventNote } from "./eventNote";
-import { EventSubscribe } from "./eventSubscribe";
+import { Event } from "./event/event";
+import { EventNote } from "./event/event-note";
+import { EventSubscribe } from "./event/event-subscribe";
 import { Role } from "./role";
-import { TagFollow } from "./tagFollow";
+import { TagFollow } from "./tag/tag-follow";
 
 export interface User {
     id: number;

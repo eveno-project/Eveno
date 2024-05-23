@@ -1,5 +1,5 @@
 import { Event } from "./event";
-import { Network } from "./network";
+import { Network } from "../network";
 
 export interface EventNetwork {
     id: number;

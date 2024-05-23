@@ -1,5 +1,5 @@
-import { EventTag } from "./eventTag";
-import { TagFollow } from "./tagFollow";
+import { EventTag } from "../event/event-tag";
+import { TagFollow } from "./tag-follow";
 
 export interface Tag {
     id: number;

@@ -1,5 +1,5 @@
 import { Event } from "./event";
-import { User } from "./user";
+import { User } from "../user";
 
 export interface EventSubscribe {
     id: number;

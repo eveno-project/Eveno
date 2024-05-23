@@ -1,10 +1,10 @@
-import { Comment } from "./comment";
-import { EventLocalization } from "./eventLocalization";
-import { EventNetwork } from "./eventNetwork";
-import { EventNote } from "./eventNote";
-import { EventSubscribe } from "./eventSubscribe";
-import { EventTag } from "./eventTag";
-import { User } from "./user";
+import { Comment } from "../comment";
+import { EventLocalization } from "./event-localization";
+import { EventNetwork } from "./event-network";
+import { EventNote } from "./event-note";
+import { EventSubscribe } from "./event-subscribe";
+import { EventTag } from "./event-tag";
+import { User } from "../user";
 
 export interface Event {
     id: number;
