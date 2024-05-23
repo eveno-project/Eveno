@@ -1,8 +1,7 @@
 import { Event } from "./event";
 
-export type EventLocalization = {
+export interface EventLocalization {
     id: number;
-    eventId: number;
     address: string;
     city: string;
     zipCode: string;
