@@ -17,37 +17,6 @@ export default function ErrorPage() {
 			<h1>Error</h1>
 			{error && <p>{error}</p>}
 			<button onClick={handleBack}>Back to Login</button>
-
-			<style jsx>{`
-        .error-container {
-          max-width: 400px;
-          margin: 0 auto;
-          padding: 2rem;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          background: #fff;
-          border-radius: 8px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-          color: red;
-        }
-        p {
-          color: #333;
-        }
-        button {
-          margin-top: 1rem;
-          padding: 0.75rem;
-          background: #f4f4f4;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        button:hover {
-          background: #e4e4e4;
-        }
-      `}</style>
 		</div>
 	);
 }
