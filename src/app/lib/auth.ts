@@ -27,9 +27,7 @@ export const authOptions : NextAuthOptions = {
 				}
 
 				if (user && credentials?.password) {
-					// Vérification du mot de passe
 					const isValid = await compare(credentials.password, user.password);
-					// const isValid = credentials.password === user.password;
 					if (isValid) {
 						return user;
 					}
@@ -42,10 +40,9 @@ export const authOptions : NextAuthOptions = {
 	],
 	session: {
 		strategy: 'jwt',
+	},
+	pages: {
+		signIn: '/login',
+
 	}
-	// ,
-	// pages: {
-	// 	signIn: '/login',
-	//
-	// }
 };

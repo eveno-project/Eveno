@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
-import styles from "./register.module.css";
 
 const RegisterPage = () => {
 	const [formData, setFormData] = useState({
@@ -24,7 +23,6 @@ const RegisterPage = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(formData);
 		const res = await fetch("/api/register", {
 			method: "POST",
 			headers: {
@@ -51,7 +49,7 @@ const RegisterPage = () => {
 			<h1>Register</h1>
 			<form onSubmit={handleSubmit}>
 				<div>
-					<label htmlFor="username">Username</label>
+					<label htmlFor="username">Username*</label>
 					<input
 						type="text"
 						name="username"
@@ -61,7 +59,7 @@ const RegisterPage = () => {
 					/>
 				</div>
 				<div>
-					<label htmlFor="email">Email</label>
+					<label htmlFor="email">Email*</label>
 					<input
 						type="email"
 						name="email"
@@ -71,7 +69,7 @@ const RegisterPage = () => {
 					/>
 				</div>
 				<div>
-					<label htmlFor="password">Password</label>
+					<label htmlFor="password">Password*</label>
 					<input
 						type="password"
 						name="password"
@@ -81,7 +79,7 @@ const RegisterPage = () => {
 					/>
 				</div>
 				<div>
-					<label htmlFor="confirmPassword">Confirm Password</label>
+					<label htmlFor="confirmPassword">Confirm Password*</label>
 					<input
 						type="password"
 						name="confirmPassword"
@@ -102,7 +100,7 @@ const RegisterPage = () => {
 					/>
 				</div>
 				<div>
-					<label htmlFor="birthday">Birthday</label>
+					<label htmlFor="birthday">Birthday*</label>
 					<input
 						type="date"
 						name="birthday"
