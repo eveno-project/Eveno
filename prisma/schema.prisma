@@ -55,7 +55,7 @@ model Comment {
   parentId Int? // pour commenter sur un autre commentaire
 
   event   Event     @relation(fields: [eventId], references: [id])
-  user    User      @relation(fields: [userId], references: [id])
+  user    User      @relation(fields: [userId], references: [id], onDelete: SetNull)
   replies Comment[] @relation("CommentReplies")
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
 }
@@ -63,6 +63,8 @@ model Comment {
 model Event {
   id            Int      @id @default(autoincrement())
   userId        Int
+  startDate     DateTime
+  endDate       DateTime
   createdAt     DateTime
   updatedAt     DateTime
   publishAt     DateTime
@@ -74,7 +76,7 @@ model Event {
   adult         Boolean
   isValid       Boolean
 
-  user               User                @relation(fields: [userId], references: [id])
+  user               User                @relation(fields: [userId], references: [id], onDelete: SetNull)
   comments           Comment[]
   eventTags          EventTag[]
   eventNetworks      EventNetwork[]
@@ -127,7 +129,7 @@ model TagFollow {
   userId Int
   tagId  Int
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   tag  Tag  @relation(fields: [tagId], references: [id])
 }
 
@@ -137,7 +139,7 @@ model EventSubscribe {
   eventId Int
   type    String
 
-  user  User  @relation(fields: [userId], references: [id])
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   event Event @relation(fields: [eventId], references: [id])
 }
 
@@ -148,5 +150,5 @@ model EventNote {
   value   Int
 
   event Event @relation(fields: [eventId], references: [id])
-  user  User  @relation(fields: [userId], references: [id])
+  user  User  @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
