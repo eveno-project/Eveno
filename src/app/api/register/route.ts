@@ -2,8 +2,8 @@ import prisma from "@utils/db";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
-export async function POST(req: NextRequest) {
-	const { username, email, password, confirmPassword, adult, birthday} = await req.json();
+export async function POST(NextRequest: NextRequest) {
+	const { username, email, password, confirmPassword, adult, birthday} = await NextRequest.json();
 
 	if(!username || !email || !password || !confirmPassword || !birthday) {
 		return NextResponse.json({ error: "Missing fields" }, { status: 400 });
