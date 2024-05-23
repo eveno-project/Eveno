@@ -1,7 +1,7 @@
 import { EventNetwork } from "./eventNetwork";
 
-export type Network = {
+export interface Network {
     id: number;
     name: string;
-    eventNetworks?: EventNetwork[];
+    eventNetworks: EventNetwork[];
 };

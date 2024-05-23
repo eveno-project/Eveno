@@ -6,7 +6,7 @@ import { EventSubscribe } from "./eventSubscribe";
 import { EventTag } from "./eventTag";
 import { User } from "./user";
 
-export type Event = {
+export interface Event {
     id: number;
     createdAt: Date;
     updatedAt: Date;
@@ -19,10 +19,10 @@ export type Event = {
     adult: boolean;
     isValid: boolean;
     user: Partial<User>;
-    comments?: Comment[];
-    eventTags?: Partial<EventTag[]>;
-    eventNetworks?: EventNetwork[];
-    eventLocalizations?: EventLocalization[];
-    eventSubscribes?: EventSubscribe[];
-    eventNotes?: EventNote[];
+    comments: Comment[];
+    eventTags: EventTag[];
+    eventNetworks: EventNetwork[];
+    eventLocalizations: EventLocalization[];
+    eventSubscribes: EventSubscribe[];
+    eventNotes: EventNote[];
 };

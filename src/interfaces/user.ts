@@ -5,7 +5,7 @@ import { EventSubscribe } from "./eventSubscribe";
 import { Role } from "./role";
 import { TagFollow } from "./tagFollow";
 
-export type User = {
+export interface User {
     id: number;
     username: string;
     password: string;
@@ -14,11 +14,10 @@ export type User = {
     image?: string;
     adult: boolean;
     birthday: Date;
-    roleId: number;
-    role?: Role;
-    comments?: Comment[];
-    events?: Event[];
-    tagFollows?: TagFollow[];
-    eventSubscribes?: EventSubscribe[];
-    eventNotes?: EventNote[];
+    role: Role;
+    comments: Comment[];
+    events: Event[];
+    tagFollows: TagFollow[];
+    eventSubscribes: EventSubscribe[];
+    eventNotes: EventNote[];
 };

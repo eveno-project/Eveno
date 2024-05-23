@@ -65,43 +65,43 @@ const CreateEventForm = () => {
     };
 
     return (
-        <section className="create-event-form">
+        <section>
             <h2>Créer un évènement</h2>
-            {error && <div className="error-message">{error}</div>}
+            {error && <div>{error}</div>}
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
+                <div>
                     <label htmlFor="title">Titre:</label>
                     <input type="text" id="title" value={title} onChange={handleChangeTitle} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="description">Description:</label>
                     <input type="text" id="description" value={description} onChange={handleChangeDescription} required />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="linkTicketing">Lien billeterie :</label>
                     <input type="text" id="linkTicketing" value={linkTicketing} onChange={handleChangeLinkTicketing} />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="adult">Contenu adulte ?</label>
                     <input type="checkbox" id="adult" checked={adult} onChange={handleChangeAdult} />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="publishAt">Publication pour le :</label>
                     <input type="date" id="publishAt" value={publishAt} onChange={handlePublishAt} min={today} />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="address">Adresse :</label>
                     <input type="text" id="address" value={address} onChange={handleAdresse} />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="city">Ville :</label>
                     <input type="text" id="city" value={city} onChange={handleCity} />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="zipCode">Code postal :</label>
                     <input type="number" id="zipCode" value={zipCode} onChange={handleZipCode} pattern="^\d{5}$" />
                 </div>
-                <div className="form-group">
+                <div>
                     <label htmlFor="regionName">Region :</label>
                     <input type="text" id="regionName" value={regionName} onChange={handleRegionName} />
                 </div>

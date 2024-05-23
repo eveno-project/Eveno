@@ -1,10 +1,8 @@
 import { Tag } from "./tag";
 import { User } from "./user";
 
-export type TagFollow = {
+export interface TagFollow {
     id: number;
-    userId: number;
-    tagId: number;
     user?: User;
     tag?: Tag;
 };
