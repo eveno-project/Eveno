@@ -1,16 +1,15 @@
-import Image from "next/image";
 import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 import { Color } from "@constants/color";
 import Event from "@interfaces/event";
 
-export default function EventCard({event}: {event: Partial<Event>}) {
-    const {title, image, localization, notes} = event;
+export default function EventCard({ event }: { event: Partial<Event> }) {
+    const { title, images, localization, notes } = event;
     return (
         <article>
             {
-                image && (
+                images && (
                     <div>
-                        <img src={image.path} alt={image.name} />
+                        <img src={images[0].path} alt={images[0].name} />
                     </div>
                 )
             }
@@ -18,7 +17,7 @@ export default function EventCard({event}: {event: Partial<Event>}) {
             {
                 localization && (
                     <div>
-                        <PinDropRoundedIcon htmlColor={Color.BLACK}/>
+                        <PinDropRoundedIcon htmlColor={Color.BLACK} />
                         <p>{localization.address}, {localization.zipCode} {localization.city}</p>
                     </div>
                 )
