@@ -1,5 +1,5 @@
 import createEvent from "../../actions/event/create";
-import EventForm from "@components/Form/event-form";
+import EventForm from "@components/form/event-form";
 
 export default async function EventCreate() {
     return (
