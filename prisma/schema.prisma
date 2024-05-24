@@ -50,33 +50,32 @@ model User {
 model Comment {
   id       Int    @id @default(autoincrement())
   eventId  Int
-  userId   Int
+  userId   Int?
   content  String
   parentId Int? // pour commenter sur un autre commentaire
 
   event   Event     @relation(fields: [eventId], references: [id])
-  user    User      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user    User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
   replies Comment[] @relation("CommentReplies")
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
 }
 
 model Event {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  startDate     DateTime
-  endDate       DateTime
-  createdAt     DateTime
-  updatedAt     DateTime
-  publishAt     DateTime
-  published     Boolean
-  title         String
-  description   String
-  image         Json?
-  linkTicketing String?
-  adult         Boolean
-  isValid       Boolean
-
-  user               User                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id                 Int                 @id @default(autoincrement())
+  userId             Int?
+  startDate          DateTime
+  endDate            DateTime
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  publishedhAt       DateTime?
+  published          Boolean             @default(false)
+  title              String
+  description        String
+  image              Json?
+  linkTicketing      String?
+  adult              Boolean
+  isValid            Boolean             @default(false)
+  user               User?               @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   comments           Comment[]
   eventTags          EventTag[]
   eventNetworks      EventNetwork[]
@@ -95,7 +94,7 @@ model EventTag {
 }
 
 model EventNetwork {
-  id        Int    @id @default(autoincrement())
+  id        Int @id @default(autoincrement())
   networkId Int
   eventId   Int
   link      String
@@ -144,11 +143,11 @@ model EventSubscribe {
 }
 
 model EventNote {
-  id      Int @id @default(autoincrement())
+  id      Int  @id @default(autoincrement())
   eventId Int
-  userId  Int
+  userId  Int?
   value   Int
 
   event Event @relation(fields: [eventId], references: [id])
-  user  User  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user  User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
