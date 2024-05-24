@@ -1,1 +1,1 @@
-export type Types = 'button' | 'submit';
+export type Type = 'button' | 'submit';

@@ -1,11 +1,9 @@
-import { Event } from "./event/event";
-import { User } from "./user";
+import User from "./user"
 
-export interface Comment {
-    id: number;
-    content: string;
-    event: Event;
-    user: User;
-    parent?: Comment;
-    replies: Comment[];
-};
+export default interface Comment {
+    content: string
+    id?: number
+    parent?: Partial<Comment>
+    replies: Comment[]
+    user: Partial<User>
+}

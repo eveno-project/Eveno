@@ -1,7 +1,5 @@
-import { EventNetwork } from "./event/event-network";
-
-export interface Network {
-    id: number;
-    name: string;
-    eventNetworks: EventNetwork[];
-};
+export default interface Network {
+    id?: number
+    name: string
+    link: string
+}

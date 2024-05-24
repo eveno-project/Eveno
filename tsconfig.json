@@ -22,12 +22,16 @@
       }
     ],
     "paths": {
-      "@common/*": ["./src/*"],
-      "@styles/*": ["./src/styles/*"],
-      "@constants/*": ["./src/constants/*"],
+      "@actions/*": ["src/app/actions/*"],
       "@components/*": ["./src/components/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@dto/*": ["./src/interfaces/dto/*.ts"],
+      "@interfaces/*": ["./src/interfaces/*.ts"],
+      "@services/*": ["./src/services/*.ts"],
+      "@styles/*": ["./src/styles/*"],
+      "@types/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"],
-      "@interfaces/*": ["./src/interfaces/*"]
+      "@validators/*": ["./src/validators/*"],
     }
   },
   "include": [
