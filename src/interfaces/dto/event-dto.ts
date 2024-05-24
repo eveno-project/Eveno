@@ -10,7 +10,7 @@ export default interface EventDto {
     id: number
     createdAt: Date
     updatedAt: Date
-    publishAt: Date
+    publishedAt: Date
     published: boolean
     title: string
     description: string
