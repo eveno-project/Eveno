@@ -2,7 +2,6 @@
 import Event from "@interfaces/event";
 import create from "@services/event";
 import { eventShema } from "@validators/event.schema";
-import { redirect } from "next/navigation";
 import { ZodIssue, ZodObject } from "zod";
 
 export default async function createEvent(_prevState: any, params: FormData) {
