@@ -20,6 +20,8 @@ export default interface EventDto {
     isValid: boolean
     user: Partial<UserDto>
     comments: CommentDto[]
+    startDate: Date
+    endDate: Date
     eventTags: EventTagDto[]
     eventNetworks: EventNetworkDto[]
     eventLocalizations: EventLocalizationDto[]
