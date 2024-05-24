@@ -22,9 +22,6 @@
       }
     ],
     "paths": {
-<<<<<<< Updated upstream
-      "@common/*": ["./src/*"]
-=======
       "@actions/*": ["src/app/actions/*"],
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
@@ -35,7 +32,6 @@
       "@types/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"],
       "@validators/*": ["./src/validators/*"],
->>>>>>> Stashed changes
     }
   },
   "include": [
