@@ -1,4 +1,4 @@
-export default interface Role {
+export default interface Tag {
     id?: number
     name: string
 }
