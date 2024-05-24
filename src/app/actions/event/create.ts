@@ -22,6 +22,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
             latitude: 0,
         }
     });
+
     if (!validation.success) {
         console.error({
             address: params.get('address'),
@@ -31,7 +32,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
             errors: validation.error.issues as ZodIssue[]
         };
     }
-    console.log('test');
+
     await create(validation.data as Event);
 
     // redirect('/');
