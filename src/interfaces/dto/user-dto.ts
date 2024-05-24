@@ -11,7 +11,7 @@ export default interface UserDto {
     password: string
     email: string
     token: string
-    image?: JSON
+    image?: string
     adult: boolean
     birthday: Date
     role: RoleDto

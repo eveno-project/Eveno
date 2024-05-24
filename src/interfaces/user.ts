@@ -7,7 +7,7 @@ export default interface User {
     birthday: Date
     email: string
     id?: number
-    image?: Image
+    image?: string
     password: string
     role: Role
     token: string
