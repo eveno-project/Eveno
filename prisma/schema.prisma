@@ -67,7 +67,7 @@ model Event {
   endDate            DateTime
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
-  publishedhAt       DateTime?
+  publishedAt       DateTime?
   published          Boolean             @default(false)
   title              String
   description        String

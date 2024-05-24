@@ -1,11 +1,11 @@
 "use server";
 import Event from "@interfaces/event";
 import create from "@services/event";
-import { eventShema } from "@validators/event.schema";
+import { eventSchema } from "@validators/event.schema";
 import { ZodIssue, ZodObject } from "zod";
 
 export default async function createEvent(_prevState: any, params: FormData) {
-    const validation = eventShema.safeParse({
+    const validation = eventSchema.safeParse({
         adult: params.get('adult') ? true : false,
         description: params.get('description') as string,
         endDate: params.get('endDate'),

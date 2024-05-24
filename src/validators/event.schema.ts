@@ -4,7 +4,7 @@ const stringToZodDate = z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
 }, z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), { message: "La date ne peut-être inférieur à aujourd’hui" }));
 
-export const eventShema = z.object({
+export const eventSchema = z.object({
     adult: z.boolean(),
     title: z.string().min(3, { message: "minimum 3 caractères" }),
     description: z.string().min(20, { message: "mininum 20 caractères" }),
