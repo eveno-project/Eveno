@@ -22,11 +22,12 @@
       }
     ],
     "paths": {
-      "@actions/*": ["src/app/actions/*"],
+      "@actions/*": ["./src/app/actions/*"],
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
       "@dto/*": ["./src/interfaces/dto/*.ts"],
       "@interfaces/*": ["./src/interfaces/*.ts"],
+      "@lib/*": ["./src/app/lib/*"],
       "@services/*": ["./src/services/*.ts"],
       "@styles/*": ["./src/styles/*"],
       "@types/*": ["./src/types/*"],
