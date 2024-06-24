@@ -3,9 +3,19 @@ import prisma from "@utils/db";
 import Localization from "@interfaces/localization";
 import User from "@interfaces/user";
 import EventDto from "@dto/event-dto";
+import { getSession } from "next-auth/react";
 
 
-export async function create(event: Event): Promise<void> {
+
+export async function create(event: Event, req: any): Promise<void> {
+    // const session = await getSession({ req });
+
+    // if (!session) {
+    //     throw new Error("You must be logged in to create an event");
+    // } else {
+    //     console.log(session);
+    // }
+
     event.user = { id: 3 };
     try {
         const newEvent = await prisma.event.create({
@@ -24,7 +34,6 @@ export async function create(event: Event): Promise<void> {
                 }
             }
         });
-        console.log({ newEvent });
     } catch (error) {
         console.error(error);
         throw error;
@@ -35,7 +44,6 @@ export async function create(event: Event): Promise<void> {
 
 export async function update(event: Event): Promise<void> {
     event.user = { id: 3 };
-    // console.log(event);
     try {
         if (event.id) {
             await prisma.event.update({
@@ -118,17 +126,7 @@ export async function getById(eventId: number): Promise<Event | undefined> {
     }
 }
 
-// export async function getAll(): Promise<Event[]> {
-//     try {
-//         const events = await prisma.event.findMany({
-//             include: { eventLocalizations: true }
-//         });
-//         return events;
-//     } catch (error) {
-//         console.error(error);
-//         throw error;
-//     }
-// }
+
 
 
 export async function deleteOne(eventId: number): Promise<void> {
@@ -136,7 +134,88 @@ export async function deleteOne(eventId: number): Promise<void> {
         await prisma.event.delete({
             where: { id: parseInt(eventId, 10) }
         });
-        console.log(`Event with ID ${eventId} has been deleted.`);
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export async function getAll(): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: true,
+                eventNetworks: true,
+                eventNotes: true
+            }
+        });
+
+        const transformedEvents = events.map(event => ({
+            id: event.id,
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            tags: [],
+            networks: [],
+            notes: event.eventNotes,
+            title: event.title,
+            linkTicketing: event.linkTicketing ?? undefined,
+            isValid: event.isValid,
+            user: { id: event.userId ?? undefined },
+            startDate: event.startDate,
+            comments: [],
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            publishedAt: event.publishedAt ?? undefined,
+            published: event.published,
+            localization: event.eventLocalizations
+        }));
+
+        return transformedEvents;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export async function getByUserId(userId: number): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: { userId: parseInt(userId, 10) },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: true,
+                eventNetworks: true,
+                eventNotes: true
+            }
+        });
+
+        const transformedEvents = events.map(event => ({
+            id: event.id,
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            tags: [],
+            networks: [],
+            notes: event.eventNotes,
+            title: event.title,
+            linkTicketing: event.linkTicketing ?? undefined,
+            isValid: event.isValid,
+            user: { id: event.userId ?? undefined },
+            startDate: event.startDate,
+            comments: [],
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            publishedAt: event.publishedAt ?? undefined,
+            published: event.published,
+            localization: event.eventLocalizations
+        }));
+
+        return transformedEvents;
     } catch (error) {
         console.error(error);
         throw error;

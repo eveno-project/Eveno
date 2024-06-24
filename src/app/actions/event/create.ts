@@ -3,6 +3,7 @@ import Event from "@interfaces/event";
 import { create } from "@services/event";
 import { eventSchema } from "@validators/event.schema";
 import { ZodIssue, ZodObject } from "zod";
+import { redirect } from "next/navigation";
 
 export default async function createEvent(_prevState: any, params: FormData) {
     const validation = eventSchema.safeParse({
@@ -35,5 +36,5 @@ export default async function createEvent(_prevState: any, params: FormData) {
 
     await create(validation.data as Event);
 
-    // redirect('/');
+    redirect('/event/userEvent');
 }

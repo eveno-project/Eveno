@@ -66,7 +66,7 @@ export default function EventForm({ action, event }: { action: FormProps, event?
                 <label htmlFor="regionName">Region :</label>
                 <input name="regionName" type="text" defaultValue={event?.localization[0].regionName} />
             </div>
-            <Button color="primary" type="submit">Créer un évènement</Button>
+            <Button color="primary" type="submit">{event?.id ? "Modifier l'évènement" : "Créer un évènement"}</Button>
         </form>
     );
 };
