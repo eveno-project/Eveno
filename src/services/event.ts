@@ -9,7 +9,16 @@ import { authOptions } from "@lib/auth";
 import Mapper from "@utils/mapper";
 
 
-export async function create(event: Event): Promise<void> {
+
+export async function create(event: Event, req: any): Promise<void> {
+    // const session = await getSession({ req });
+
+    // if (!session) {
+    //     throw new Error("You must be logged in to create an event");
+    // } else {
+    //     console.log(session);
+    // }
+
     event.user = { id: 3 };
     try {
 
