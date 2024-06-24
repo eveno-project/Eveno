@@ -11,6 +11,11 @@ export default function EventForm({ action, event }: { action: Action, event?: E
     const [formState, formAction] = useFormState(action, { errors: [] });
 
     const defaultDate = new Date().toISOString().split('T')[0];
+
+    const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
+    const endDate = event?.endDate ? new Date(event.endDate).toISOString().split('T')[0] : defaultDate;
+
+
     return (
         <form action={formAction}>
             {
@@ -29,11 +34,11 @@ export default function EventForm({ action, event }: { action: Action, event?: E
             <div>
                 <div>
                     <label htmlFor="startDate">Date de départ:</label>
-                    <input name="startDate" type="date" min={defaultDate} defaultValue={defaultDate} required />
+                    <input name="startDate" type="date" min={defaultDate} defaultValue={defaultDate} required value={startDate} />
                 </div>
                 <div>
                     <label htmlFor="endDate">Date de fin:</label>
-                    <input name="endDate" type="date" min={defaultDate} defaultValue={defaultDate} required />
+                    <input name="endDate" type="date" min={defaultDate} defaultValue={defaultDate} required value={endDate} />
                 </div>
             </div>
             <div>
