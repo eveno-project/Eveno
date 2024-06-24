@@ -8,6 +8,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
     if (!params) {
         throw Error('aucun paramètre');
     }
+    // console.debug({ address: params.get('address') });
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
@@ -18,7 +19,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
         publishedAt: params.get('publishedAt') ?? undefined,
         title: params.get('title')?.toString(),
         localization: {
-            id: params.get('idLocalization'),
+            id: +params.get('idLocalization')!.toString(),
             address: params.get('address'),
             city: params.get('city'),
             regionName: params.get('regionName'),
@@ -27,17 +28,16 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             latitude: 0,
         }
     });
-
+    console.debug({ validation: validation.data });
     if (!validation.success) {
         console.error({
-            address: params.get('address'),
             issues: validation.error.issues
         });
         return {
             errors: validation.error.issues as ZodIssue[]
         };
     }
-    console.log(validation.data);
+    // console.log(validation.data);
     await update(validation.data as Event);
 
     // redirect('/');

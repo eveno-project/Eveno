@@ -5,6 +5,13 @@ const stringToZodDate = z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
 }, z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), { message: "La date ne peut-être inférieur à aujourd’hui" }));
 
+const localizationBaseSchema = z.object({
+    address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }),
+    city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }),
+    regionName: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Région invalid" }),
+    zipCode: z.string().transform((arg) => Number(arg)).refine((arg) => arg !== undefined && 9, { message: "Code postal invalid" }),
+})
+
 const eventBaseSchema = z.object({
     adult: z.boolean(),
     title: z.string().min(3, { message: "minimum 3 caractères" }),
@@ -12,12 +19,7 @@ const eventBaseSchema = z.object({
     startDate: stringToZodDate,
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
-    localization: z.object({
-        address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }),
-        city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }),
-        regionName: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Région invalid" }),
-        zipCode: z.string().transform((arg) => Number(arg)).refine((arg) => arg !== undefined && 9, { message: "Code postal invalid" }),
-    }),
+    localization: localizationBaseSchema,
 });
 
 export const eventSchema = eventBaseSchema
@@ -29,7 +31,7 @@ export const eventSchema = eventBaseSchema
 export const updateEventSchema = eventBaseSchema
     .extend({
         id: z.number(),
-        localization: z.object({
+        localization: localizationBaseSchema.extend({
             id: z.number()
         })
 

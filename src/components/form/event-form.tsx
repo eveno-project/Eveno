@@ -12,7 +12,6 @@ export default function EventForm({ action, event }: { action: FormProps, event?
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
     const endDate = event?.endDate ? new Date(event.endDate).toISOString().split('T')[0] : defaultDate;
 
-
     return (
         <form action={formAction}>
             {
@@ -48,24 +47,24 @@ export default function EventForm({ action, event }: { action: FormProps, event?
             </div>
             {
                 event?.localization && (
-                    <input type="hidden" name="idLocalization" value={event?.localization.id} />
+                    <input type="hidden" name="idLocalization" value={event?.localization[0].id} />
                 )
             }
             <div>
                 <label htmlFor="address">Adresse :</label>
-                <input name="address" type="text" defaultValue={event?.localization.address} />
+                <input name="address" type="text" defaultValue={event?.localization[0].address} />
             </div>
             <div>
                 <label htmlFor="city">Ville :</label>
-                <input name="city" type="text" defaultValue={event?.localization.city} />
+                <input name="city" type="text" defaultValue={event?.localization[0].city} />
             </div>
             <div>
                 <label htmlFor="zipCode">Code postal :</label>
-                <input name="zipCode" type="number" pattern="^\d{5}$" defaultValue={event?.localization.zipCode} />
+                <input name="zipCode" type="number" pattern="^\d{5}$" defaultValue={event?.localization[0].zipCode} />
             </div>
             <div>
                 <label htmlFor="regionName">Region :</label>
-                <input name="regionName" type="text" defaultValue={event?.localization.regionName} />
+                <input name="regionName" type="text" defaultValue={event?.localization[0].regionName} />
             </div>
             <Button color="primary" type="submit">Créer un évènement</Button>
         </form>

@@ -35,7 +35,7 @@ export async function create(event: Event): Promise<void> {
 
 export async function update(event: Event): Promise<void> {
     event.user = { id: 1 };
-    console.log(event);
+    // console.log(event);
     try {
         if (event.id) {
             await prisma.event.update({
@@ -129,3 +129,16 @@ export async function getById(eventId: number): Promise<Event | undefined> {
 //         throw error;
 //     }
 // }
+
+
+export async function deleteOne(eventId: number): Promise<void> {
+    try {
+        await prisma.event.delete({
+            where: { id: parseInt(eventId, 10) }
+        });
+        console.log(`Event with ID ${eventId} has been deleted.`);
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
