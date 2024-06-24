@@ -3,13 +3,12 @@ import Event from "@interfaces/event";
 import { update } from "@services/event";
 import { updateEventSchema } from "@validators/event.schema";
 import { redirect } from "next/navigation";
-import { ZodIssue, ZodObject } from "zod";
+import { ZodIssue } from "zod";
 
 export default async function updateEvent(id: number, _prevState?: any, params?: FormData) {
     if (!params) {
         throw Error('aucun paramètre');
     }
-
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
@@ -29,7 +28,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             latitude: 0,
         }
     });
-    console.debug({ validation: validation.data });
+    
     if (!validation.success) {
         console.error({
             issues: validation.error.issues
