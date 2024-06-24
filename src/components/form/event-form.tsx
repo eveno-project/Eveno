@@ -15,7 +15,6 @@ export default function EventForm({ action, event }: { action: Action, event?: E
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
     const endDate = event?.endDate ? new Date(event.endDate).toISOString().split('T')[0] : defaultDate;
 
-
     return (
         <form action={formAction}>
             {

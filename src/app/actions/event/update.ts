@@ -9,6 +9,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
     if (!params) {
         throw Error('aucun paramètre');
     }
+    // console.debug({ address: params.get('address') });
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
