@@ -54,7 +54,7 @@ model Comment {
   content  String
   parentId Int? // pour commenter sur un autre commentaire
 
-  event   Event     @relation(fields: [eventId], references: [id])
+  event   Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user    User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
   replies Comment[] @relation("CommentReplies")
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
@@ -67,7 +67,7 @@ model Event {
   endDate            DateTime
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
-  publishedAt       DateTime?
+  publishedAt        DateTime?
   published          Boolean             @default(false)
   title              String
   description        String
@@ -89,17 +89,17 @@ model EventTag {
   eventId Int
   tagId   Int
 
-  event Event @relation(fields: [eventId], references: [id])
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   tag   Tag   @relation(fields: [tagId], references: [id])
 }
 
 model EventNetwork {
-  id        Int @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   networkId Int
   eventId   Int
   link      String
 
-  event   Event   @relation(fields: [eventId], references: [id])
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
   network Network @relation(fields: [networkId], references: [id])
 }
 
@@ -120,7 +120,7 @@ model EventLocalization {
   latitude   Float
   longitude  Float
 
-  event Event @relation(fields: [eventId], references: [id])
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 model TagFollow {
@@ -139,7 +139,7 @@ model EventSubscribe {
   type    String
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  event Event @relation(fields: [eventId], references: [id])
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 model EventNote {
@@ -148,6 +148,6 @@ model EventNote {
   userId  Int?
   value   Int
 
-  event Event @relation(fields: [eventId], references: [id])
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user  User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

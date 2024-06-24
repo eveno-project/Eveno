@@ -6,7 +6,7 @@ import EventDto from "@dto/event-dto";
 
 
 export async function create(event: Event): Promise<void> {
-    event.user = { id: 1 };
+    event.user = { id: 3 };
     try {
         const newEvent = await prisma.event.create({
             data: {
@@ -34,7 +34,7 @@ export async function create(event: Event): Promise<void> {
 
 
 export async function update(event: Event): Promise<void> {
-    event.user = { id: 1 };
+    event.user = { id: 3 };
     // console.log(event);
     try {
         if (event.id) {

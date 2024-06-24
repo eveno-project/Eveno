@@ -40,7 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/api/event/remove/[id]/route.ts"  ],
   "exclude": [
     "node_modules"
   ]
