@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from "@utils/db";
+import { deleteUser } from "@services/user";
 
 export async function DELETE(nextRequest : NextRequest, { params }: { params: { username: string } }) {
 
@@ -11,9 +12,7 @@ export async function DELETE(nextRequest : NextRequest, { params }: { params: { 
 	try {
 		const username = params.username;
 
-		const deletedUser = await prisma.user.delete({
-			where: { username: username },
-		});
+		const deletedUser = await deleteUser(username)
 
 		return NextResponse.json(deletedUser, { status: 200 })
 	} catch (error) {
