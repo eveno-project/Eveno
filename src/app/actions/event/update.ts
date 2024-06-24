@@ -9,7 +9,6 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
     if (!params) {
         throw Error('aucun paramètre');
     }
-
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
