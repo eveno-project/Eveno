@@ -9,7 +9,8 @@ import { authOptions } from "@lib/auth";
 import Mapper from "@utils/mapper";
 
 
-export async function create(event: Event, req: any): Promise<void> {
+export async function create(event: Event): Promise<void> {
+    event.user = { id: 3 };
     try {
 
         event.user = { id: 3 };
