@@ -1,3 +1,4 @@
+import { JsonValue } from "@prisma/client/runtime/library";
 import CommentDto from "./comment-dto";
 import EventLocalizationDto from "./event-localization-dto";
 import EventNetworkDto from "./event-network-dto";
@@ -10,12 +11,12 @@ export default interface EventDto {
     id: number
     createdAt: Date
     updatedAt: Date
-    publishedAt: Date
+    publishedAt: Date | null
     published: boolean
     title: string
     description: string
-    image?: JSON
-    linkTicketing?: string
+    image?: JsonValue | null
+    linkTicketing?: string | null
     adult: boolean
     isValid: boolean
     user: Partial<UserDto>

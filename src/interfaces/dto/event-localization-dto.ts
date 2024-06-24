@@ -8,5 +8,5 @@ export default interface EventLocalizationDto {
     latitude: number
     longitude: number
     regionName: string
-    zipCode: string
+    zipCode: number
 };
