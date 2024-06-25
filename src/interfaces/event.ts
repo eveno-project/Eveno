@@ -13,7 +13,7 @@ export default interface Event {
     id?: number
     images?: Image[]
     updatedAt: Date
-    publishedAt: Date
+    publishedAt?: Date
     published: boolean
     title: string
     linkTicketing?: string

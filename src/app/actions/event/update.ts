@@ -1,12 +1,17 @@
 "use server";
 import Event from "@interfaces/event";
-import { create } from "@services/event";
-import { eventSchema } from "@validators/event.schema";
-import { ZodIssue, ZodObject } from "zod";
+import { update } from "@services/event";
+import { updateEventSchema } from "@validators/event.schema";
 import { redirect } from "next/navigation";
+import { ZodIssue, ZodObject } from "zod";
 
-export default async function createEvent(_prevState: any, params: FormData) {
-    const validation = eventSchema.safeParse({
+export default async function updateEvent(id: number, _prevState?: any, params?: FormData) {
+    if (!params) {
+        throw Error('aucun paramètre');
+    }
+
+    const validation = updateEventSchema.safeParse({
+        id: id,
         adult: params.get('adult') ? true : false,
         description: params.get('description') as string,
         endDate: params.get('endDate'),
@@ -15,6 +20,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
         publishedAt: params.get('publishedAt') ?? undefined,
         title: params.get('title')?.toString(),
         localization: {
+            id: +params.get('idLocalization')!.toString(),
             address: params.get('address'),
             city: params.get('city'),
             regionName: params.get('regionName'),
@@ -23,10 +29,9 @@ export default async function createEvent(_prevState: any, params: FormData) {
             latitude: 0,
         }
     });
-
+    console.debug({ validation: validation.data });
     if (!validation.success) {
         console.error({
-            address: params.get('address'),
             issues: validation.error.issues
         });
         return {
@@ -34,7 +39,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
         };
     }
 
-    await create(validation.data as Event);
+    await update(validation.data as Event);
 
-    redirect('/event/userEvent');
+    redirect('/event/' + id + '/details/');
 }
