@@ -6,18 +6,18 @@ import RoleDto from "./role-dto";
 import TagFollowDto from "./tag-follow-dto";
 
 export default interface UserDto {
-    id: number
-    username: string
-    password: string
-    email: string
-    token: string
-    image?: string
     adult: boolean
     birthday: Date
-    role: RoleDto
     comments: CommentDto[]
-    events: EventDto[]
-    tagFollows: TagFollowDto[]
-    eventSubscribes: EventSubscribeDto[]
+    email: string
     eventNotes: EventNoteDto[]
+    events: EventDto[]
+    eventSubscribes: EventSubscribeDto[]
+    id: number
+    image?: string
+    password: string
+    role: RoleDto
+    tagFollows: TagFollowDto[]
+    token: string
+    username: string
 }

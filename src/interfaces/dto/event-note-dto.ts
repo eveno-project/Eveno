@@ -5,5 +5,5 @@ export default interface EventNoteDto {
     id: number
     value: number
     event?: EventDto
-    user?: UserDto
+    user: UserDto
 }

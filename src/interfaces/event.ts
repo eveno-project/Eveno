@@ -1,3 +1,4 @@
+import Comment from "./comment"
 import Image from "./image"
 import Localization from "./localization"
 import Network from "./network"
@@ -21,7 +22,7 @@ export default interface Event {
     user: Partial<User>
     tags: Tag[]
     networks: Network[]
-    localization: Localization
+    localizations: Localization[]
     notes: Note[]
     startDate: Date
     endDate: Date
