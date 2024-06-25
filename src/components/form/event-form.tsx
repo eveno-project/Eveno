@@ -8,6 +8,7 @@ import { useFormState } from "react-dom";
 
 export default function EventForm({ action, event }: { action: FormProps, event?: Event }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
+
     const defaultDate = new Date().toISOString().split('T')[0];
 
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
@@ -31,11 +32,11 @@ export default function EventForm({ action, event }: { action: FormProps, event?
             <div>
                 <div>
                     <label htmlFor="startDate">Date de départ:</label>
-                    <input name="startDate" type="date" min={defaultDate} defaultValue={defaultDate} required value={startDate} />
+                    <input name="startDate" type="date" min={defaultDate} defaultValue={startDate} required />
                 </div>
                 <div>
                     <label htmlFor="endDate">Date de fin:</label>
-                    <input name="endDate" type="date" min={defaultDate} defaultValue={defaultDate} required value={endDate} />
+                    <input name="endDate" type="date" min={defaultDate} defaultValue={endDate} required />
                 </div>
             </div>
             <div>
