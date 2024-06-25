@@ -8,7 +8,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@lib/auth";
 import Mapper from "@utils/mapper";
 
-
 export async function create(event: Event): Promise<void> {
     try {
 
