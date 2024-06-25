@@ -2,7 +2,6 @@ import { getById } from "@services/event";
 
 export default async function Page({ params }: { params: { id: number } }) {
     const event = await getById(params.id);
-    console.log(event);
 
     if (!event) {
         return (
