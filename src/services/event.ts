@@ -10,7 +10,7 @@ import Mapper from "@utils/mapper";
 
 
 
-export async function create(event: Event, req: any): Promise<void> {
+export async function create(event: Event): Promise<void> {
     try {
         event.user = { id: 3 };
 
