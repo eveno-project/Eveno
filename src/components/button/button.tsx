@@ -1,17 +1,22 @@
 import { Type } from '@types/button';
+import styles from './button.module.css';
+import { ReactNode } from 'react';
+import { Color } from '@types/color';
 
 export default function Button({
     children,
     color,
     type,
     isOutline = false,
+    className
 }: {
-    children: React.ReactNode,
-    color: 'primary' | 'secondary' | 'tertiary',
+    children: ReactNode,
+    color: Color,
     type: Type,
     isOutline?: boolean,
+    className?: string
 }) {
     return (
-        <button type={type} className={`button ${isOutline ? 'outline' : ''} ${color}`}>{children}</button>
+        <button type={type} className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}>{children}</button>
     );
 }
