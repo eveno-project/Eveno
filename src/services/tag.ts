@@ -1,7 +1,7 @@
 import Tag from "@interfaces/tag";
 import prisma from "@utils/db";
 
-export async function create(tag: Tag, req: any): Promise<void> {
+export async function create(tag: Tag): Promise<void> {
     try {
         const newTag = await prisma.tag.create({
             data: {

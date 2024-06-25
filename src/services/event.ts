@@ -1,14 +1,7 @@
 import Event from "@interfaces/event";
 import prisma from "@utils/db";
-import Localization from "@interfaces/localization";
-import User from "@interfaces/user";
 import EventDto from "@dto/event-dto";
-import { getSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@lib/auth";
 import Mapper from "@utils/mapper";
-
-
 
 export async function create(event: Event): Promise<void> {
     try {
@@ -35,8 +28,6 @@ export async function create(event: Event): Promise<void> {
         throw error;
     }
 }
-
-
 
 export async function update(event: Event): Promise<void> {
     event.user = { id: 3 };
@@ -73,7 +64,6 @@ export async function update(event: Event): Promise<void> {
     }
 }
 
-
 export async function getById(eventId: number): Promise<Event | undefined> {
     try {
         const event = (await prisma.event.findUnique({
@@ -95,9 +85,6 @@ export async function getById(eventId: number): Promise<Event | undefined> {
         throw error;
     }
 }
-
-
-
 
 export async function deleteOne(eventId: number): Promise<void> {
     try {
@@ -131,6 +118,7 @@ export async function getAll(): Promise<Event[]> {
         throw error;
     }
 }
+
 export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
         // Fetch the events by joining the user table based on email
