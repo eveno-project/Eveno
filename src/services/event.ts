@@ -4,20 +4,15 @@ import Localization from "@interfaces/localization";
 import User from "@interfaces/user";
 import EventDto from "@dto/event-dto";
 import { getSession } from "next-auth/react";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "@lib/auth";
 
 
 export async function create(event: Event, req: any): Promise<void> {
-    // const session = await getSession({ req });
-
-    // if (!session) {
-    //     throw new Error("You must be logged in to create an event");
-    // } else {
-    //     console.log(session);
-    // }
-
-    event.user = { id: 3 };
     try {
+        
+        event.user = { id: 3 };
+
         const newEvent = await prisma.event.create({
             data: {
                 adult: event.adult,
@@ -180,11 +175,15 @@ export async function getAll(): Promise<Event[]> {
         throw error;
     }
 }
-
-export async function getByUserId(userId: number): Promise<Event[]> {
+export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
+        // Fetch the events by joining the user table based on email
         const events = await prisma.event.findMany({
-            where: { userId: parseInt(userId, 10) },
+            where: {
+                user: {
+                    email: userEmail
+                }
+            },
             include: {
                 eventLocalizations: true,
                 user: true,
@@ -194,13 +193,14 @@ export async function getByUserId(userId: number): Promise<Event[]> {
             }
         });
 
+        // Transform the events to match the DTO structure
         const transformedEvents = events.map(event => ({
             id: event.id,
             adult: event.adult,
             description: event.description,
             endDate: event.endDate,
-            tags: [],
-            networks: [],
+            tags: event.eventTags,
+            networks: event.eventNetworks,
             notes: event.eventNotes,
             title: event.title,
             linkTicketing: event.linkTicketing ?? undefined,

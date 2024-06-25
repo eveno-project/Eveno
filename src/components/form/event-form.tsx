@@ -5,6 +5,7 @@ import Event from "@interfaces/event";
 import type { FormProps } from "@types/form-props";
 import { useFormState } from "react-dom";
 
+
 export default function EventForm({ action, event }: { action: FormProps, event?: Event }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
     const defaultDate = new Date().toISOString().split('T')[0];

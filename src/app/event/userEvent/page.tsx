@@ -1,8 +1,8 @@
 import EventCard from "@components/event/event-card";
-import { getByUserId } from "@services/event";
+import { getByUserEmail } from "@services/event";
 
-export default async function Page({ params }: { params: { id: number } }) {
-    const events = await getByUserId('3');
+export default async function Page() {
+    const events = await getByUserEmail('user1@gmail.com');
     return (
         <div>
             {events.map(event => (
