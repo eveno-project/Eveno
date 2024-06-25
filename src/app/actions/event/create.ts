@@ -21,12 +21,12 @@ export default async function createEvent(_prevState: any, params: FormData) {
             zipCode: params.get('zipCode'),
             longitude: 0,
             latitude: 0,
-        }
+        },
+        tags: params.getAll('tags').map(tag => ({ id: Number(tag) }))
     });
 
     if (!validation.success) {
         console.error({
-            address: params.get('address'),
             issues: validation.error.issues
         });
         return {

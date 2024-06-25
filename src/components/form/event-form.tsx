@@ -1,5 +1,4 @@
 "use client";
-
 import Button from "@components/button/button";
 import Event from "@interfaces/event";
 import { useFormState } from "react-dom";
@@ -9,7 +8,6 @@ import { Action } from "@type/action";
 
 export default function EventForm({ action, event }: { action: Action, event?: Event }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
-
     const defaultDate = new Date().toISOString().split('T')[0];
 
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
@@ -69,6 +67,17 @@ export default function EventForm({ action, event }: { action: Action, event?: E
                 <label htmlFor="regionName">Region :</label>
                 <input name="regionName" type="text" defaultValue={event?.localizations[0].regionName} />
             </div>
+            <div>
+                <label htmlFor="tags">Tags :</label>
+                <select name="tags" multiple>
+                    {tags.map(tag => (
+                        <option key={tag.id} value={tag.id} selected={event?.eventTags.includes(tag.id)}>
+                            {tag.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             <Button color="primary" type="submit">{event?.id ? "Modifier l'évènement" : "Créer un évènement"}</Button>
         </form>
     );

@@ -27,7 +27,8 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             zipCode: params.get('zipCode'),
             longitude: 0,
             latitude: 0,
-        }
+        },
+        tags: params.getAll('tags').map(tag => ({ id: Number(tag) }))
     });
     
     if (!validation.success) {

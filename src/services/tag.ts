@@ -71,6 +71,26 @@ export async function getTagByName(name: string): Promise<Tag | null> {
     }
 }
 
+export async function getTagsByIds(tags: Tag[]): Promise<Tag[]> {
+    try {
+        const ids = tags.map(tag => tag.id);
+
+        const tagsFound = await prisma.tag.findMany({
+            where: {
+                id: {
+                    in: ids,
+                },
+            },
+        });
+
+        return tagsFound;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
 export async function getTagByNameVérif(name: string): Promise<Boolean> {
     try {
         const tag = await prisma.tag.findUnique({

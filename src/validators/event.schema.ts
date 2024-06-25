@@ -20,6 +20,9 @@ const eventBaseSchema = z.object({
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
     localization: localizationBaseSchema,
+    tags: z.array(z.object({
+        id: z.number()
+    })).optional(),
 });
 
 export const eventSchema = eventBaseSchema
