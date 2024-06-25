@@ -5,5 +5,5 @@ export default interface EventNetworkDto {
     event?: EventDto
     id: number
     link: string
-    network?: NetworkDto
+    network: NetworkDto
 }

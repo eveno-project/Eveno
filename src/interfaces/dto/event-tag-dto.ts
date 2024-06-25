@@ -3,6 +3,6 @@ import TagDto from "./tag-dto";
 
 export default interface EventTagDto {
     id: number
-    event?: EventDto
-    tag?: TagDto
+    event: EventDto
+    tag: TagDto
 };
