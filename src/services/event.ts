@@ -8,9 +8,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@lib/auth";
 
 
-export async function create(event: Event, req: any): Promise<void> {
+export async function create(event: Event): Promise<void> {
     try {
-        
+
         event.user = { id: 3 };
 
         const newEvent = await prisma.event.create({

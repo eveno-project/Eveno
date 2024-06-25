@@ -9,7 +9,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
     if (!params) {
         throw Error('aucun paramètre');
     }
-    
+
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
@@ -38,8 +38,8 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             errors: validation.error.issues as ZodIssue[]
         };
     }
-    
+
     await update(validation.data as Event);
 
-    redirect('/event/details/' + id);
+    redirect('/event/' + id + '/details/');
 }
