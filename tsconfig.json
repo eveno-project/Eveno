@@ -25,6 +25,7 @@
       "@actions/*": ["./src/app/actions/*"],
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
+      "@contexts/*": ["./src/contexts/*"],
       "@dto/*": ["./src/interfaces/dto/*.ts"],
       "@interfaces/*": ["./src/interfaces/*.ts"],
       "@lib/*": ["./src/app/lib/*"],
