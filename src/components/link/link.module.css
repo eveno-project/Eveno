@@ -1,0 +1,24 @@
+.link {
+    font-family: 'Luciole-Bold';
+    font-size: 0.75rem;
+
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    
+    text-decoration-thickness: 2px;
+}
+
+.primary {
+    color: var(--PRIMARY);
+    text-decoration-color: var(--PRIMARY);
+}
+
+.secondary {
+    color: var(--SECONDARY);
+    text-decoration-color: var(--SECONDARY);
+}
+
+.tertiary {
+    color: var(--TERTIARY);
+    text-decoration-color: var(--TERTIARY);
+}

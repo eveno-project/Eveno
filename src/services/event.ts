@@ -9,7 +9,7 @@ export default async function create(event: Event): Promise<void> {
                 adult: event.adult,
                 description: event.description,
                 endDate: event.endDate,
-                image: JSON.stringify(event.image),
+                image: JSON.stringify(event.images),
                 title: event.title,
                 linkTicketing: event.linkTicketing,
                 isValid: event.isValid,

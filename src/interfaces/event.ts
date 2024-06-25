@@ -11,7 +11,7 @@ export default interface Event {
     createdAt: Date
     description: string
     id?: number
-    image?: Image
+    images?: Image[]
     updatedAt: Date
     publishedAt: Date
     published: boolean

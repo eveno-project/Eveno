@@ -1,6 +1,6 @@
-@import url('variables.css');
+@import url('../../assets/styles/variables.css');
 
-button, .button {
+.primary, .secondary, .tertiary, .primary_outline, .secondary_outline, .tertiary_outline {
     align-items: center;
 
     border-width: 0.125rem;
@@ -19,64 +19,68 @@ button, .button {
     padding: 1rem 1rem;
 }
 
-button:active, .button:active {
+.primary:active,
+.secondary:active, 
+.tertiary:active, 
+.primary_outline:active, 
+.secondary_outline:active, 
+.tertiary_outline:active {
     box-shadow: none;
     transform: translate3d(2px, 2px, 0);
     transition-duration: 60ms;
     transition-timing-function: ease-in-out;
 }
 
-button.primary, .button.primary{
+.primary {
     background-color: var(--PRIMARY);
     color: var(--BLACK);
 }
 
-button.secondary, .button.secondary {
+.secondary {
     background-color: var(--SECONDARY);
     color: var(--BLACK);
 }
 
-button.tertiary, .button.tertiary {
+.tertiary {
     background-color: var(--TERTIARY);
     color: var(--BLACK);
 }
 
-button.outline.primary, .button.outline.primary {
+.primary_outline {
     background-color: var(--WHITE);
     border-color: var(--PRIMARY);
+    box-shadow: 0.125rem 0.125rem var(--PRIMARY);
     color: var(--PRIMARY);
 }
 
-button.outline.secondary, .button.outline.secondary {
+.secondary_outline {
     background-color: var(--WHITE);
     border-color: var(--SECONDARY);
+    box-shadow: 0.125rem 0.125rem var(--SECONDARY);
     color: var(--SECONDARY);
 }
 
-button.outline.tertiary, .button.outline.tertiary {
+.tertiary_outline {
     background-color: var(--WHITE);
     border-color: var(--TERTIARY);
+    box-shadow: 0.125rem 0.125rem var(--TERTIARY);
     color: var(--TERTIARY);
 }
 
-button svg, .button svg {
-    margin-bottom: 0.1875rem;
-}
-
 @media (prefers-color-scheme: dark) {
-    button.outline.primary, .button.outline.primary {
+    .primary_outline {
         background-color: var(--BLACK);
         border-color: var(--PRIMARY);
         color: var(--PRIMARY);
     }
     
-    button.outline.secondary, .button.outline.secondary {
+    .secondary_outline{
         background-color: var(--BLACK);
         border-color: var(--SECONDARY);
         color: var(--SECONDARY);
     }
     
-    button.outline.tertiary, .button.outline.tertiary {
+    .tertiary_outline {
         background-color: var(--BLACK);
         border-color: var(--TERTIARY);
         color: var(--TERTIARY);
