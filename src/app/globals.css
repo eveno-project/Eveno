@@ -1,5 +1,25 @@
 @import url('../assets/styles/variables.css');
-@import url('../assets/styles/button.css');
+:root {
+  /**
+  * COLOR
+  **/
+  --ANNEXE1       : #D17A44;
+  --ANNEXE2       : #FFAE58;
+  --BLACK         : #0D1F26;
+  --GREY          : #706458;
+  --PRIMARY       : #EF9C42;
+  --SECONDARY     : #4EB1CF;
+  --TERTIARY      : #6BC4CF;
+  --WHITE         : #FBF3EA;
+
+  /**
+  * TYPOGRAPHY
+  **/
+  --PARAGRAPH     : 1rem 'Luciole';
+  --INPUT         : 1rem/1.5rem 'Luciole';
+  --BUTTON        : 1rem 'Luciole-Bold';
+  --TITLE          : 1.5rem 'Luciole-Bold';
+}
 :root {
   --max-width: 1100px;
 
