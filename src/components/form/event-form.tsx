@@ -33,11 +33,11 @@ export default function EventForm({ action, event }: { action: Action, event?: E
             <div>
                 <div>
                     <label htmlFor="startDate">Date de départ:</label>
-                    <input name="startDate" type="date" min={defaultDate} defaultValue={defaultDate} required value={startDate} />
+                    <input name="startDate" type="date" min={defaultDate} defaultValue={startDate} required />
                 </div>
                 <div>
                     <label htmlFor="endDate">Date de fin:</label>
-                    <input name="endDate" type="date" min={defaultDate} defaultValue={defaultDate} required value={endDate} />
+                    <input name="endDate" type="date" min={defaultDate} defaultValue={endDate} required />
                 </div>
             </div>
             <div>
