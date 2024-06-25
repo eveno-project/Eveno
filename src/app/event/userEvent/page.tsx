@@ -1,17 +1,12 @@
-import EventCard from "@components/event/event-card";
+import EventList from "@components/event/event-list";
 import { getByUserEmail } from "@services/event";
 
 export default async function Page() {
     const events = await getByUserEmail('user1@gmail.com');
+    console.log(events);
     return (
         <div>
-            {events.map(event => (
-                <EventCard key={event.id} event={event} />
-            ))}
-
+            <EventList events={events} />
         </div>
-
     );
-
-
-};
+}
