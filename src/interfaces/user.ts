@@ -1,6 +1,7 @@
 import Comment from "./comment"
 import Image from "./image"
 import Role from "./role"
+import { AdapterUser } from "next-auth/adapters";
 
 export default interface User {
     adult: boolean
@@ -12,4 +13,12 @@ export default interface User {
     role: Role
     token: string
     username: string
+}
+
+export interface UserAuth extends AdapterUser {
+    id: string,
+    username: string,
+    email: string,
+    roleId: number,
+    adult: boolean
 }

@@ -8,6 +8,7 @@ export default function Button({
     color,
     type,
     isOutline = false,
+    onClick,
     className
 }: {
     children: ReactNode,
@@ -15,8 +16,9 @@ export default function Button({
     type: Type,
     isOutline?: boolean,
     className?: string
+    onClick?: () => void,
 }) {
     return (
-        <button type={type} className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}>{children}</button>
+        <button onClick={onClick} type={type} className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}>{children}</button>
     );
 }
