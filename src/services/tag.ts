@@ -5,9 +5,9 @@ import User from "@interfaces/user";
 import TagDto from "@dto/tag-dto";
 
 
-export async function create(tag: Tag, req: any): Promise<void> {
+export async function create(tag: Tag): Promise<void> {
     try {
-
+        console.log(tag);
 
         const newTag = await prisma.tag.create({
             data: {
@@ -19,6 +19,7 @@ export async function create(tag: Tag, req: any): Promise<void> {
         throw error;
     }
 }
+
 
 
 
@@ -57,11 +58,11 @@ export async function deleteOne(tagId: number): Promise<void> {
 
 export async function getAll(): Promise<Tag[]> {
     try {
-        const tags = await prisma.event.findMany();
+        const tags = await prisma.tag.findMany();
 
         const transformedTags = tags.map(tag => ({
             id: tag.id,
-            name: tag.adult,
+            name: tag.name,
         }));
 
         return transformedTags;
@@ -72,3 +73,36 @@ export async function getAll(): Promise<Tag[]> {
 }
 
 
+export async function getTagByName(name: string): Promise<Tag | null> {
+    try {
+        console.log(name);
+        const tag = await prisma.tag.findUnique({
+            where: { name },
+        });
+
+        return tag;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+export async function getTagByNameVérif(name: string): Promise<Boolean> {
+    try {
+        console.log(name);
+        const tag = await prisma.tag.findUnique({
+            where: { name },
+        });
+
+        if (tag) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    } catch (error) {
+        return false;
+    }
+}
