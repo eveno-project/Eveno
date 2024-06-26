@@ -32,6 +32,10 @@ export async function update(tag: Tag): Promise<void> {
 
 export async function deleteOne(tagId: number): Promise<void> {
     try {
+        await prisma.eventTag.deleteMany({
+            where: { tagId: parseInt(tagId, 10) }
+        })
+
         await prisma.tag.delete({
             where: { id: parseInt(tagId, 10) }
         });

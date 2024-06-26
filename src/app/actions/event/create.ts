@@ -2,10 +2,14 @@
 import Event from "@interfaces/event";
 import { create } from "@services/event";
 import { eventSchema } from "@validators/event.schema";
-import { ZodIssue, ZodObject } from "zod";
+import { ZodIssue } from "zod";
 import { redirect } from "next/navigation";
+import { authOptions } from "@lib/auth";
+import { getServerSession } from 'next-auth';
 
 export default async function createEvent(_prevState: any, params: FormData) {
+    const session = await getServerSession(authOptions);
+    const idUser = session?.user.id;
     const validation = eventSchema.safeParse({
         adult: params.get('adult') ? true : false,
         description: params.get('description') as string,
@@ -22,7 +26,8 @@ export default async function createEvent(_prevState: any, params: FormData) {
             longitude: 0,
             latitude: 0,
         },
-        tags: params.getAll('tags').map(tag => ({ id: Number(tag) }))
+        tags: params.getAll('tags').map(tag => ({ id: Number(tag) })),
+        userId: parseInt(idUser)
     });
 
     if (!validation.success) {

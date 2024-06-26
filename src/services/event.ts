@@ -7,8 +7,8 @@ import { getTagsByIds } from "./tag";
 
 export async function create(event: Event): Promise<void> {
     let transaction;
+    // console.log(event);
     try {
-        event.user = { id: 3 };
         const eventData = {
             adult: event.adult,
             description: event.description,
@@ -17,7 +17,7 @@ export async function create(event: Event): Promise<void> {
             title: event.title,
             linkTicketing: event.linkTicketing,
             isValid: event.isValid,
-            userId: event.user.id,
+            userId: event.userId,
             startDate: event.startDate,
             eventLocalizations: {
                 create: { ...event.localization, longitude: 0, latitude: 0 }
@@ -40,8 +40,7 @@ export async function create(event: Event): Promise<void> {
                 data: eventData,
             }),
         ]);
-
-        console.log("Event created:", transaction[0]);
+        console.log(transaction);
     } catch (error) {
         console.error("Error creating event:", error);
         throw error;
@@ -199,6 +198,60 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
         return events.map(
             Mapper.toEvent
         );
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+export async function getByTagName(tagName: string): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                eventTags: {
+                    some: {
+                        tag: {
+                            name: tagName
+                        }
+                    }
+                }
+            },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            }
+        });
+
+        const transformedEvents = events.map(event => ({
+            id: event.id,
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            eventTags: event.eventTags.map(et => et.tag.name),
+            networks: [],
+            notes: event.eventNotes,
+            title: event.title,
+            linkTicketing: event.linkTicketing ?? undefined,
+            isValid: event.isValid,
+            user: { id: event.userId ?? undefined },
+            startDate: event.startDate,
+            comments: [],
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            publishedAt: event.publishedAt ?? undefined,
+            published: event.published,
+            localization: event.eventLocalizations
+        }));
+
+        return transformedEvents;
     } catch (error) {
         console.error(error);
         throw error;

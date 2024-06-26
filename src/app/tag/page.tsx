@@ -3,11 +3,17 @@ import deleteTag from '@actions/tag/delete';
 import TagForm from '@components/form/tag/tag-form';
 import { getAll } from '@services/tag';
 import Stack from '@mui/material/Stack';
-
+import { authOptions } from "@lib/auth";
+import { getServerSession } from 'next-auth';
+import { Role } from "@constants/role";
+import { redirect } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: number } }) {
     const tags = await getAll();
-    console.log(tags);
+    const session = await getServerSession(authOptions);
+    if (session?.user.role !== Role.ADMIN) {
+        redirect("/");
+    }
     return (
         <div>
             <h1>Liste des Tags</h1>

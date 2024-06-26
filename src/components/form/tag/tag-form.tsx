@@ -7,31 +7,29 @@ import type { FormProps } from "@types/form-props";
 import { useFormState } from "react-dom";
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import style from './tag-form.module.css';
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function TagForm({ action, tag }: { action: FormProps, tag?: Tag }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
     const formRef = useRef<HTMLFormElement>(null);
+    const [value, changeValue] = useState('');
 
-    const handleClearClick = () => {
-        if (formRef.current) {
-            alert('test');
-            formRef.current.submit();
-        }
-    };
+
+
+
     return (
-        <form action={formAction} className={style.form}>
+        <form action={formAction} className={style.form} >
             {
                 tag?.id ? (
                     <TagComponent color="primary" className={style.button}>
                         <input type="hidden" name="id" value={tag.id} />
                         <div>{tag?.name}</div>
-                        <button className={style.delete} onClick={handleClearClick}><ClearRoundedIcon /></button>
+                        <button className={style.delete} ><ClearRoundedIcon /></button>
                     </TagComponent>
                 ) : (
                     <div>
-                        <input name="name" type="text" required defaultValue={tag?.name} />
-                        <Button color="primary" type="submit" className={style.button}>Créer un tag</Button>
+                        <input name="name" type="text" required value={value} />
+                        <Button >Créer un tag</Button>
                     </div>
                 )
             }

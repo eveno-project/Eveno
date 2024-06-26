@@ -5,9 +5,14 @@ import { useFormState } from "react-dom";
 import { ZodIssue } from "zod";
 import { Action } from "@type/action";
 
+<<<<<<< HEAD
 
 export default function EventForm({ action, event }: { action: Action, event?: Event }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
+=======
+export default function EventForm({ action, event, tags }: { action: FormProps, event?: Event, tags: Tag[] }) {
+    const [formState, formAction] = useFormState(action, { errors: [] },);
+>>>>>>> feat auto user to event and autorisation user
     const defaultDate = new Date().toISOString().split('T')[0];
 
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
