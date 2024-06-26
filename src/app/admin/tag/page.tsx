@@ -7,6 +7,7 @@ import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';
 import { Role } from "@constants/role";
 import { redirect } from "next/navigation";
+import { Container } from '@mui/material';
 
 export default async function Page({ params }: { params: { id: number } }) {
     const tags = await getAll();
@@ -16,7 +17,7 @@ export default async function Page({ params }: { params: { id: number } }) {
         redirect("/");
     }
     return (
-        <div>
+        <Container maxWidth="md">
             <h1>Liste des Tags</h1>
             <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
 
@@ -26,7 +27,7 @@ export default async function Page({ params }: { params: { id: number } }) {
             </Stack>
 
             <TagForm action={createTag} />
-        </div>
+        </Container>
     );
 };
 
