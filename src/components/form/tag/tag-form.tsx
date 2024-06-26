@@ -28,7 +28,7 @@ export default function TagForm({ action, tag }: { action: FormProps, tag?: Tag 
                     </TagComponent>
                 ) : (
                     <div>
-                        <input name="name" type="text" required value={value} />
+                        <input name="name" type="text" required />
                         <Button >Créer un tag</Button>
                     </div>
                 )

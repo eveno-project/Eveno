@@ -5,14 +5,8 @@ import { useFormState } from "react-dom";
 import { ZodIssue } from "zod";
 import { Action } from "@type/action";
 
-<<<<<<< HEAD
-
-export default function EventForm({ action, event }: { action: Action, event?: Event }) {
+export default function EventForm({ action, event, tags }: { action: Action, event?: Event, tags: Tag[] }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
-=======
-export default function EventForm({ action, event, tags }: { action: FormProps, event?: Event, tags: Tag[] }) {
-    const [formState, formAction] = useFormState(action, { errors: [] },);
->>>>>>> feat auto user to event and autorisation user
     const defaultDate = new Date().toISOString().split('T')[0];
 
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
@@ -20,11 +14,9 @@ export default function EventForm({ action, event, tags }: { action: FormProps, 
 
     return (
         <form action={formAction}>
-            {
-                event?.id && (
-                    <input type="hidden" name="id" value={event.id} />
-                )
-            }
+            {event?.id && (
+                <input type="hidden" name="id" value={event.id} />
+            )}
             <div>
                 <label htmlFor="title">Titre:</label>
                 <input name="title" type="text" required defaultValue={event?.title} />
@@ -51,11 +43,9 @@ export default function EventForm({ action, event, tags }: { action: FormProps, 
                 <label htmlFor="adult">Tout public ?</label>
                 <input name="adult" type="checkbox" defaultChecked={event?.adult} />
             </div>
-            {
-                event?.localizations && (
-                    <input type="hidden" name="idLocalization" value={event?.localizations[0].id} />
-                )
-            }
+            {event?.localizations && (
+                <input type="hidden" name="idLocalization" value={event.localizations[0].id} />
+            )}
             <div>
                 <label htmlFor="address">Adresse :</label>
                 <input name="address" type="text" defaultValue={event?.localizations[0].address} />
@@ -76,7 +66,7 @@ export default function EventForm({ action, event, tags }: { action: FormProps, 
                 <label htmlFor="tags">Tags :</label>
                 <select name="tags" multiple>
                     {tags.map(tag => (
-                        <option key={tag.id} value={tag.id} selected={event?.eventTags.includes(tag.id)}>
+                        <option key={tag.id} value={tag.id} selected={event?.tags.some(eventTag => eventTag.id === tag.id)}>
                             {tag.name}
                         </option>
                     ))}
@@ -86,4 +76,4 @@ export default function EventForm({ action, event, tags }: { action: FormProps, 
             <Button color="primary" type="submit">{event?.id ? "Modifier l'évènement" : "Créer un évènement"}</Button>
         </form>
     );
-};
+}
