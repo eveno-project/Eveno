@@ -13,7 +13,7 @@ export default async function createTag(_prevState: any, params: FormData) {
     }
 
     const existingTag = await getTagByNameVérif(name.toString());
-    console.log(existingTag);
+    
     if (existingTag == true) {
         return {
             errors: "Le tag existe déjà"

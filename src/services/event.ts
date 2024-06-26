@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 
 export async function create(event: Event): Promise<void> {
     let transaction;
-    // console.log(event);
+
     try {
         const eventData = {
             adult: event.adult,
@@ -27,7 +27,6 @@ export async function create(event: Event): Promise<void> {
 
         if (event.tags.length > 0) {
             const tags = await getTagsByIds(event.tags);
-            console.log('Fetched tags:', tags);
 
             eventData['eventTags'] = {
                 create: tags.map((tag) => ({
@@ -41,7 +40,6 @@ export async function create(event: Event): Promise<void> {
                 data: eventData,
             }),
         ]);
-        console.log(transaction);
     } catch (error) {
         console.error("Error creating event:", error);
         throw error;
@@ -83,7 +81,6 @@ export async function update(event: Event): Promise<void> {
 
             if (event.tags.length > 0) {
                 const tags = await getTagsByIds(event.tags);
-                console.log('Fetched tags:', tags);
 
                 eventData['eventTags'] = {
                     create: tags.map((tag) => ({

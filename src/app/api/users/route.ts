@@ -7,13 +7,13 @@ import { getServerSession } from "next-auth";
 import { Role } from "@constants/role";
 
 export async function GET(req: NextRequest) {
-	if(req.method !== "GET") {
+	if (req.method !== "GET") {
 		return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 	}
 
 	try {
 		const session = await getServerSession(authOptions);
-		console.log(session)
+
 		if (!session || !session.user) {
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 		}
