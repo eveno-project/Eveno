@@ -11,7 +11,7 @@ export default function EventFormDelete({ action, event }: { action: FormProps, 
     return (
         <form action={formAction}>
             <input type="hidden" name="id" value={event.id} />
-            <Button color="primary" type="submit">delete event</Button>
+            <Button color="primary" type="submit">Supprimer l'event</Button>
         </form>
     );
 };
