@@ -4,12 +4,15 @@ import { update } from "@services/event";
 import { updateEventSchema } from "@validators/event.schema";
 import { redirect } from "next/navigation";
 import { ZodIssue } from "zod";
+import { authOptions } from "@lib/auth";
+import { getServerSession } from 'next-auth';
 
 export default async function updateEvent(id: number, _prevState?: any, params?: FormData) {
     if (!params) {
         throw Error('aucun paramètre');
     }
-
+    const session = await getServerSession(authOptions);
+    const idUser = session?.user.id;
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
@@ -28,7 +31,8 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             longitude: 0,
             latitude: 0,
         },
-        tags: params.getAll('tags').map(tag => ({ id: Number(tag) }))
+        tags: params.getAll('tags').map(tag => ({ id: Number(tag) })),
+        userId: parseInt(idUser)
     });
     
     if (!validation.success) {
