@@ -7,13 +7,13 @@ import { redirect } from "next/navigation";
 export default async function AdminPage() {
 
 	const session = await getServerSession(authOptions);
-	if(session?.user.role !== Role.ADMIN) {
+	if (session?.user.role !== Role.ADMIN) {
 		redirect("/");
 	}
 
 	return (
 		<div>
-			<UsersTable/>
+			<UsersTable />
 		</div>
 	);
 }

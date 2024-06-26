@@ -3,6 +3,7 @@ import prisma from "@utils/db";
 import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
 import { getTagsByIds } from "./tag";
+import { redirect } from 'next/navigation';
 
 
 export async function create(event: Event): Promise<void> {
@@ -122,7 +123,7 @@ export async function getById(eventId: number): Promise<Event | undefined> {
         })) as unknown as EventDto;
 
         if (!event) {
-            throw new Error("L'event n'existe pas");
+            redirect("/");
         }
 
         if (!event.user.id) {
