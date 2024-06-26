@@ -1,0 +1,33 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+.searchInput {
+    flex: 1;
+    margin-left: 10px;
+    /* Ajout de "px" après le nombre pour indiquer l'unité */
+    padding: 6px 10px;
+    border-radius: 20px;
+    /* Ajout de "px" après le nombre pour indiquer l'unité */
+    border: none;
+    font-size: 16px;
+    /* Ajout de "px" après le nombre pour indiquer l'unité */
+}
+
+.iconContainer {
+    display: flex;
+    align-items: center;
+}
+
+.navbar>* {
+    margin-right: 50px;
+}
+
+.navbar> :last-child {
+    margin-right: 0;
+}

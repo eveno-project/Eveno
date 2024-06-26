@@ -2,6 +2,9 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import { Container } from "@mui/material";
+
+import style from './page.module.css';
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -27,7 +30,7 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div>
+		<Container maxWidth="md">
 			<form onSubmit={handleSubmit}>
 				<input
 					type="email"
@@ -43,6 +46,6 @@ export default function LoginPage() {
 				/>
 				<button type="submit">Login</button>
 			</form>
-		</div>
+		</Container>
 	);
 }

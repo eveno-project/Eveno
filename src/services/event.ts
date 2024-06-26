@@ -255,3 +255,54 @@ export async function getByTagName(tagName: string): Promise<Event[]> {
         throw error;
     }
 }
+
+
+export async function getManyByName(name: string): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                title: {
+                    contains: name,
+                    mode: 'insensitive'
+                }
+            },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            }
+        });
+
+        const transformedEvents = events.map(event => ({
+            id: event.id,
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            eventTags: event.eventTags.map(et => et.tag.name),
+            networks: [],
+            notes: event.eventNotes,
+            title: event.title,
+            linkTicketing: event.linkTicketing ?? undefined,
+            isValid: event.isValid,
+            user: { id: event.userId ?? undefined },
+            startDate: event.startDate,
+            comments: [],
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            publishedAt: event.publishedAt ?? undefined,
+            published: event.published,
+            localization: event.eventLocalizations
+        }));
+
+        return transformedEvents;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
