@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import { getUser } from "@services/user";
@@ -44,16 +44,16 @@ export const authOptions : NextAuthOptions = {
 		signIn: '/login',
 	},
 	callbacks: {
-		async jwt({ token, user }: { token: JWT; user?: UserAuth }) {
-			if (user) {
-				user = user as UserAuth;
-				token.id = parseInt(user.id, 10)
-				token.username = user.username
-				token.email = user.email
-				token.role = user.roleId
-				token.adult = user.adult
+		async jwt(params : {token: JWT; user: UserAuth | User} ) {
+			if (params.user) {
+				params.user = params.user as UserAuth;
+				params.token.id = parseInt(params.user.id, 10)
+				params.token.username = params.user.username
+				params.token.email = params.user.email
+				params.token.role = params.user.roleId
+				params.token.adult = params.user.adult
 			}
-			return token
+			return params.token
 		},
 		async session({ session, token }) {
 

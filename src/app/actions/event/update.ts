@@ -39,7 +39,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
         };
     }
 
-    await update(validation.data as Event);
+    await update(validation.data as unknown as Event);
 
     redirect('/event/' + id + '/details/');
 }

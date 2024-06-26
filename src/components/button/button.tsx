@@ -1,7 +1,7 @@
-import { Type } from '@types/button';
+import { Type } from '@type/button';
 import styles from './button.module.css';
 import { ReactNode } from 'react';
-import { Color } from '@types/color';
+import { Color } from '@type/color';
 
 export default function Button({
     children,

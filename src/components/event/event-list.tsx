@@ -1,4 +1,4 @@
-import EventCard from "./event-card";
+import EventCard from "@components/event/card/card";
 import Event from "@interfaces/event";
 
 const EventList = ({ events }: { events: Event[] }) => {

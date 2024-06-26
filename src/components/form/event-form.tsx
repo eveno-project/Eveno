@@ -2,11 +2,12 @@
 
 import Button from "@components/button/button";
 import Event from "@interfaces/event";
-import type { FormProps } from "@types/form-props";
 import { useFormState } from "react-dom";
+import { ZodIssue } from "zod";
+import { Action } from "@type/action";
 
 
-export default function EventForm({ action, event }: { action: FormProps, event?: Event }) {
+export default function EventForm({ action, event }: { action: Action, event?: Event }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
 
     const defaultDate = new Date().toISOString().split('T')[0];
@@ -48,25 +49,25 @@ export default function EventForm({ action, event }: { action: FormProps, event?
                 <input name="adult" type="checkbox" defaultChecked={event?.adult} />
             </div>
             {
-                event?.localization && (
-                    <input type="hidden" name="idLocalization" value={event?.localization[0].id} />
+                event?.localizations && (
+                    <input type="hidden" name="idLocalization" value={event?.localizations[0].id} />
                 )
             }
             <div>
                 <label htmlFor="address">Adresse :</label>
-                <input name="address" type="text" defaultValue={event?.localization[0].address} />
+                <input name="address" type="text" defaultValue={event?.localizations[0].address} />
             </div>
             <div>
                 <label htmlFor="city">Ville :</label>
-                <input name="city" type="text" defaultValue={event?.localization[0].city} />
+                <input name="city" type="text" defaultValue={event?.localizations[0].city} />
             </div>
             <div>
                 <label htmlFor="zipCode">Code postal :</label>
-                <input name="zipCode" type="number" pattern="^\d{5}$" defaultValue={event?.localization[0].zipCode} />
+                <input name="zipCode" type="number" pattern="^\d{5}$" defaultValue={event?.localizations[0].zipCode} />
             </div>
             <div>
                 <label htmlFor="regionName">Region :</label>
-                <input name="regionName" type="text" defaultValue={event?.localization[0].regionName} />
+                <input name="regionName" type="text" defaultValue={event?.localizations[0].regionName} />
             </div>
             <Button color="primary" type="submit">{event?.id ? "Modifier l'évènement" : "Créer un évènement"}</Button>
         </form>

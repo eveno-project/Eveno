@@ -34,7 +34,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
         };
     }
 
-    await create(validation.data as Event);
+    await create(validation.data as unknown as Event);
 
     redirect('/event/userEvent');
 }

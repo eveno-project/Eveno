@@ -30,7 +30,7 @@
       "@lib/*": ["./src/app/lib/*"],
       "@services/*": ["./src/services/*.ts"],
       "@styles/*": ["./src/styles/*"],
-      "@types/*": ["./src/types/*"],
+      "@type/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"],
       "@validators/*": ["./src/validators/*"],
     }
