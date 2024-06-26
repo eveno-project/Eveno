@@ -1,15 +1,37 @@
-.address__icon__color {
-    color: var(--BLACK);
+.information__container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.address__container {
+.information__address__icon {
+    color: var(--BLACK);
+    width: 0.8rem;
+}
+
+.information__address__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.information__address {
+    font: var(--PARAGRAPH);
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.information__address__header {
     display: flex;
     align-items: center;
 }
 
-.address {
-    font: var(--PARAGRAPH);
-    margin-left: 0.5rem;
+.information__address__list {
+    margin: 0;
+}
+
+.information__agenda__item {
+    display: flex;
+    align-items: center;
 }
 
 .title {
@@ -18,8 +40,34 @@
 }
 
 .container {
+    position: relative;
     overflow: hidden;
+    height: 100%;
 }
+
+.body {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    display: flex;
+    padding: 1rem 0;
+    position: absolute;
+    bottom: 0;
+    justify-content: flex-end;
+}
+
+.footer__reserved__button {
+
+}
+
+.title__2 {
+    font-family: 'Luciole-Bold';
+    font-size: 1rem;
+}
+
+
 
 @media (prefers-color-scheme: dark) {
     .icon__color {

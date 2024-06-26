@@ -6,7 +6,11 @@ dayjs.extend(require('dayjs/plugin/utc'));
 dayjs.extend(require('dayjs/plugin/duration'));
 dayjs.locale('');
 export default class DateFormatter {
+    static toDayjs(date: Date) {
+        return dayjs(date);
+    }
+
     static complete(date: Date) {
-        return dayjs(date).format('dddd DD MMMM YYYY');
+        return this.toDayjs(date).format('dddd DD MMMM YYYY HH:MM');
     }
 }
