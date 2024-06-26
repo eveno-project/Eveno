@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { id: number } }) {
         );
     }
 
-    const formatDate = (date) => {
+    const formatDate = (date: string | number | Date) => {
         return new Intl.DateTimeFormat('fr-FR', {
             year: 'numeric',
             month: 'long',
@@ -29,14 +29,14 @@ export default async function Page({ params }: { params: { id: number } }) {
             <p>Début : {formatDate(event.startDate)}</p>
             <p>Fin : {event.endDate ? formatDate(event.endDate) : 'Non spécifiée'}</p>
 
-            {event.localization && (
+            {event.localizations && (
                 <div>
                     <h2>Localisation :</h2>
-                    <div key={event.localization[0].id}>
-                        <p>Adresse : {event.localization[0].address}</p>
-                        <p>Ville : {event.localization[0].city}</p>
-                        <p>Code postal : {event.localization[0].zipCode}</p>
-                        <p>Région : {event.localization[0].regionName}</p>
+                    <div key={event.localizations[0].id}>
+                        <p>Adresse : {event.localizations[0].address}</p>
+                        <p>Ville : {event.localizations[0].city}</p>
+                        <p>Code postal : {event.localizations[0].zipCode}</p>
+                        <p>Région : {event.localizations[0].regionName}</p>
                     </div>
                 </div>
             )}

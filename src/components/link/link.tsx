@@ -2,7 +2,7 @@ import { default as NextLink } from 'next/link';
 
 import styles from './link.module.css';
 import { ReactNode } from 'react';
-import { Color } from '@types/color';
+import { Color } from '@type/color';
 
 export default function Link({
     children,

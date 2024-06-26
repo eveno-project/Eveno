@@ -19,7 +19,7 @@ export default class Mapper {
     static toEvent(eventDto: EventDto): Event {
         return {
             adult: eventDto.adult,
-            comments: eventDto.comments.map(Mapper.toComment),
+            comments: eventDto.comments?.map(Mapper.toComment),
             createdAt: new Date(eventDto.createdAt),
             description: eventDto.description,
             id: eventDto.id,
@@ -30,7 +30,7 @@ export default class Mapper {
             linkTicketing: eventDto.linkTicketing ? eventDto.linkTicketing : undefined,
             isValid: eventDto.isValid,
             user: Mapper.toUser(eventDto.user),
-            tags: eventDto.eventTags.map(Mapper.toTags),
+            tags: eventDto.eventTags?.map(Mapper.toTags),
             networks: eventDto.eventNetworks.map(Mapper.toNetwork),
             localizations: eventDto.eventLocalizations.map(Mapper.toLocalization),
             endDate: new Date(eventDto.endDate),
@@ -77,8 +77,8 @@ export default class Mapper {
 
     static toTags(eventTagDto: EventTagDto): Tag {
         return {
-            id: eventTagDto.tag.id,
-            name: eventTagDto.tag.name
+            id: eventTagDto.tag?.id,
+            name: eventTagDto.tag?.name
         };
     }
 
