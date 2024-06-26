@@ -14,7 +14,7 @@ export default function Card({ event, width = 200 }: { event: Partial<Event>, wi
                     <div className={styles.container}>
                         <BookmarkBorderRoundedIcon className={styles.icon} />
 
-                        <img className={styles.image} src={images[0]?.path} alt={images[0]?.name} />
+                        <img className={styles.image} src={images[0].path} alt={images[0].name} />
                         {linkTicketing && (<a href={linkTicketing}>Ticketing</a>)}
                     </div>
                 )

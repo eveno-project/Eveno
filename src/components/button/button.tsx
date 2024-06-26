@@ -9,7 +9,8 @@ export default function Button({
     type,
     isOutline = false,
     onClick,
-    className
+    className,
+    disabled = false
 }: {
     children: ReactNode,
     color: Color,
@@ -17,14 +18,9 @@ export default function Button({
     isOutline?: boolean,
     className?: string
     onClick?: () => void,
+    disabled?: boolean
 }) {
     return (
-        <button
-            onClick={onClick}
-            type={type}
-            className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}
-        >
-            {children}
-        </button>
+        <button disabled={disabled} onClick={onClick} type={type} className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}>{children}</button>
     );
 }
