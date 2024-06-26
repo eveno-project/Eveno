@@ -48,75 +48,12 @@ export async function create(event: Event): Promise<void> {
     }
 }
 
-export async function update(event: Event): Promise<void> {
-    event.user = { id: 3 };
-    let transaction;
 
-    try {
-        if (event.id) {
-            await prisma.eventTag.deleteMany({
-                where: { eventId: parseInt(event.id, 10) }
-            })
-            const eventData = {
-                adult: event.adult,
-                description: event.description,
-                endDate: event.endDate,
-                image: JSON.stringify(event.image),
-                title: event.title,
-                linkTicketing: event.linkTicketing,
-                isValid: event.isValid,
-                userId: event.user.id,
-                startDate: event.startDate,
-                eventLocalizations: {
-                    update: {
-                        where: { id: parseInt(event.localization.id, 10) },
-                        data: {
-                            ...event.localization,
-                            longitude: 0,
-                            latitude: 0
-                        }
-                    }
-                }
-            };
-
-            if (event.tags.length > 0) {
-                const tags = await getTagsByIds(event.tags);
-
-                eventData['eventTags'] = {
-                    create: tags.map((tag) => ({
-                        tag: { connect: { id: tag.id } }
-                    })),
-                };
-            }
-
-            transaction = await prisma.$transaction([
-                prisma.event.update({
-                    where: { id: parseInt(event.id, 10) },
-                    data: eventData,
-                }),
-            ]);
-        }
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
-export async function getById(eventId: number): Promise<Event | undefined> {
+export async function getById(id: number): Promise<Event | undefined> {
     try {
         const event = (await prisma.event.findUnique({
-            where: { id: parseInt(eventId, 10) },
-            include: {
-                eventLocalizations: true,
-                user: true,
-                eventTags: {
-                    include: {
-                        tag: true
-                    }
-                },
-                eventNetworks: true,
-                eventNotes: true
-            }
+            where: { id: +id },
+            include: { eventLocalizations: true, user: true, eventTags: true, eventNetworks: true, eventNotes: true }
         })) as unknown as EventDto;
 
         if (!event) {
@@ -146,7 +83,7 @@ export async function deleteOne(eventId: number): Promise<void> {
     }
 }
 
-export async function getAll(): Promise<Event[]> {
+export async function getAll(): Promise<Partial<Event>[]> {
     try {
         const events = (await prisma.event.findMany({
             include: {
@@ -173,7 +110,6 @@ export async function getAll(): Promise<Event[]> {
 
 export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
-        // Fetch the events by joining the user table based on email
         const events = (await prisma.event.findMany({
             where: {
                 user: {

@@ -1,4 +1,4 @@
-import EventList from "@components/event/event-list";
+import EventList from "@components/event/list/event-list";
 import { getByUserEmail } from "@services/event";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';

@@ -1,7 +1,4 @@
-import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
-
-import { Color } from "@constants/color";
 import Event from "@interfaces/event";
 
 import styles from './card.module.css';
@@ -32,7 +29,7 @@ export default function Card({ event, width = 200 }: { event: Partial<Event>, wi
                 }
             </section>
             <section className={styles.footer}>
-                <Link color='primary' href={`/event/detail/${event.id}`}>Voir plus</Link>
+                <Link color='primary' href={`/event/${event.id}`}>Voir plus</Link>
             </section>
         </article>
     );

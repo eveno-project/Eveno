@@ -1,0 +1,28 @@
+.address__icon__color {
+    color: var(--BLACK);
+}
+
+.address__container {
+    display: flex;
+    align-items: center;
+}
+
+.address {
+    font: var(--PARAGRAPH);
+    margin-left: 0.5rem;
+}
+
+.title {
+    font: var(--TITLE);
+    margin-bottom: 1rem;
+}
+
+.container {
+    overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+    .icon__color {
+        color: var(--WHITE);
+    }
+}

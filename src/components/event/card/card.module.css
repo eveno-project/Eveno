@@ -1,12 +1,15 @@
 .card {
+    background-color: var(--WHITE);
     max-width: 90%;
     border-width: 0.125rem;
     border-radius: 1rem 1rem;
     border-style: solid;
     border-color: var(--BLACK);
-    
+
     box-shadow: 0.125rem 0.125rem var(--BLACK);
     padding-bottom: 1rem;
+
+    margin: 1rem 1rem 1rem 1rem;
 }
 
 .container {
@@ -39,7 +42,6 @@
 }
 
 .content p {
-    color: var(--BLACK);
     font-family: 'Luciole-Bold';
     font-size: 0.875rem;
 }
@@ -54,4 +56,16 @@
     display: flex;
     justify-content: flex-end;
     padding: 0 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+   .card {
+        background-color: var(--BLACK);
+        border-color: var(--SECONDARY);
+        box-shadow: 0.125rem 0.125rem var(--SECONDARY);
+   }
+
+   .address {
+        color: var(--WHITE);
+   }
 }

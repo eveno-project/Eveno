@@ -31,7 +31,7 @@ export default class Mapper {
             isValid: eventDto.isValid,
             user: Mapper.toUser(eventDto.user),
             tags: eventDto.eventTags?.map(Mapper.toTags),
-            networks: eventDto.eventNetworks.map(Mapper.toNetwork),
+            networks: eventDto.eventNetworks?.map(Mapper.toNetwork),
             localizations: eventDto.eventLocalizations.map(Mapper.toLocalization),
             endDate: new Date(eventDto.endDate),
             notes: eventDto.eventNotes.map(Mapper.toNote),
