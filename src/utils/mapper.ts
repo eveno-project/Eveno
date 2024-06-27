@@ -23,7 +23,7 @@ export default class Mapper {
             createdAt: new Date(eventDto.createdAt),
             description: eventDto.description,
             id: eventDto.id,
-            images: Mapper.parseImages(eventDto.image),
+            images: eventDto.image as unknown as Image[],
             updatedAt: new Date(eventDto.updatedAt),
             publishedAt: eventDto.publishedAt ? new Date(eventDto.publishedAt) : undefined,
             title: eventDto.title,
@@ -62,17 +62,6 @@ export default class Mapper {
             token: userDto.token,
             username: userDto.username
         };
-    }
-
-    static parseImages(imageJson: JsonValue | undefined): Image[] {
-        if (!imageJson) return [];
-        try {
-            const images: Image[] = JSON.parse(imageJson as string);
-            return images;
-        } catch (error) {
-            console.error('Error parsing images:', error);
-            return [];
-        }
     }
 
     static toTags(eventTagDto: EventTagDto): Tag {

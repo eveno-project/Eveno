@@ -11,6 +11,7 @@ import { useDotButton } from '@services/carousel';
 import DotButton from './dot-button/dot-button';
 
 export default function Carousel({ images, options }: { images: Image[], options?: EmblaOptionsType }) {
+
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
     const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
         const autoplay = emblaApi?.plugins()?.autoplay
@@ -43,7 +44,7 @@ export default function Carousel({ images, options }: { images: Image[], options
             </section>
             <section className={styles.slider__dots__container}>
                 <div className={styles.slider__dots}>
-                    {scrollSnaps.map((_, index) => (
+                    {scrollSnaps.map((_, index: number) => (
                         <DotButton
                             key={index}
                             onClick={() => onDotButtonClick(index)}

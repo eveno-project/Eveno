@@ -86,7 +86,7 @@ export async function getById(id: number): Promise<Event> {
         if (!event.user.id) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
-
+        
         return Mapper.toEvent(event);
     } catch (error) {
         throw error;

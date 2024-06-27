@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                 <section className={style.header}>
                     <article>
                         {
-                            event?.images && (
+                            event.images && event?.images?.length !==0 && (
                                 <section className={style.carousel}>
                                     <Carousel images={event.images} />
                                 </section>
