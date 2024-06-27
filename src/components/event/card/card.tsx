@@ -21,7 +21,7 @@ export default function Card({ event, width = 200 }: { event: Partial<Event>, wi
             <section className={styles.content}>
                 <p>{title}</p>
                 {
-                    localizations ? (
+                    localizations && localizations.length !== 0 ? (
                         <p className={styles.address}>{localizations[0].address}, {localizations[0].zipCode} { localizations[0].city}</p>
                     ) : (
                         <p className={styles.address}>À distance </p>
