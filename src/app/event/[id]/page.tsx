@@ -59,12 +59,12 @@ export default async function Page({ params }: { params: { id: number } }) {
                                         </div>
                                     </>
                                 ) : (
-                                    <>
+                                    <article className={style.information__address}>
                                         <CloudRoundedIcon htmlColor={Color.BLACK} width="14" />
                                         <p className={style.information__address}>
                                             En ligne
                                         </p>
-                                    </>
+                                    </article>
                                 )
                             }
                         </div>
