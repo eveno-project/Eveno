@@ -2,52 +2,35 @@ import Event from "@interfaces/event";
 import prisma from "@utils/db";
 import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
-import { getTagsByIds } from "./tag";
 import { redirect } from 'next/navigation';
 
-
 export async function create(event: Event): Promise<void> {
-    let transaction;
-
     try {
-        const eventData = {
-            adult: event.adult,
-            description: event.description,
-            endDate: event.endDate,
-            image: JSON.stringify(event.images),
-            title: event.title,
-            linkTicketing: event.linkTicketing,
-            isValid: event.isValid,
-            userId: event.userId,
-            startDate: event.startDate,
-            eventLocalizations: {
-                create: { ...event.localization, longitude: 0, latitude: 0 }
-            },
-        };
-
-        if (event.tags.length > 0) {
-            const tags = await getTagsByIds(event.tags);
-
-            eventData['eventTags'] = {
-                create: tags.map((tag) => ({
-                    tag: { connect: { id: tag.id } }
-                })),
-            };
-        }
-
-        transaction = await prisma.$transaction([
-            prisma.event.create({
-                data: eventData,
-            }),
-        ]);
+        await prisma.event.create({
+            data: {
+                adult: event.adult,
+                description: event.description,
+                endDate: event.endDate,
+                image: JSON.stringify(event.images),
+                title: event.title,
+                linkTicketing: event.linkTicketing,
+                isValid: event.isValid,
+                userId: event.user.id,
+                startDate: event.startDate,
+                eventLocalizations: {
+                    create: { ...event.localizations, longitude: 0, latitude: 0 }
+                },
+                eventTags: { 
+                    create: event.tags.map(tag => ({
+                        tag: { connect: { id: tag.id } }
+                    }))
+                }
+            }
+        });
     } catch (error) {
-        console.error("Error creating event:", error);
         throw error;
-    } finally {
-        await prisma.$disconnect();
     }
 }
-
 
 export async function getById(id: number): Promise<Event | undefined> {
     try {
@@ -66,7 +49,6 @@ export async function getById(id: number): Promise<Event | undefined> {
 
         return Mapper.toEvent(event);
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
@@ -78,7 +60,6 @@ export async function deleteOne(eventId: number): Promise<void> {
         });
 
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
@@ -103,7 +84,6 @@ export async function getAll(): Promise<Partial<Event>[]> {
             Mapper.toEvent
         );
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
@@ -133,20 +113,18 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
             Mapper.toEvent
         );
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
 
-
-export async function getByTagName(tagName: string): Promise<Event[]> {
+export async function getByTagName(name: string): Promise<Event[]> {
     try {
         const events = await prisma.event.findMany({
             where: {
                 eventTags: {
                     some: {
                         tag: {
-                            name: tagName
+                            name
                         }
                     }
                 }
@@ -162,36 +140,13 @@ export async function getByTagName(tagName: string): Promise<Event[]> {
                 eventNetworks: true,
                 eventNotes: true
             }
-        });
-
-        const transformedEvents = events.map(event => ({
-            id: event.id,
-            adult: event.adult,
-            description: event.description,
-            endDate: event.endDate,
-            eventTags: event.eventTags.map(et => et.tag.name),
-            networks: [],
-            notes: event.eventNotes,
-            title: event.title,
-            linkTicketing: event.linkTicketing ?? undefined,
-            isValid: event.isValid,
-            user: { id: event.userId ?? undefined },
-            startDate: event.startDate,
-            comments: [],
-            createdAt: event.createdAt,
-            updatedAt: event.updatedAt,
-            publishedAt: event.publishedAt ?? undefined,
-            published: event.published,
-            localization: event.eventLocalizations
-        }));
-
-        return transformedEvents;
+        }) as unknown as EventDto[];
+        return events.map(Mapper.toEvent);
     } catch (error) {
-        console.error(error);
+        
         throw error;
     }
 }
-
 
 export async function getManyByName(name: string): Promise<Event[]> {
     try {
@@ -213,32 +168,9 @@ export async function getManyByName(name: string): Promise<Event[]> {
                 eventNetworks: true,
                 eventNotes: true
             }
-        });
-
-        const transformedEvents = events.map(event => ({
-            id: event.id,
-            adult: event.adult,
-            description: event.description,
-            endDate: event.endDate,
-            eventTags: event.eventTags.map(et => et.tag.name),
-            networks: [],
-            notes: event.eventNotes,
-            title: event.title,
-            linkTicketing: event.linkTicketing ?? undefined,
-            isValid: event.isValid,
-            user: { id: event.userId ?? undefined },
-            startDate: event.startDate,
-            comments: [],
-            createdAt: event.createdAt,
-            updatedAt: event.updatedAt,
-            publishedAt: event.publishedAt ?? undefined,
-            published: event.published,
-            localization: event.eventLocalizations
-        }));
-
-        return transformedEvents;
+        }) as unknown as EventDto[];
+        return events.map(Mapper.toEvent)
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
