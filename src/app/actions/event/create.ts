@@ -11,7 +11,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
     if (!userId) {
-        return redirect('/');
+        redirect('/');
     }
     const validation = eventSchema.safeParse({
         adult: params.get('adult') ? true : false,
@@ -21,7 +21,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
         startDate: params.get('startDate'),
         publishedAt: params.get('publishedAt') ?? undefined,
         title: params.get('title')?.toString(),
-        localization: {
+        localizations: {
             address: params.get('address'),
             city: params.get('city'),
             regionName: params.get('regionName'),
@@ -30,10 +30,13 @@ export default async function createEvent(_prevState: any, params: FormData) {
             latitude: 0,
         },
         tags: params.getAll('tags').map(tag => ({ id: Number(tag) })),
-        userId: userId
+        user: {
+            id: userId
+        }
     });
 
     if (!validation.success) {
+        console.error({ error: validation.error.issues })
         return {
             errors: validation.error.issues as ZodIssue[]
         };

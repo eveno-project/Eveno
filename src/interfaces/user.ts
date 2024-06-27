@@ -1,5 +1,3 @@
-import Comment from "./comment"
-import Image from "./image"
 import Role from "./role"
 import { AdapterUser } from "next-auth/adapters";
 

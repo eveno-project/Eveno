@@ -72,7 +72,6 @@ export default function EventForm({ action, event, tags }: { action: Action, eve
                     ))}
                 </select>
             </div>
-
             <Button color="primary" type="submit">{event?.id ? "Modifier l'évènement" : "Créer un évènement"}</Button>
         </form>
     );

@@ -1,11 +1,9 @@
-import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
-
-import { Color } from "@constants/color";
 import Event from "@interfaces/event";
 
 import styles from './card.module.css';
 import Link from '@components/link/link';
+import Image from 'next/image';
 
 export default function Card({ event, width = 200 }: { event: Partial<Event>, width?: number }) {
     const { title, images, localizations, linkTicketing } = event;
@@ -22,17 +20,19 @@ export default function Card({ event, width = 200 }: { event: Partial<Event>, wi
                 )
             }
             <section className={styles.content}>
-                <p>{title}</p>
+                <article className={styles.title__container}>
+                    <p>{title}</p>
+                </article>
                 {
-                    localizations ? (
-                        <p className={styles.address}>{localizations[0].address}, {localizations[0].zipCode} { localizations[0].city}</p>
+                    localizations && localizations.length !== 0 ? (
+                        <p className={styles.address}>{localizations[0].address}, {localizations[0].zipCode} {localizations[0].city}</p>
                     ) : (
                         <p className={styles.address}>À distance </p>
                     )
                 }
             </section>
             <section className={styles.footer}>
-                <Link color='primary' href={`/event/detail/${event.id}`}>Voir plus</Link>
+                <Link color='primary' href={`/event/${event.id}`}>Voir plus</Link>
             </section>
         </article>
     );

@@ -7,13 +7,10 @@ import { ZodIssue } from 'zod';
 import { authOptions } from '@lib/auth';
 import { getServerSession } from 'next-auth';
 
-export default async function updateEvent(id: number, _prevState?: any, params?: FormData) {
+export default async function updateEvent(id: number, _prevState: any, params: FormData) {
     const session = await getServerSession(authOptions);
-    if (!params) {
-        throw Error('aucun paramètre');
-    }
     if (!session?.user) {
-        throw Error('Utilisateur non connecté');
+        redirect('/');
     }
     const userId = session?.user.id;
     const validation = updateEventSchema.safeParse({
@@ -25,7 +22,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
         startDate: params.get('startDate'),
         publishedAt: params.get('publishedAt') ?? undefined,
         title: params.get('title')?.toString(),
-        localization: {
+        localizations: {
             id: +params.get('idLocalization')!.toString(),
             address: params.get('address'),
             city: params.get('city'),
@@ -35,9 +32,11 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             latitude: 0,
         },
         tags: params.getAll('tags').map(tag => ({ id: Number(tag) })),
-        userId: userId
+        user: {
+            id: userId
+        }
     });
-    
+
     if (!validation.success) {
         console.error({
             issues: validation.error.issues

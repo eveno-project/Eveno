@@ -1,15 +1,16 @@
-import Card from "@components/event/card/card";
-import Event from "@interfaces/event";
+import List from "@components/event/list/list";
+import { Container } from "@mui/material";
 import { getAll } from "@services/event";
-import NavBar from "@components/navbar/navbar";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export default async function Home() {
   const events = await getAll();
   return (
-    <main>
-      {
-        events.map(event => <Card event={event} />)
-      }
-    </main>
+    <Container maxWidth="md">
+      <Suspense fallback={<Loading />}>
+        <List events={events} />
+      </Suspense>
+    </Container>
   );
 }

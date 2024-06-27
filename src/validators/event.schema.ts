@@ -1,5 +1,4 @@
-import exp from "constants";
-import { z, ZodObject } from "zod";
+import { z } from "zod";
 
 const stringToZodDate = z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
@@ -8,25 +7,29 @@ const stringToZodDate = z.preprocess((arg) => {
 const localizationBaseSchema = z.object({
     address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }),
     city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }),
-    regionName: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Région invalid" }),
+    regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: "Région invalid" }),
     zipCode: z.string().transform((arg) => Number(arg)).refine((arg) => arg !== undefined && 9, { message: "Code postal invalid" }),
 })
 
 const eventBaseSchema = z.object({
     adult: z.boolean(),
-    userId: z.number(),
     title: z.string().min(3, { message: "minimum 3 caractères" }),
     description: z.string().min(20, { message: "mininum 20 caractères" }),
     startDate: stringToZodDate,
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
-    localization: localizationBaseSchema,
+    user: z.object({
+        id: z.number().optional()
+    }),
     tags: z.array(z.object({
         id: z.number()
     })).optional(),
 });
 
 export const eventSchema = eventBaseSchema
+    .extend({
+        localizations: localizationBaseSchema
+    })
     .refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
         message: "La date de fin ne peut-être inférieur à la date de départ",
@@ -35,9 +38,9 @@ export const eventSchema = eventBaseSchema
 export const updateEventSchema = eventBaseSchema
     .extend({
         id: z.number(),
-        localization: localizationBaseSchema.extend({
+        localizations: localizationBaseSchema.extend({
             id: z.number()
-        })
+        }).optional()
 
     }).refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],

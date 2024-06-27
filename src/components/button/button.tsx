@@ -19,6 +19,12 @@ export default function Button({
     onClick?: () => void,
 }) {
     return (
-        <button onClick={onClick} type={type} className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}>{children}</button>
+        <button
+            onClick={onClick}
+            type={type}
+            className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}
+        >
+            {children}
+        </button>
     );
 }

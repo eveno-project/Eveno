@@ -12,7 +12,7 @@ export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: bo
     return (
         <header className={style.navbar__container}>
             <div className={style.navbar__fou}>
-                <Link href="/" ><Image src="/logo/classic.svg" alt='logo' width={32} height={32} /></Link>
+                <Link href="/"><Image src="/fou/classic.svg" alt='logo' width={32} height={32} /></Link>
             </div>
             {
                 !noSearchBar && (
