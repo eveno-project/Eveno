@@ -31,7 +31,7 @@ describe('Card component', () => {
 		expect(screen.getByAltText('Event Image')).toBeInTheDocument();
 		expect(screen.getByText('123 Main St, 12345 Sample City')).toBeInTheDocument();
 		expect(screen.getByText('Ticketing')).toHaveAttribute('href', 'http://ticketing.com');
-		expect(screen.getByText('Voir plus')).toHaveAttribute('href', '/event/detail/1');
+		expect(screen.getByText('Voir plus')).toHaveAttribute('href', '/event/1');
 	});
 
 	it('renders with default width', () => {
