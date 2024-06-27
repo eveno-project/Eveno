@@ -1,5 +1,4 @@
-import exp from "constants";
-import { z, ZodObject } from "zod";
+import { z } from "zod";
 
 const stringToZodDate = z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
@@ -21,6 +20,9 @@ const eventBaseSchema = z.object({
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
     localization: localizationBaseSchema,
+    user: z.object({
+        id: z.number().optional()
+    }),
     tags: z.array(z.object({
         id: z.number()
     })).optional(),

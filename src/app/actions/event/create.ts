@@ -30,7 +30,9 @@ export default async function createEvent(_prevState: any, params: FormData) {
             latitude: 0,
         },
         tags: params.getAll('tags').map(tag => ({ id: Number(tag) })),
-        userId: userId
+        user: {
+            id: userId
+        }
     });
 
     if (!validation.success) {

@@ -18,8 +18,6 @@ export default async function Page({ params }: { params: { id: number } }) {
     if (!event || event?.user.id != session?.user.id) {
         redirect("/");
     }
-
-
     return (
         <div>
             <EventForm action={updateEventWithId} event={event} tags={tags} />
