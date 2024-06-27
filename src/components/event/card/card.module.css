@@ -58,14 +58,20 @@
     padding: 0 1rem;
 }
 
+.title__container {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (prefers-color-scheme: dark) {
-   .card {
+    .card {
         background-color: var(--BLACK);
         border-color: var(--SECONDARY);
         box-shadow: 0.125rem 0.125rem var(--SECONDARY);
-   }
+    }
 
-   .address {
+    .address {
         color: var(--WHITE);
-   }
+    }
 }
