@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import style from './page.module.css';
 import Loader from '@components/loader/loader';
 
