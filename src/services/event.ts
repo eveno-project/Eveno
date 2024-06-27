@@ -3,6 +3,7 @@ import prisma from "@utils/db";
 import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
 import { redirect } from 'next/navigation';
+import Localization from "@interfaces/localization";
 
 export async function create(event: Event) {
     try {
@@ -37,6 +38,7 @@ export async function create(event: Event) {
 
 export async function update(event: Event) {
     try {
+        console.debug({ local: event.localizations[0] });
         if (event.id) {
             await prisma.event.update({
                 where: { id: event.id },
@@ -53,10 +55,10 @@ export async function update(event: Event) {
                     },
                     startDate: event.startDate,
                     eventLocalizations: {
-                        update: event.localizations.map(localization => ({
-                            where: { id: localization.id },
-                            data: localization
-                        }))
+                        update: {
+                            where: { id: (event.localizations as unknown as Localization).id },
+                            data: { ...event.localizations as unknown as Localization }
+                        }
                     },
                     eventTags: {
                         create: event.tags.map(tag => ({

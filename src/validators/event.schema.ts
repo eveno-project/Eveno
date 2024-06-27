@@ -7,7 +7,7 @@ const stringToZodDate = z.preprocess((arg) => {
 const localizationBaseSchema = z.object({
     address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }),
     city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }),
-    regionName: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Région invalid" }),
+    regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: "Région invalid" }),
     zipCode: z.string().transform((arg) => Number(arg)).refine((arg) => arg !== undefined && 9, { message: "Code postal invalid" }),
 })
 
