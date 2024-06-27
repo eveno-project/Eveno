@@ -32,6 +32,45 @@ export async function create(event: Event): Promise<void> {
     }
 }
 
+export async function update(event: Event) {
+    try {
+        if (event.id) {
+            await prisma.event.update({
+                where: { id: event.id },
+                data: {
+                    adult: event.adult,
+                    description: event.description,
+                    endDate: event.endDate,
+                    image: JSON.stringify(event.images),
+                    title: event.title,
+                    linkTicketing: event.linkTicketing,
+                    isValid: event.isValid,
+                    userId: event.user.id,
+                    startDate: event.startDate,
+                    eventLocalizations: {
+                        update: {
+                            where: { id: event.localizations[0]?.id },
+                            data: {
+                                ...event.localizations,
+                                longitude: 0,
+                                latitude: 0
+                            }
+                        }
+                    },
+                    eventTags: {
+                        create: event.tags.map(tag => ({
+                            tag: { connect: { id: tag.id } }
+                        }))
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export async function getById(id: number): Promise<Event | undefined> {
     try {
         const event = (await prisma.event.findUnique({

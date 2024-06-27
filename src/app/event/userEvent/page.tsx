@@ -6,12 +6,10 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
     const session = await getServerSession(authOptions);
-    const events = await getByUserEmail(session.user.email);
-
     if (!session) {
         redirect("/");
     }
-
+    const events = await getByUserEmail(session.user.email);
     return (
         <div>
             <EventList events={events} />
