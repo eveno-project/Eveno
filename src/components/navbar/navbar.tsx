@@ -32,7 +32,8 @@ export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: bo
             } */}
             {
                 session?.user ? (
-                    <Button onClick={signOut} type='button' color='primary'>Se déconnecter</Button>
+                    <></>
+                    // <Button onClick={signOut} type='button' color='primary'>Se déconnecter</Button>
                 ) : (
                     <Link href="/login" className={style.authentication__login}>Se connecter</Link>
                 )
