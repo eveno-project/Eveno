@@ -53,14 +53,10 @@ export async function update(event: Event) {
                     },
                     startDate: event.startDate,
                     eventLocalizations: {
-                        update: {
-                            where: { id: event.localizations[0]?.id },
-                            data: {
-                                ...event.localizations,
-                                longitude: 0,
-                                latitude: 0
-                            }
-                        }
+                        update: event.localizations.map(localization => ({
+                            where: { id: localization.id },
+                            data: localization
+                        }))
                     },
                     eventTags: {
                         create: event.tags.map(tag => ({
