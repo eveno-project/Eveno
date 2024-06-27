@@ -18,7 +18,6 @@ const eventBaseSchema = z.object({
     startDate: stringToZodDate,
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
-    localization: localizationBaseSchema,
     user: z.object({
         id: z.number().optional()
     }),

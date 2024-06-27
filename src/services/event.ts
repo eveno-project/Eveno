@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 
 export async function create(event: Event) {
     try {
+        const localization = event.localizations.length !== 0 ? { ...event.localizations, longitude: 0, latitude: 0 } : undefined;
         await prisma.event.create({
             data: {
                 adult: event.adult,
@@ -20,7 +21,7 @@ export async function create(event: Event) {
                 },
                 startDate: event.startDate,
                 eventLocalizations: {
-                    create: { ...event.localizations, longitude: 0, latitude: 0 }
+                    create: localization
                 },
                 eventTags: { 
                     create: event.tags.map(tag => ({
