@@ -11,7 +11,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
     if (!userId) {
-        return redirect('/');
+        redirect('/');
     }
     const validation = eventSchema.safeParse({
         adult: params.get('adult') ? true : false,
