@@ -4,7 +4,7 @@ import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
 import { redirect } from 'next/navigation';
 
-export async function create(event: Event): Promise<void> {
+export async function create(event: Event) {
     try {
         await prisma.event.create({
             data: {
@@ -15,7 +15,9 @@ export async function create(event: Event): Promise<void> {
                 title: event.title,
                 linkTicketing: event.linkTicketing,
                 isValid: event.isValid,
-                userId: event.user.id,
+                user: {
+                    connect: { id: event.user.id }
+                },
                 startDate: event.startDate,
                 eventLocalizations: {
                     create: { ...event.localizations, longitude: 0, latitude: 0 }
@@ -45,7 +47,9 @@ export async function update(event: Event) {
                     title: event.title,
                     linkTicketing: event.linkTicketing,
                     isValid: event.isValid,
-                    userId: event.user.id,
+                    user: {
+                        connect: { id: event.user.id }
+                    },
                     startDate: event.startDate,
                     eventLocalizations: {
                         update: {
@@ -66,12 +70,11 @@ export async function update(event: Event) {
             });
         }
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
 
-export async function getById(id: number): Promise<Event | undefined> {
+export async function getById(id: number): Promise<Event> {
     try {
         const event = (await prisma.event.findUnique({
             where: { id: +id },
@@ -103,7 +106,7 @@ export async function deleteOne(eventId: number): Promise<void> {
     }
 }
 
-export async function getAll(): Promise<Partial<Event>[]> {
+export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
     try {
         const events = (await prisma.event.findMany({
             include: {
@@ -116,6 +119,9 @@ export async function getAll(): Promise<Partial<Event>[]> {
                 },
                 eventNetworks: true,
                 eventNotes: true
+            },
+            orderBy: {
+                createdAt: sort
             }
         })) as unknown as EventDto[];
 

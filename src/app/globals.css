@@ -28,10 +28,6 @@
   font: var(--PARAGRAPH);
 }
 
-body, html {
-  margin: 0;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     color: var(--WHITE);
@@ -41,7 +37,6 @@ body, html {
 
 html,
 body {
-  overflow: hidden;
   margin: 0;
   height: 100%;
 }
