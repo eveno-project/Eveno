@@ -24,3 +24,14 @@
     display: flex;
     justify-content: center;
 }
+
+.form__register {
+    color: var(--SECONDARY);
+    text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .form__register {
+        color: var(--PRIMARY);
+    }
+}

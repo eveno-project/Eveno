@@ -6,6 +6,7 @@ import { Container } from "@mui/material";
 
 import style from './page.module.css';
 import Button from "@components/button/button";
+import Link from "@components/link/link";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ export default function LoginPage() {
 	return (
 		<Container className={style.container} maxWidth="md">
 			<form onSubmit={handleSubmit} className={style.form__container}>
-				<h2>Login</h2>
+				<h2>Connexion</h2>
 				<input
 					className={style.form__input}
 					name="email"
@@ -50,7 +51,8 @@ export default function LoginPage() {
 					onChange={(e) => setPassword(e.target.value)}
 					placeholder="Password"
 				/>
-				<Button className={style.form__submit} color="primary" type="submit">Login</Button>
+				<Link className={style.form__register} href="/register">Pas encore inscrit ?</Link>
+				<Button className={style.form__submit} color="primary" type="submit">Se connecter</Button>
 			</form>
 		</Container>
 	);

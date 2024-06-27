@@ -21,3 +21,14 @@
 .navbar__searchbar:focus {
     border-width: 0.188rem;
 }
+
+.authentication__login {
+    color: var(--SECONDARY);
+    text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .authentication__login {
+        color: var(--PRIMARY);
+    }
+}

@@ -22,20 +22,43 @@
       }
     ],
     "paths": {
-      "@actions/*": ["./src/app/actions/*"],
-      "@components/*": ["./src/components/*"],
-      "@constants/*": ["./src/constants/*"],
-      "@dto/*": ["./src/interfaces/dto/*.ts"],
-      "@interfaces/*": ["./src/interfaces/*.ts"],
-      "@lib/*": ["./src/app/lib/*"],
-      "@services/*": ["./src/services/*.ts"],
-      "@styles/*": ["./src/styles/*"],
-      "@type/*": ["./src/types/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@validators/*": ["./src/validators/*"],
+      "@actions/*": [
+        "./src/app/actions/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@constants/*": [
+        "./src/constants/*"
+      ],
+      "@dto/*": [
+        "./src/interfaces/dto/*.ts"
+      ],
+      "@interfaces/*": [
+        "./src/interfaces/*.ts"
+      ],
+      "@lib/*": [
+        "./src/app/lib/*"
+      ],
+      "@services/*": [
+        "./src/services/*.ts"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
+      ],
+      "@type/*": [
+        "./src/types/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@validators/*": [
+        "./src/validators/*"
+      ]
     }
   },
   "include": [
+    "test/**/*.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

@@ -35,7 +35,7 @@ export default function Carousel({ images, options }: { images: Image[], options
                 <div className={styles.slider__container}>
                     {
                         images.map((image, key) => (
-                            <div className={styles.slider__container__image}>
+                            <div key={key} className={styles.slider__container__image}>
                                 <img className={styles.slider__image} key={key} src={image.path} alt={image.name} />
                             </div>
                         ))

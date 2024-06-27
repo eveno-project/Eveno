@@ -3,13 +3,14 @@ import styles from './button.module.css';
 import { ReactNode } from 'react';
 import { Color } from '@type/color';
 
-export default function Button({
+export default async function Button({
     children,
     color,
     type,
     isOutline = false,
     onClick,
-    className
+    className,
+    disabled = false
 }: {
     children: ReactNode,
     color: Color,
@@ -17,14 +18,9 @@ export default function Button({
     isOutline?: boolean,
     className?: string
     onClick?: () => void,
+    disabled?: boolean
 }) {
     return (
-        <button
-            onClick={onClick}
-            type={type}
-            className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}
-        >
-            {children}
-        </button>
+        <button disabled={disabled} onClick={onClick} type={type} className={`${styles[`${color}${isOutline ? '_outline' : ''}`]} ${className}`}>{children}</button>
     );
 }
