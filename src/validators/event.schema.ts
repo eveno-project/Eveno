@@ -28,7 +28,7 @@ const eventBaseSchema = z.object({
 
 export const eventSchema = eventBaseSchema
     .extend({
-        localization: localizationBaseSchema
+        localizations: localizationBaseSchema
     })
     .refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
@@ -38,7 +38,7 @@ export const eventSchema = eventBaseSchema
 export const updateEventSchema = eventBaseSchema
     .extend({
         id: z.number(),
-        localization: localizationBaseSchema.extend({
+        localizations: localizationBaseSchema.extend({
             id: z.number()
         })
 
