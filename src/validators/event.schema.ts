@@ -40,7 +40,7 @@ export const updateEventSchema = eventBaseSchema
         id: z.number(),
         localizations: localizationBaseSchema.extend({
             id: z.number()
-        })
+        }).optional()
 
     }).refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
