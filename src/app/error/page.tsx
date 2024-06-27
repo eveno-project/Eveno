@@ -1,5 +1,6 @@
 'use client';
 
+import Button from '@components/button/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function ErrorPage() {
@@ -15,7 +16,7 @@ export default function ErrorPage() {
 		<div className="error-container">
 			<h1>Error</h1>
 			{error && <p>{error}</p>}
-			<button onClick={handleBack}>Back to Login</button>
+			<Button color='primary' type='button' onClick={handleBack}>Back to Login</Button>
 		</div>
 	);
 }

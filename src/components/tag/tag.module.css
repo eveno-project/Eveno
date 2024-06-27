@@ -1,0 +1,80 @@
+@import url('../../assets/styles/variables.css');
+
+.primary,
+.secondary,
+.tertiary,
+.primary_outline,
+.secondary_outline,
+.tertiary_outline {
+    align-items: center;
+
+    border-width: 0.125rem;
+    border-radius: 1rem 1rem;
+    border-style: solid;
+    border-color: var(--BLACK);
+
+    display: flex;
+
+    font-family: 'Luciole-Bold';
+    font-size: 1rem;
+    letter-spacing: 0;
+
+    padding: 1rem 1rem;
+}
+
+
+.primary {
+    background-color: var(--PRIMARY);
+    color: var(--BLACK);
+}
+
+.secondary {
+    background-color: var(--SECONDARY);
+    color: var(--BLACK);
+}
+
+.tertiary {
+    background-color: var(--TERTIARY);
+    color: var(--BLACK);
+}
+
+.primary_outline {
+    background-color: var(--WHITE);
+    border-color: var(--PRIMARY);
+    box-shadow: 0.125rem 0.125rem var(--PRIMARY);
+    color: var(--PRIMARY);
+}
+
+.secondary_outline {
+    background-color: var(--WHITE);
+    border-color: var(--SECONDARY);
+    box-shadow: 0.125rem 0.125rem var(--SECONDARY);
+    color: var(--SECONDARY);
+}
+
+.tertiary_outline {
+    background-color: var(--WHITE);
+    border-color: var(--TERTIARY);
+    box-shadow: 0.125rem 0.125rem var(--TERTIARY);
+    color: var(--TERTIARY);
+}
+
+@media (prefers-color-scheme: dark) {
+    .primary_outline {
+        background-color: var(--BLACK);
+        border-color: var(--PRIMARY);
+        color: var(--PRIMARY);
+    }
+
+    .secondary_outline {
+        background-color: var(--BLACK);
+        border-color: var(--SECONDARY);
+        color: var(--SECONDARY);
+    }
+
+    .tertiary_outline {
+        background-color: var(--BLACK);
+        border-color: var(--TERTIARY);
+        color: var(--TERTIARY);
+    }
+}

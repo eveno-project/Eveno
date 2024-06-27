@@ -14,12 +14,16 @@ const localizationBaseSchema = z.object({
 
 const eventBaseSchema = z.object({
     adult: z.boolean(),
+    userId: z.number(),
     title: z.string().min(3, { message: "minimum 3 caractères" }),
     description: z.string().min(20, { message: "mininum 20 caractères" }),
     startDate: stringToZodDate,
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
     localization: localizationBaseSchema,
+    tags: z.array(z.object({
+        id: z.number()
+    })).optional(),
 });
 
 export const eventSchema = eventBaseSchema

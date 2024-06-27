@@ -1,15 +1,12 @@
 "use client";
-
 import Button from "@components/button/button";
 import Event from "@interfaces/event";
 import { useFormState } from "react-dom";
-import { ZodIssue } from "zod";
 import { Action } from "@type/action";
+import Tag from "@interfaces/tag";
 
-
-export default function EventForm({ action, event }: { action: Action, event?: Event }) {
+export default function EventForm({ action, event, tags }: { action: Action, event?: Event, tags: Tag[] }) {
     const [formState, formAction] = useFormState(action, { errors: [] });
-
     const defaultDate = new Date().toISOString().split('T')[0];
 
     const startDate = event?.startDate ? new Date(event.startDate).toISOString().split('T')[0] : defaultDate;
@@ -17,11 +14,9 @@ export default function EventForm({ action, event }: { action: Action, event?: E
 
     return (
         <form action={formAction}>
-            {
-                event?.id && (
-                    <input type="hidden" name="id" value={event.id} />
-                )
-            }
+            {event?.id && (
+                <input type="hidden" name="id" value={event.id} />
+            )}
             <div>
                 <label htmlFor="title">Titre:</label>
                 <input name="title" type="text" required defaultValue={event?.title} />
@@ -48,11 +43,9 @@ export default function EventForm({ action, event }: { action: Action, event?: E
                 <label htmlFor="adult">Tout public ?</label>
                 <input name="adult" type="checkbox" defaultChecked={event?.adult} />
             </div>
-            {
-                event?.localizations && (
-                    <input type="hidden" name="idLocalization" value={event?.localizations[0].id} />
-                )
-            }
+            {event?.localizations && (
+                <input type="hidden" name="idLocalization" value={event.localizations[0].id} />
+            )}
             <div>
                 <label htmlFor="address">Adresse :</label>
                 <input name="address" type="text" defaultValue={event?.localizations[0].address} />
@@ -69,7 +62,18 @@ export default function EventForm({ action, event }: { action: Action, event?: E
                 <label htmlFor="regionName">Region :</label>
                 <input name="regionName" type="text" defaultValue={event?.localizations[0].regionName} />
             </div>
+            <div>
+                <label htmlFor="tags">Tags :</label>
+                <select name="tags" multiple>
+                    {tags.map(tag => (
+                        <option key={tag.id} value={tag.id} selected={event?.tags.some(eventTag => eventTag.id === tag.id)}>
+                            {tag.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             <Button color="primary" type="submit">{event?.id ? "Modifier l'évènement" : "Créer un évènement"}</Button>
         </form>
     );
-};
+}

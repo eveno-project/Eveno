@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import { Container } from "@mui/material";
+
+import style from './page.module.css';
+import Button from "@components/button/button";
 
 export default function LoginPage() {
 	const [email, setEmail] = useState("");
@@ -27,22 +31,27 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
+		<Container className={style.container} maxWidth="md">
+			<form onSubmit={handleSubmit} className={style.form__container}>
+				<h2>Login</h2>
 				<input
+					className={style.form__input}
+					name="email"
 					type="email"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					placeholder="Email"
 				/>
 				<input
+					className={style.form__input}
+					name="password"
 					type="password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					placeholder="Password"
 				/>
-				<button type="submit">Login</button>
+				<Button className={style.form__submit} color="primary" type="submit">Login</Button>
 			</form>
-		</div>
+		</Container>
 	);
 }

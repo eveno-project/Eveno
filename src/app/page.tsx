@@ -1,75 +1,14 @@
 import Card from "@components/event/card/card";
 import Event from "@interfaces/event";
+import { getAll } from "@services/event";
+import NavBar from "@components/navbar/navbar";
 
-export default function Home() {
-  const events = [
-    {
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-      notes: [{
-        id: 1,
-        value: 3
-      }]
-    },
-    {
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-    },{
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-    },{
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-    },{
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-    },{
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-    },{
-      title: 'Évènement de l\'année dernière',
-      images: [
-        {
-          path: 'https://placehold.co/600x400',
-          name: 'placehold 600x400'
-        }
-      ],
-    },
-  ] as Partial<Event>[];
+export default async function Home() {
+  const events = await getAll();
   return (
     <main>
       {
-        events.map(event => <Card event={event}/>)
+        events.map(event => <Card event={event} />)
       }
     </main>
   );

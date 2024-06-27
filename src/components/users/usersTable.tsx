@@ -5,7 +5,7 @@ import User from "@interfaces/user";
 import { getUsersByRole } from "@services/user";
 import Button from "@components/button/button";
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import styles from './usersTable.module.css';
+import styles from './UsersTable.module.css';
 
 const UsersTable = () => {
 	const [users, setUsers] = useState<User[]>([]);
@@ -40,26 +40,26 @@ const UsersTable = () => {
 			<h1 className={styles.heading}>Admin</h1>
 			<table className={styles.table}>
 				<thead>
-				<tr>
-					<th className={styles.th}>ID</th>
-					<th className={styles.th}>Username</th>
-					<th className={styles.th}>Email</th>
-					<th className={styles.th}>Actions</th>
-				</tr>
+					<tr>
+						<th className={styles.th}>ID</th>
+						<th className={styles.th}>Username</th>
+						<th className={styles.th}>Email</th>
+						<th className={styles.th}>Actions</th>
+					</tr>
 				</thead>
 				<tbody>
-				{users.map(user => (
-					<tr key={user.id} className={styles.tr}>
-						<td className={styles.td}>{user.id}</td>
-						<td className={styles.td}>{user.username}</td>
-						<td className={styles.td}>{user.email}</td>
-						<td className={styles.td}>
-							<Button type={"button"} color="primary" onClick={() => handleDelete(user.username)}>
-								<DeleteRoundedIcon />
-							</Button>
-						</td>
-					</tr>
-				))}
+					{users.map(user => (
+						<tr key={user.id} className={styles.tr}>
+							<td className={styles.td}>{user.id}</td>
+							<td className={styles.td}>{user.username}</td>
+							<td className={styles.td}>{user.email}</td>
+							<td className={styles.td}>
+								<Button type={"button"} color="primary" onClick={() => handleDelete(user.username)}>
+									<DeleteRoundedIcon />
+								</Button>
+							</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		</div>

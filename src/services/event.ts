@@ -1,71 +1,100 @@
 import Event from "@interfaces/event";
 import prisma from "@utils/db";
-import Localization from "@interfaces/localization";
-import User from "@interfaces/user";
 import EventDto from "@dto/event-dto";
-import { getSession } from "next-auth/react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@lib/auth";
 import Mapper from "@utils/mapper";
+import { getTagsByIds } from "./tag";
+import { redirect } from 'next/navigation';
 
 
 export async function create(event: Event): Promise<void> {
+    let transaction;
+
     try {
+        const eventData = {
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            image: JSON.stringify(event.images),
+            title: event.title,
+            linkTicketing: event.linkTicketing,
+            isValid: event.isValid,
+            userId: event.userId,
+            startDate: event.startDate,
+            eventLocalizations: {
+                create: { ...event.localization, longitude: 0, latitude: 0 }
+            },
+        };
 
-        event.user = { id: 3 };
+        if (event.tags.length > 0) {
+            const tags = await getTagsByIds(event.tags);
 
-        const newEvent = await prisma.event.create({
-            data: {
+            eventData['eventTags'] = {
+                create: tags.map((tag) => ({
+                    tag: { connect: { id: tag.id } }
+                })),
+            };
+        }
+
+        transaction = await prisma.$transaction([
+            prisma.event.create({
+                data: eventData,
+            }),
+        ]);
+    } catch (error) {
+        console.error("Error creating event:", error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+export async function update(event: Event): Promise<void> {
+    event.user = { id: 3 };
+    let transaction;
+
+    try {
+        if (event.id) {
+            await prisma.eventTag.deleteMany({
+                where: { eventId: parseInt(event.id, 10) }
+            })
+            const eventData = {
                 adult: event.adult,
                 description: event.description,
                 endDate: event.endDate,
-                image: JSON.stringify(event.images),
+                image: JSON.stringify(event.image),
                 title: event.title,
                 linkTicketing: event.linkTicketing,
                 isValid: event.isValid,
                 userId: event.user.id,
                 startDate: event.startDate,
                 eventLocalizations: {
-                    create: { ...event.localizations, longitude: 0, latitude: 0 }
-                }
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
-
-
-export async function update(event: Event): Promise<void> {
-    event.user = { id: 3 };
-    try {
-        if (event.id) {
-            await prisma.event.update({
-                where: { id: event.id },
-                data: {
-                    adult: event.adult,
-                    description: event.description,
-                    endDate: event.endDate,
-                    image: JSON.stringify(event.images),
-                    title: event.title,
-                    linkTicketing: event.linkTicketing,
-                    isValid: event.isValid,
-                    userId: event.user.id,
-                    startDate: event.startDate,
-                    eventLocalizations: {
-                        update: {
-                            where: { id: event.localizations[0]?.id },
-                            data: {
-                                ...event.localizations,
-                                longitude: 0,
-                                latitude: 0
-                            }
+                    update: {
+                        where: { id: parseInt(event.localization.id, 10) },
+                        data: {
+                            ...event.localization,
+                            longitude: 0,
+                            latitude: 0
                         }
                     }
                 }
-            });
+            };
+
+            if (event.tags.length > 0) {
+                const tags = await getTagsByIds(event.tags);
+
+                eventData['eventTags'] = {
+                    create: tags.map((tag) => ({
+                        tag: { connect: { id: tag.id } }
+                    })),
+                };
+            }
+
+            transaction = await prisma.$transaction([
+                prisma.event.update({
+                    where: { id: parseInt(event.id, 10) },
+                    data: eventData,
+                }),
+            ]);
         }
     } catch (error) {
         console.error(error);
@@ -73,16 +102,25 @@ export async function update(event: Event): Promise<void> {
     }
 }
 
-
 export async function getById(eventId: number): Promise<Event | undefined> {
     try {
         const event = (await prisma.event.findUnique({
-            where: { id: eventId },
-            include: { eventLocalizations: true, user: true, eventTags: true, eventNetworks: true, eventNotes: true }
+            where: { id: parseInt(eventId, 10) },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            }
         })) as unknown as EventDto;
 
         if (!event) {
-            throw new Error("L'event n'existe pas");
+            redirect("/");
         }
 
         if (!event.user.id) {
@@ -95,9 +133,6 @@ export async function getById(eventId: number): Promise<Event | undefined> {
         throw error;
     }
 }
-
-
-
 
 export async function deleteOne(eventId: number): Promise<void> {
     try {
@@ -117,7 +152,11 @@ export async function getAll(): Promise<Event[]> {
             include: {
                 eventLocalizations: true,
                 user: true,
-                eventTags: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
                 eventNetworks: true,
                 eventNotes: true
             }
@@ -131,6 +170,7 @@ export async function getAll(): Promise<Event[]> {
         throw error;
     }
 }
+
 export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
         // Fetch the events by joining the user table based on email
@@ -143,7 +183,11 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
             include: {
                 eventLocalizations: true,
                 user: true,
-                eventTags: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
                 eventNetworks: true,
                 eventNotes: true
             }
@@ -152,6 +196,111 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
         return events.map(
             Mapper.toEvent
         );
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+export async function getByTagName(tagName: string): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                eventTags: {
+                    some: {
+                        tag: {
+                            name: tagName
+                        }
+                    }
+                }
+            },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            }
+        });
+
+        const transformedEvents = events.map(event => ({
+            id: event.id,
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            eventTags: event.eventTags.map(et => et.tag.name),
+            networks: [],
+            notes: event.eventNotes,
+            title: event.title,
+            linkTicketing: event.linkTicketing ?? undefined,
+            isValid: event.isValid,
+            user: { id: event.userId ?? undefined },
+            startDate: event.startDate,
+            comments: [],
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            publishedAt: event.publishedAt ?? undefined,
+            published: event.published,
+            localization: event.eventLocalizations
+        }));
+
+        return transformedEvents;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+export async function getManyByName(name: string): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                title: {
+                    contains: name,
+                    mode: 'insensitive'
+                }
+            },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            }
+        });
+
+        const transformedEvents = events.map(event => ({
+            id: event.id,
+            adult: event.adult,
+            description: event.description,
+            endDate: event.endDate,
+            eventTags: event.eventTags.map(et => et.tag.name),
+            networks: [],
+            notes: event.eventNotes,
+            title: event.title,
+            linkTicketing: event.linkTicketing ?? undefined,
+            isValid: event.isValid,
+            user: { id: event.userId ?? undefined },
+            startDate: event.startDate,
+            comments: [],
+            createdAt: event.createdAt,
+            updatedAt: event.updatedAt,
+            publishedAt: event.publishedAt ?? undefined,
+            published: event.published,
+            localization: event.eventLocalizations
+        }));
+
+        return transformedEvents;
     } catch (error) {
         console.error(error);
         throw error;
