@@ -13,7 +13,6 @@ const localizationBaseSchema = z.object({
 
 const eventBaseSchema = z.object({
     adult: z.boolean(),
-    userId: z.number(),
     title: z.string().min(3, { message: "minimum 3 caractères" }),
     description: z.string().min(20, { message: "mininum 20 caractères" }),
     startDate: stringToZodDate,
@@ -29,6 +28,9 @@ const eventBaseSchema = z.object({
 });
 
 export const eventSchema = eventBaseSchema
+    .extend({
+        localization: localizationBaseSchema
+    })
     .refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
         message: "La date de fin ne peut-être inférieur à la date de départ",
