@@ -2,8 +2,8 @@
 import Button from "@components/button/button";
 import Event from "@interfaces/event";
 import { useFormState } from "react-dom";
-import { ZodIssue } from "zod";
 import { Action } from "@type/action";
+import Tag from "@interfaces/tag";
 
 export default function EventForm({ action, event, tags }: { action: Action, event?: Event, tags: Tag[] }) {
     const [formState, formAction] = useFormState(action, { errors: [] });

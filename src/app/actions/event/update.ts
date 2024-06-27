@@ -1,18 +1,21 @@
-"use server";
-import Event from "@interfaces/event";
-import { update } from "@services/event";
-import { updateEventSchema } from "@validators/event.schema";
-import { redirect } from "next/navigation";
-import { ZodIssue } from "zod";
-import { authOptions } from "@lib/auth";
+'use server';
+import Event from '@interfaces/event';
+import { update } from '@services/event';
+import { updateEventSchema } from '@validators/event.schema';
+import { redirect } from 'next/navigation';
+import { ZodIssue } from 'zod';
+import { authOptions } from '@lib/auth';
 import { getServerSession } from 'next-auth';
 
 export default async function updateEvent(id: number, _prevState?: any, params?: FormData) {
+    const session = await getServerSession(authOptions);
     if (!params) {
         throw Error('aucun paramètre');
     }
-    const session = await getServerSession(authOptions);
-    const idUser = session?.user.id;
+    if (!session?.user) {
+        throw Error('Utilisateur non connecté');
+    }
+    const userId = session?.user.id;
     const validation = updateEventSchema.safeParse({
         id: id,
         adult: params.get('adult') ? true : false,
@@ -32,7 +35,7 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
             latitude: 0,
         },
         tags: params.getAll('tags').map(tag => ({ id: Number(tag) })),
-        userId: parseInt(idUser)
+        userId: userId
     });
     
     if (!validation.success) {
@@ -46,5 +49,5 @@ export default async function updateEvent(id: number, _prevState?: any, params?:
 
     await update(validation.data as unknown as Event);
 
-    redirect('/event/' + id + '/details/');
+    redirect(`/event/${id}`);
 }
