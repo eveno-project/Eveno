@@ -22,7 +22,7 @@ export default async function updateEvent(id: number, _prevState: any, params: F
         startDate: params.get('startDate'),
         publishedAt: params.get('publishedAt') ?? undefined,
         title: params.get('title')?.toString(),
-        localization: {
+        localizations: {
             id: +params.get('idLocalization')!.toString(),
             address: params.get('address'),
             city: params.get('city'),
@@ -36,7 +36,7 @@ export default async function updateEvent(id: number, _prevState: any, params: F
             id: userId
         }
     });
-    
+
     if (!validation.success) {
         console.error({
             issues: validation.error.issues

@@ -21,7 +21,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
         startDate: params.get('startDate'),
         publishedAt: params.get('publishedAt') ?? undefined,
         title: params.get('title')?.toString(),
-        localization: {
+        localizations: {
             address: params.get('address'),
             city: params.get('city'),
             regionName: params.get('regionName'),
@@ -36,6 +36,7 @@ export default async function createEvent(_prevState: any, params: FormData) {
     });
 
     if (!validation.success) {
+        console.error({ error: validation.error.issues })
         return {
             errors: validation.error.issues as ZodIssue[]
         };

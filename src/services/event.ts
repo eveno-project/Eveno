@@ -23,7 +23,7 @@ export async function create(event: Event) {
                 eventLocalizations: {
                     create: localization
                 },
-                eventTags: { 
+                eventTags: {
                     create: event.tags.map(tag => ({
                         tag: { connect: { id: tag.id } }
                     }))
@@ -189,7 +189,7 @@ export async function getByTagName(name: string): Promise<Event[]> {
         }) as unknown as EventDto[];
         return events.map(Mapper.toEvent);
     } catch (error) {
-        
+
         throw error;
     }
 }
