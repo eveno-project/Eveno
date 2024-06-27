@@ -38,7 +38,6 @@ export async function create(event: Event) {
 
 export async function update(event: Event) {
     try {
-        console.debug({ local: event.localizations[0] });
         if (event.id) {
             await prisma.event.update({
                 where: { id: event.id },
