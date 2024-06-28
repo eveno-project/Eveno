@@ -20,7 +20,7 @@
     max-width: 10rem;
 }
 
-.style.form__input__adult {
+.form__input__adult {
     display: flex;
     justify-content: space-between;
 }
