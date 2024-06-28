@@ -54,6 +54,9 @@
       ],
       "@validators/*": [
         "./src/validators/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
       ]
     }
   },

@@ -22,3 +22,8 @@
     color: var(--TERTIARY);
     text-decoration-color: var(--TERTIARY);
 }
+
+.link {
+    color: var(--LINK);
+    text-decoration-color: var(--LINK);
+}
