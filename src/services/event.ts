@@ -86,7 +86,7 @@ export async function getById(id: number): Promise<Event> {
         if (!event.user.id) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
-        
+
         return Mapper.toEvent(event);
     } catch (error) {
         throw error;
@@ -118,6 +118,11 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
                 eventNetworks: true,
                 eventNotes: true
             },
+            where: {
+                eventTags: {
+                    some: {} // This ensures that only events with at least one eventTag are retrieved
+                }
+            },
             orderBy: {
                 createdAt: sort
             }
@@ -130,6 +135,8 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
         throw error;
     }
 }
+
+
 
 export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
