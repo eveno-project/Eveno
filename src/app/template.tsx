@@ -6,9 +6,9 @@ export default function template({
     children: React.ReactNode;
 }) {
     return (
-        <>
+        <div>
             <NavBar />
             {children}
-        </>
+        </div>
     );
 }

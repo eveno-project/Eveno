@@ -1,9 +1,10 @@
+"use client";
 import { Type } from '@type/button';
 import styles from './button.module.css';
 import { ReactNode } from 'react';
 import { Color } from '@type/color';
 
-export default async function Button({
+export default function Button({
     children,
     color,
     type,

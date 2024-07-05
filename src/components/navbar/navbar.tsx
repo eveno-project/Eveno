@@ -1,16 +1,27 @@
+"use client";
 import style from './navbar.module.css';
 import Image from 'next/image';
 import Button from '@components/button/button';
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import useSession from "@hooks/useSession";
+import * as url from "node:url";
 
-export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: boolean, noMenu?: boolean }) {
-    const session = await getServerSession();
+export default function NavBar({ noSearchBar, noMenu }: { noSearchBar?: boolean, noMenu?: boolean }) {
+    const router = useRouter();
+    const pathname = usePathname()
     const handleLogin = () => {
-        redirect('loging')
-    };
+        router.push("/login");
+    }
+
+    const handleLogout = async () => {
+        await signOut();
+        router.push("/");
+    }
+
+    const session = useSession();
+
     return (
         <header className={style.navbar__container}>
             <div className={style.navbar__fou}>
@@ -32,10 +43,11 @@ export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: bo
             } */}
             {
                 session?.user ? (
-                    <></>
-                    // <Button onClick={signOut} type='button' color='primary'>Se déconnecter</Button>
+                    <Button onClick={handleLogout} color={"primary"} type={"button"}>Se déconnecter</Button>
                 ) : (
-                    <Link href="/login" className={style.authentication__login}>Se connecter</Link>
+                    pathname !== '/login' && pathname !== '/register' &&(
+                        <Button onClick={handleLogin} color={"primary"} type={"button"}>Se connecter</Button>
+                    )
                 )
             }
         </header>

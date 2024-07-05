@@ -32,7 +32,7 @@ export default function Card({ event, width = 200 }: { event: Partial<Event>, wi
                 }
             </section>
             <section className={styles.footer}>
-                <Link color='primary' href={`/event/${event.id}`}>Voir plus</Link>
+                <Link color='link' href={`/event/${event.id}`}>Voir plus</Link>
             </section>
         </article>
     );
