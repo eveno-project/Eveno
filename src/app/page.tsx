@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Container } from "@mui/material";
@@ -26,13 +26,14 @@ const Main = () => {
       })
       .then((data) => {
         if (data && Array.isArray(data.data)) {
-          setEvents(data.data);
+          const validEvents = data.data.filter((event: Event) => event.isValid);
+          setEvents(validEvents);
         } else {
           throw new Error("Fetched data is not an array");
         }
       })
       .catch((error) => {
-        console.error("Error fetching event:", error);
+        console.error("Error fetching events:", error);
       })
       .finally(() => {
         setLoadingEvents(false);
@@ -79,7 +80,6 @@ const Main = () => {
     event.title.toLowerCase().includes(filterText.toLowerCase())
   );
 
-  // Filter events by selected tags
   const filteredByTags = selectedTags.length
     ? filteredEvents.filter((event) => selectedTags.every((tag) => event.tags.some((et) => et.name === tag)))
     : filteredEvents;

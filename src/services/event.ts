@@ -120,7 +120,7 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
             },
             where: {
                 eventTags: {
-                    some: {} // This ensures that only events with at least one eventTag are retrieved
+                    some: {}
                 }
             },
             orderBy: {
@@ -135,6 +135,42 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
         throw error;
     }
 }
+
+
+export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
+    try {
+        const events = (await prisma.event.findMany({
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            },
+            where: {
+                isValid: isValid,
+                eventTags: {
+                    some: {}
+                }
+            },
+            orderBy: {
+                createdAt: sort
+            }
+        })) as unknown as EventDto[];
+
+        return events.map(
+            Mapper.toEvent
+        );
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 
 
 

@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
 export async function POST(NextRequest: NextRequest) {
-	const { username, email, password, confirmPassword, adult, birthday} = await NextRequest.json();
+	const { username, email, password, confirmPassword, adult, birthday } = await NextRequest.json();
 
-	if(!username || !email || !password || !confirmPassword || !birthday) {
+	if (!username || !email || !password || !confirmPassword || !birthday) {
 		return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 	}
 
-	if(email === "" || !email.includes("@")) {
+	if (email === "" || !email.includes("@")) {
 		return NextResponse.json({ error: "Invalid email" }, { status: 400 });
 	}
 
@@ -21,7 +21,7 @@ export async function POST(NextRequest: NextRequest) {
 		return NextResponse.json({ error: "Adult must be a boolean" }, { status: 400 });
 	}
 
-	if(birthday.length !== 10) {
+	if (birthday.length !== 10) {
 		return NextResponse.json({ error: "Birthday must be in the format 'YYYY-MM-DD'" }, { status: 400 });
 	}
 
@@ -51,6 +51,7 @@ export async function POST(NextRequest: NextRequest) {
 				return NextResponse.json({ error: "Username already exists" }, { status: 400 });
 			}
 		}
+		console.log(error);
 		return NextResponse.json({ error: "Internal error" }, { status: 500 });
 	}
 }
