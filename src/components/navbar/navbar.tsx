@@ -1,16 +1,17 @@
+'use client';
 import style from './navbar.module.css';
 import Image from 'next/image';
-import Button from '@components/button/button';
-import Link from 'next/link';
-import { getServerSession } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import Link from '@components/link/link';
+import { Session, getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getSession } from 'next-auth/react';
 
-export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: boolean, noMenu?: boolean }) {
-    const session = await getServerSession();
-    const handleLogin = () => {
-        redirect('loging')
-    };
+export default function NavBar({ noSearchBar, noMenu }: { noSearchBar?: boolean, noMenu?: boolean }) {
+    const [session, setSession] = useState<Session | null>(null);
+    useEffect(() => {
+        async () => setSession(await getSession());
+    }, [])
     return (
         <header className={style.navbar__container}>
             <div className={style.navbar__fou}>

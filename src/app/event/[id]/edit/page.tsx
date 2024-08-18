@@ -1,3 +1,4 @@
+'use server';
 import updateEvent from "@actions/event/update";
 import deleteEvent from "@actions/event/delete";
 import EventForm from "@components/form/event-form";
@@ -7,7 +8,6 @@ import { getAll } from "@services/tag";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';
 import { redirect } from "next/navigation";
-import Button from "@components/button/button";
 
 export default async function Page({ params }: { params: { id: number } }) {
     const event = await getById((params.id));

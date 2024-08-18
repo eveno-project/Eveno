@@ -38,9 +38,6 @@ export default async function updateEvent(id: number, _prevState: any, params: F
     });
 
     if (!validation.success) {
-        console.error({
-            issues: validation.error.issues
-        });
         return {
             errors: validation.error.issues as ZodIssue[]
         };

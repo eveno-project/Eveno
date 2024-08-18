@@ -1,3 +1,5 @@
+'use server';
+
 import createEvent from "@actions/event/create";
 import EventForm from "@components/form/event-form";
 import { getAll } from "@services/tag";

@@ -36,7 +36,6 @@ export default async function createEvent(_prevState: any, params: FormData) {
     });
 
     if (!validation.success) {
-        console.error({ error: validation.error.issues })
         return {
             errors: validation.error.issues as ZodIssue[]
         };
