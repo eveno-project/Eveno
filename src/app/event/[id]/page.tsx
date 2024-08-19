@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 
 import { Container } from "@mui/material";
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import validateEvent from "@actions/event/validate";
+import followEvent from "@actions/event/follow";
 import NoAdultContentRoundedIcon from '@mui/icons-material/NoAdultContentRounded';
 import CloudRoundedIcon from '@mui/icons-material/CloudRounded';
 import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded';
@@ -16,31 +18,52 @@ import Button from "@components/button/button";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';
 import { Role } from "@constants/role";
+import EventFormValidate from "@components/form/event-form-validate";
+import EventFormFollow from "@components/form/event-form-follow";
+import EventSubscribe from "@interfaces/EventSubscribe";
+
+function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): boolean {
+    return eventSubscribes.some(subscribe => subscribe.userId === userId);
+}
 
 export default async function Page({ params }: { params: { id: number } }) {
     const event = await getById(params.id);
     const session = await getServerSession(authOptions);
+    console.log(event.eventSubscribes);
 
     let myEvent = false;
     let canValide = false;
+    let canFollow = false;
+    let follow = false;
+
     if (session) {
         if (event && (event.user.id === session?.user.id)) {
             myEvent = true;
         }
         if (
             event
-            && (session.user.role == Role.ADMIN)
-            // && (event.user.id !== session?.user.id)
+            && event.isValid === false
+            && (session.user.role === Role.ADMIN)
         ) {
             canValide = true;
         }
 
-        if ((session.user.role !== Role.ADMIN || event.user.id !== session?.user.id) && event.isValid == false) {
+        if ((session.user.role !== Role.ADMIN || event.user.id !== session?.user.id) && event.isValid === false) {
             redirect('/');
         }
+        if (
+            event
+            && event.isValid === true
+        ) {
+            canFollow = true;
+        }
 
+        if (session.user) {
+            follow = isUserSubscribed(event.eventSubscribes, session.user.id);
+        }
+
+        console.log(follow);
     }
-
 
     if (event) {
         return (
@@ -115,9 +138,7 @@ export default async function Page({ params }: { params: { id: number } }) {
                     <Button className={style.footer__reserved__button} color="primary" type="button">Reserver</Button>
                     {
                         canValide && (
-                            <Link href={`/event/${event.id}/edit`}>
-                                <Button className={style.footer__reserved__button} color="primary" type="button">Valider</Button>
-                            </Link>
+                            <EventFormValidate action={validateEvent} event={event} />
                         )
                     }
                     {
@@ -125,6 +146,11 @@ export default async function Page({ params }: { params: { id: number } }) {
                             <Link href={`/event/${event.id}/edit`}>
                                 <Button className={style.footer__reserved__button} color="primary" type="button"  >modifier</Button>
                             </Link>
+                        )
+                    }
+                    {
+                        canFollow && follow && (
+                            <EventFormFollow action={followEvent} event={event} />
                         )
                     }
                 </section>

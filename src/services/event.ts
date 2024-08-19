@@ -1,4 +1,5 @@
 import Event from "@interfaces/event";
+import EventSubscribe from "@interfaces/EventSubscribe";
 import prisma from "@utils/db";
 import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
@@ -16,7 +17,7 @@ export async function create(event: Event) {
                 image: JSON.stringify(event.images),
                 title: event.title,
                 linkTicketing: event.linkTicketing,
-                isValid: event.isValid,
+                isValid: false,
                 user: {
                     connect: { id: event.user.id }
                 },
@@ -48,7 +49,7 @@ export async function update(event: Event) {
                     image: JSON.stringify(event.images),
                     title: event.title,
                     linkTicketing: event.linkTicketing,
-                    isValid: event.isValid,
+                    isValid: false,
                     user: {
                         connect: { id: event.user.id }
                     },
@@ -72,13 +73,49 @@ export async function update(event: Event) {
     }
 }
 
+
+export async function valid(eventId: number) {
+    try {
+        if (eventId) {
+            await prisma.event.update({
+                where: { id: eventId },
+                data: {
+                    isValid: true,
+                }
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function follow(eventId: number, userId: number) {
+    try {
+        if (eventId && userId) {
+            await prisma.eventSubscribe.create({
+                data: {
+                    event: {
+                        connect: { id: eventId }
+                    },
+                    user: {
+                        connect: { id: userId }
+                    },
+                    type: ""
+                }
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function getById(id: number): Promise<Event> {
     try {
         const event = (await prisma.event.findUnique({
             where: { id: +id },
-            include: { eventLocalizations: true, user: true, eventTags: true, eventNetworks: true, eventNotes: true }
+            include: { eventLocalizations: true, user: true, eventTags: true, eventNetworks: true, eventNotes: true, eventSubscribes: true }
         })) as unknown as EventDto;
-
+        
         if (!event) {
             redirect("/");
         }

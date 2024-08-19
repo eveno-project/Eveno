@@ -3,6 +3,7 @@ import EventDto from "@dto/event-dto";
 import EventLocalizationDto from "@dto/event-localization-dto";
 import EventNetworkDto from "@dto/event-network-dto";
 import EventNoteDto from "@dto/event-note-dto";
+import EventSubscribeDto from "@dto/event-subscribe-dto";
 import EventTagDto from "@dto/event-tag-dto";
 import UserDto from "@dto/user-dto";
 import Comment from "@interfaces/comment";
@@ -11,6 +12,7 @@ import Image from "@interfaces/image";
 import Localization from "@interfaces/localization";
 import Network from "@interfaces/network";
 import Note from "@interfaces/note";
+import Subscribe from "@interfaces/subscribe";
 import Tag from "@interfaces/tag";
 import User from "@interfaces/user";
 import { JsonValue } from "@prisma/client/runtime/library";
@@ -31,6 +33,7 @@ export default class Mapper {
             isValid: eventDto.isValid,
             user: Mapper.toUser(eventDto.user),
             tags: eventDto.eventTags?.map(Mapper.toTags),
+            eventSubscribes: eventDto.eventSubscribes?.map(Mapper.toEventSubscribes),
             networks: eventDto.eventNetworks?.map(Mapper.toNetwork),
             localizations: eventDto.eventLocalizations.map(Mapper.toLocalization),
             endDate: new Date(eventDto.endDate),
@@ -68,6 +71,15 @@ export default class Mapper {
         return {
             id: eventTagDto.tag?.id,
             name: eventTagDto.tag?.name
+        };
+    }
+
+    static toEventSubscribes(eventSubscribesDto: EventSubscribeDto): Subscribe {
+        console.log(eventSubscribesDto);
+        return {
+            id: eventSubscribesDto.id,
+            userId: eventSubscribesDto.userId,
+            eventId: eventSubscribesDto.eventId,
         };
     }
 

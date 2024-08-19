@@ -7,6 +7,7 @@ import Loading from "./loading";
 import style from "./page.module.css";
 import Event from "@interfaces/event";
 import Tag from "@interfaces/tag";
+import TagSelect from "@components/tag/tagSelect"; // Importez le nouveau composant
 
 const Main = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -67,9 +68,13 @@ const Main = () => {
     setFilterText(event.target.value);
   };
 
-  const handleTagSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selectedValues: string[] = Array.from(event.target.selectedOptions, (option) => option.value);
-    setSelectedTags(selectedValues);
+  const handleTagSelect = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedTags(
+      typeof value === 'string' ? value.split(',') : value,
+    );
   };
 
   if (loadingEvents || loadingTags) {
@@ -93,13 +98,11 @@ const Main = () => {
         onChange={handleFilterChange}
         className={style.navbar__searchbar}
       />
-      <select multiple onChange={handleTagSelect}>
-        {tags.map((tag) => (
-          <option key={tag.id} value={tag.name}>
-            {tag.name}
-          </option>
-        ))}
-      </select>
+      <TagSelect
+        tags={tags}
+        selectedTags={selectedTags}
+        onTagChange={handleTagSelect}
+      />
       <List events={filteredByTags} />
     </Container>
   );
