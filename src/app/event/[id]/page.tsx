@@ -29,12 +29,12 @@ function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): bo
 export default async function Page({ params }: { params: { id: number } }) {
     const event = await getById(params.id);
     const session = await getServerSession(authOptions);
-    console.log(event.eventSubscribes);
 
     let myEvent = false;
     let canValide = false;
     let canFollow = false;
     let follow = false;
+
 
     if (session) {
         if (event && (event.user.id === session?.user.id)) {
@@ -59,10 +59,11 @@ export default async function Page({ params }: { params: { id: number } }) {
         }
 
         if (session.user) {
-            follow = isUserSubscribed(event.eventSubscribes, session.user.id);
+            if (event.eventSubscribes) {
+                follow = isUserSubscribed(event.eventSubscribes, session.user.id);
+            }
         }
-
-        console.log(follow);
+        console.log(event);
     }
 
     if (event) {
@@ -135,7 +136,12 @@ export default async function Page({ params }: { params: { id: number } }) {
                     </article>
                 </section>
                 <section className={style.footer}>
-                    <Button className={style.footer__reserved__button} color="primary" type="button">Reserver</Button>
+
+                    {
+                        (event.linkTicketing != undefined) && (
+                            <Button className={style.footer__reserved__button} color="primary" type="button">Reserver</Button>
+                        )
+                    }
                     {
                         canValide && (
                             <EventFormValidate action={validateEvent} event={event} />
@@ -149,8 +155,8 @@ export default async function Page({ params }: { params: { id: number } }) {
                         )
                     }
                     {
-                        canFollow && follow && (
-                            <EventFormFollow action={followEvent} event={event} />
+                        canFollow && (
+                            <EventFormFollow action={followEvent} event={event} doYouFollow={follow} />
                         )
                     }
                 </section>

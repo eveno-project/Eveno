@@ -109,13 +109,42 @@ export async function follow(eventId: number, userId: number) {
     }
 }
 
+export async function unFollow(eventId: number, userId: number): Promise<void> {
+    try {
+        if (eventId && userId) {
+            await prisma.eventSubscribe.deleteMany({
+                where: {
+                    eventId: eventId,
+                    userId: userId,
+                },
+            });
+        }
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 export async function getById(id: number): Promise<Event> {
     try {
         const event = (await prisma.event.findUnique({
             where: { id: +id },
-            include: { eventLocalizations: true, user: true, eventTags: true, eventNetworks: true, eventNotes: true, eventSubscribes: true }
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true,
+                eventSubscribes: true
+            }
         })) as unknown as EventDto;
-        
+
+
         if (!event) {
             redirect("/");
         }
@@ -123,7 +152,6 @@ export async function getById(id: number): Promise<Event> {
         if (!event.user.id) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
-
         return Mapper.toEvent(event);
     } catch (error) {
         throw error;

@@ -19,6 +19,7 @@ import { JsonValue } from "@prisma/client/runtime/library";
 
 export default class Mapper {
     static toEvent(eventDto: EventDto): Event {
+        // console.log(eventDto.eventTags);
         return {
             adult: eventDto.adult,
             comments: eventDto.comments?.map(Mapper.toComment),
@@ -68,6 +69,7 @@ export default class Mapper {
     }
 
     static toTags(eventTagDto: EventTagDto): Tag {
+        console.log(eventTagDto);
         return {
             id: eventTagDto.tag?.id,
             name: eventTagDto.tag?.name
@@ -75,7 +77,6 @@ export default class Mapper {
     }
 
     static toEventSubscribes(eventSubscribesDto: EventSubscribeDto): Subscribe {
-        console.log(eventSubscribesDto);
         return {
             id: eventSubscribesDto.id,
             userId: eventSubscribesDto.userId,

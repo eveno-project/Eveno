@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: number } }) {
     const updateEventWithId = updateEvent.bind(null, +params.id);
     const tags = await getAll();
     const session = await getServerSession(authOptions);
-
+    // console.log(event);
     if (!event || event?.user.id != session?.user.id) {
         redirect("/");
     }
