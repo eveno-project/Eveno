@@ -12,7 +12,7 @@ import { Container } from '@mui/material';
 export default async function Page({ params }: { params: { id: number } }) {
     const tags = await getAll();
     const session = await getServerSession(authOptions);
-    console.log(session?.user.role);
+    
     if (session?.user.role !== Role.ADMIN) {
         redirect("/");
     }

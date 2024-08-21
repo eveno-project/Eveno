@@ -28,5 +28,5 @@ export default interface Event {
     notes: Note[]
     startDate: Date
     endDate: Date
-    eventSubscribes: Subscribe[]
+    eventSubscribes: EventSubscribe[]
 }

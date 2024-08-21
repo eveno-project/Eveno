@@ -109,6 +109,26 @@ export async function follow(eventId: number, userId: number) {
     }
 }
 
+export async function comment(eventId: number, userId: number, comment: string) {
+    try {
+        if (eventId && userId && comment) {
+            await prisma.comment.create({
+                data: {
+                    event: {
+                        connect: { id: eventId }
+                    },
+                    user: {
+                        connect: { id: userId }
+                    },
+                    content: comment
+                }
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function unFollow(eventId: number, userId: number): Promise<void> {
     try {
         if (eventId && userId) {
@@ -128,22 +148,37 @@ export async function unFollow(eventId: number, userId: number): Promise<void> {
 
 export async function getById(id: number): Promise<Event> {
     try {
-        const event = (await prisma.event.findUnique({
+        const event = await prisma.event.findUnique({
             where: { id: +id },
             include: {
                 eventLocalizations: true,
                 user: true,
                 eventTags: {
                     include: {
-                        tag: true
+                        tag: true,
                     }
                 },
-                eventNetworks: true,
+                comments: {
+                    include: {
+                        user: true
+                    }
+                },
+                eventSubscribes: {
+                    include: {
+                        user: true,
+                        event: {
+                            include: {
+                                user: true,
+                                eventLocalizations: true,
+                                eventNotes: true,
+                            }
+                        },
+                    }
+                },
                 eventNotes: true,
-                eventSubscribes: true
             }
-        })) as unknown as EventDto;
-
+        }) as unknown as EventDto;
+        // console.log(event);
 
         if (!event) {
             redirect("/");

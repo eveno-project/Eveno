@@ -21,9 +21,11 @@ import { Role } from "@constants/role";
 import EventFormValidate from "@components/form/event-form-validate";
 import EventFormFollow from "@components/form/event-form-follow";
 import EventSubscribe from "@interfaces/EventSubscribe";
+import EventFormComment from "@components/form/event-form-comment";
+import commentEvent from "@actions/event/comment";
 
 function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): boolean {
-    return eventSubscribes.some(subscribe => subscribe.userId === userId);
+    return eventSubscribes.some(subscribe => subscribe.user.id === userId);
 }
 
 export default async function Page({ params }: { params: { id: number } }) {
@@ -64,6 +66,8 @@ export default async function Page({ params }: { params: { id: number } }) {
             }
         }
         console.log(event);
+        console.log(follow);
+
     }
 
     if (event) {
@@ -157,6 +161,13 @@ export default async function Page({ params }: { params: { id: number } }) {
                     {
                         canFollow && (
                             <EventFormFollow action={followEvent} event={event} doYouFollow={follow} />
+                        )
+                    }
+                </section>
+                <section className={style.body}>
+                    {
+                        session && (
+                            <EventFormComment action={commentEvent} event={event} />
                         )
                     }
                 </section>

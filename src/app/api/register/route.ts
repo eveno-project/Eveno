@@ -51,7 +51,7 @@ export async function POST(NextRequest: NextRequest) {
 				return NextResponse.json({ error: "Username already exists" }, { status: 400 });
 			}
 		}
-		console.log(error);
+		
 		return NextResponse.json({ error: "Internal error" }, { status: 500 });
 	}
 }

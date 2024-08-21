@@ -3,7 +3,8 @@ import Event from "./event"
 
 export default interface EventSubscribe {
     id?: number
-    userId: number
-    eventId: number
+    user: Partial<User>
+    event: Partial<Event>
     type: string
 }
+

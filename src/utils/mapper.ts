@@ -6,6 +6,7 @@ import EventNoteDto from "@dto/event-note-dto";
 import EventSubscribeDto from "@dto/event-subscribe-dto";
 import EventTagDto from "@dto/event-tag-dto";
 import UserDto from "@dto/user-dto";
+import EventSubscribe from "@interfaces/EventSubscribe";
 import Comment from "@interfaces/comment";
 import Event from "@interfaces/event";
 import Image from "@interfaces/image";
@@ -16,10 +17,10 @@ import Subscribe from "@interfaces/subscribe";
 import Tag from "@interfaces/tag";
 import User from "@interfaces/user";
 import { JsonValue } from "@prisma/client/runtime/library";
+import { map } from "zod";
 
 export default class Mapper {
     static toEvent(eventDto: EventDto): Event {
-        // console.log(eventDto.eventTags);
         return {
             adult: eventDto.adult,
             comments: eventDto.comments?.map(Mapper.toComment),
@@ -45,11 +46,12 @@ export default class Mapper {
     }
 
     static toComment(commentDto: CommentDto): Comment {
+        // console.log(commentDto);
         return {
             content: commentDto.content,
             id: commentDto.id,
             parent: commentDto.parent ? Mapper.toComment(commentDto.parent) : undefined,
-            replies: commentDto.replies.map(Mapper.toComment),
+            replies: commentDto.replies ? commentDto.replies.map(Mapper.toComment) : [],
             user: Mapper.toUser(commentDto.user),
         };
     }
@@ -69,18 +71,18 @@ export default class Mapper {
     }
 
     static toTags(eventTagDto: EventTagDto): Tag {
-        console.log(eventTagDto);
         return {
             id: eventTagDto.tag?.id,
             name: eventTagDto.tag?.name
         };
     }
 
-    static toEventSubscribes(eventSubscribesDto: EventSubscribeDto): Subscribe {
+    static toEventSubscribes(eventSubscribesDto: EventSubscribeDto): EventSubscribe {
         return {
+            event: Mapper.toEvent(eventSubscribesDto.event),
             id: eventSubscribesDto.id,
-            userId: eventSubscribesDto.userId,
-            eventId: eventSubscribesDto.eventId,
+            user: Mapper.toUser(eventSubscribesDto.user),
+            type: eventSubscribesDto.type
         };
     }
 

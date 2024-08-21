@@ -25,7 +25,6 @@ const adminEventValidation = ({ params }: { params: { id: number } }) => {
                 console.error("Error fetching event:", error);
             });
     }, [params.id]);
-    console.log(event);
 }
 
 export default adminEventValidation;
