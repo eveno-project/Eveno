@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { Container } from "@mui/material";
+import { Container, Divider, Grid, Paper, Avatar } from "@mui/material";
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 import validateEvent from "@actions/event/validate";
 import followEvent from "@actions/event/follow";
@@ -23,6 +23,7 @@ import EventFormFollow from "@components/form/event-form-follow";
 import EventSubscribe from "@interfaces/EventSubscribe";
 import EventFormComment from "@components/form/event-form-comment";
 import commentEvent from "@actions/event/comment";
+import CommentList from "@components/event/comment-list";
 
 function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): boolean {
     return eventSubscribes.some(subscribe => subscribe.user.id === userId);
@@ -65,8 +66,6 @@ export default async function Page({ params }: { params: { id: number } }) {
                 follow = isUserSubscribed(event.eventSubscribes, session.user.id);
             }
         }
-        console.log(event);
-        console.log(follow);
 
     }
 
@@ -171,6 +170,8 @@ export default async function Page({ params }: { params: { id: number } }) {
                         )
                     }
                 </section>
+                <CommentList event={event} ></CommentList>
+
             </Container>
         );
     }

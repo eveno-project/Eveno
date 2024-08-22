@@ -23,7 +23,7 @@ const Main = () => {
     const router = useRouter(); // Initialize the router
 
     useEffect(() => {
-        fetch("/api/users/event/myEvent")
+        fetch("/api/users/event/eventFollow")
             .then((response) => {
                 if (response.status === 401) {
                     // Redirect to login page if unauthorized
@@ -37,7 +37,8 @@ const Main = () => {
             })
             .then((data) => {
                 if (data && Array.isArray(data.data)) {
-                    setEvents(data.data);
+                    const validEvents = data.data.filter((event: Event) => event.isValid);
+                    setEvents(validEvents);
                 } else {
                     throw new Error("Fetched data is not an array");
                 }

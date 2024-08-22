@@ -40,6 +40,12 @@ export async function create(event: Event) {
 export async function update(event: Event) {
     try {
         if (event.id) {
+            await prisma.eventTag.deleteMany({
+                where: {
+                    eventId: event.id
+                }
+            });
+
             await prisma.event.update({
                 where: { id: event.id },
                 data: {
@@ -160,8 +166,11 @@ export async function getById(id: number): Promise<Event> {
                 },
                 comments: {
                     include: {
-                        user: true
-                    }
+                        user: true,
+                    },
+                    orderBy: {
+                        id: 'desc',
+                    },
                 },
                 eventSubscribes: {
                     include: {
@@ -178,7 +187,6 @@ export async function getById(id: number): Promise<Event> {
                 eventNotes: true,
             }
         }) as unknown as EventDto;
-        // console.log(event);
 
         if (!event) {
             redirect("/");
@@ -192,6 +200,7 @@ export async function getById(id: number): Promise<Event> {
         throw error;
     }
 }
+
 
 export async function deleteOne(eventId: number): Promise<void> {
     try {
@@ -302,6 +311,53 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
         throw error;
     }
 }
+
+
+export async function getByUserEmailFollow(userEmail: string): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                eventSubscribes: {
+                    some: {
+                        user: {
+                            email: userEmail
+                        }
+                    }
+                }
+            },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true,
+                eventSubscribes: {
+                    include: {
+                        user: true,
+                        event: {
+                            include: {
+                                user: true,
+                                eventLocalizations: true,
+                                eventNotes: true,
+                            }
+                        },
+                    }
+                },
+            }
+        }) as unknown as EventDto[];
+
+        return events.map(Mapper.toEvent);
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
 
 export async function getByTagName(name: string): Promise<Event[]> {
     try {

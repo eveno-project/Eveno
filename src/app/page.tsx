@@ -7,7 +7,8 @@ import Loading from "./loading";
 import style from "./page.module.css";
 import Event from "@interfaces/event";
 import Tag from "@interfaces/tag";
-import TagSelect from "@components/tag/tagSelect"; // Importez le nouveau composant
+import TagSelect from "@components/tag/tagSelect";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 const Main = () => {
   const [events, setEvents] = useState<Event[]>([]);
