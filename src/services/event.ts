@@ -202,10 +202,21 @@ export async function getById(id: number): Promise<Event> {
 }
 
 
-export async function deleteOne(eventId: number): Promise<void> {
+export async function deleteOne(eventId: number, userId: number): Promise<void> {
     try {
+        const event = await prisma.event.findFirst({
+            where: {
+                id: eventId,
+                userId: userId,
+            },
+        });
+
+        if (!event) {
+            throw new Error("Event not found or you don't have permission to delete this event");
+        }
+
         await prisma.event.delete({
-            where: { id: eventId }
+            where: { id: eventId },
         });
 
     } catch (error) {

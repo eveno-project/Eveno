@@ -3,7 +3,6 @@ import { comment } from "@services/event";
 import { redirect } from "next/navigation";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';
-import { Console } from "console";
 
 export default async function commentEvent(_prevState: any, params: FormData) {
     const idEvent = params.get('id')?.toString();

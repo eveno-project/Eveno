@@ -1,11 +1,9 @@
 import prisma from "@utils/db";
 
-import { getUsersByRole } from "@services/user";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from "next-auth";
 import { getByUserEmail } from "@services/event";
-import { Role } from "@constants/role";
 
 export async function GET(req: NextRequest) {
     if (req.method !== "GET") {

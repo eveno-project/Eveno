@@ -24,6 +24,8 @@ import EventSubscribe from "@interfaces/EventSubscribe";
 import EventFormComment from "@components/form/event-form-comment";
 import commentEvent from "@actions/event/comment";
 import CommentList from "@components/event/comment-list";
+import EventFormDelete from "@components/form/event-form-delete";
+import deleteEvent from "@actions/event/delete";
 
 function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): boolean {
     return eventSubscribes.some(subscribe => subscribe.user.id === userId);
@@ -160,6 +162,11 @@ export default async function Page({ params }: { params: { id: number } }) {
                     {
                         canFollow && (
                             <EventFormFollow action={followEvent} event={event} doYouFollow={follow} />
+                        )
+                    }
+                    {
+                        myEvent && (
+                            <EventFormDelete action={deleteEvent} event={event} />
                         )
                     }
                 </section>

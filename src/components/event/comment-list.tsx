@@ -8,7 +8,6 @@ import CardComment from './card-comment/card-comment';
 
 export default function CommentList({ event }: { event: Partial<Event> }) {
 
-    console.log(event.comments);
     if (event.comments) {
         return (
             <div>

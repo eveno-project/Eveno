@@ -12,7 +12,7 @@ export default function CardComment({ comment }: { comment: Partial<Comment> }) 
         <Paper style={{ padding: "40px 20px" }}>
             <Grid container wrap="nowrap" spacing={2}>
                 <Grid item>
-                    <Avatar alt="Remy Sharp" />
+                    <Avatar />
                 </Grid>
                 <Grid justifyContent="left" item xs zeroMinWidth>
                     {
