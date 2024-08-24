@@ -1,0 +1,75 @@
+.information__container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.information__address__icon {
+    color: var(--BLACK);
+    width: 0.8rem;
+}
+
+.information__address__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.information__address {
+    display: flex;
+    align-items: center;
+    font: var(--PARAGRAPH);
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.information__address__header {
+    display: flex;
+    align-items: center;
+}
+
+.information__address__list {
+    margin: 0;
+}
+
+.information__agenda__item {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font: var(--TITLE);
+    margin-bottom: 1rem;
+}
+
+.container {
+    
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    display: flex;
+    padding: 1rem 0;
+    bottom: 0;
+    justify-content: flex-end;
+}
+
+.footer__reserved__button {
+
+}
+
+.title__2 {
+    font-family: 'Luciole-Bold';
+    font-size: 1rem;
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+    .icon__color {
+        color: var(--WHITE);
+    }
+}

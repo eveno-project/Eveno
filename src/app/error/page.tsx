@@ -1,6 +1,6 @@
 'use client';
-
-import Button from '@components/button/button';
+import Route from '@enums/routes.enum';
+import { Box, Button, Container, Typography } from '@mui/material';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function ErrorPage() {
@@ -9,14 +9,14 @@ export default function ErrorPage() {
 	const error = searchParams.get('error');
 
 	const handleBack = () => {
-		router.push('/login');
+		router.push(Route.LOGIN);
 	};
 
 	return (
-		<div className="error-container">
-			<h1>Error</h1>
-			{error && <p>{error}</p>}
-			<Button color='primary' type='button' onClick={handleBack}>Back to Login</Button>
-		</div>
+		<Container component="main" maxWidth="md">
+			<Typography variant="h1">Error</Typography>
+			{error && <Typography>{error}</Typography>}
+			<Button variant="contained" type="button" onClick={handleBack}>Retournée vers l&apos;accueil</Button>
+		</Container>
 	);
 }

@@ -8,4 +8,6 @@ export default interface CommentDto {
     user: UserDto
     parent?: CommentDto
     replies: CommentDto[]
+    createdAt: Date
+    updateAt: Date
 }

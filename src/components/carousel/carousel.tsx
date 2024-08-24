@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -9,9 +10,10 @@ import styles from './carousel.module.css';
 import { useCallback, useState } from 'react';
 import { useDotButton } from '@services/carousel';
 import DotButton from './dot-button/dot-button';
+import {default as NextImage} from 'next/image';
+import { fakerFR } from '@faker-js/faker';
 
 export default function Carousel({ images, options }: { images: Image[], options?: EmblaOptionsType }) {
-
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
     const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
         const autoplay = emblaApi?.plugins()?.autoplay
@@ -36,7 +38,7 @@ export default function Carousel({ images, options }: { images: Image[], options
                     {
                         images.map((image, key) => (
                             <div key={key} className={styles.slider__container__image}>
-                                <img className={styles.slider__image} key={key} src={image.path} alt={image.name} />
+                                <img className={styles.slider__image} key={key} src={image.src} alt={image.alt}/>
                             </div>
                         ))
                     }
@@ -44,7 +46,7 @@ export default function Carousel({ images, options }: { images: Image[], options
             </section>
             <section className={styles.slider__dots__container}>
                 <div className={styles.slider__dots}>
-                    {scrollSnaps.map((_, index: number) => (
+                    {scrollSnaps.map((_: any, index: number) => (
                         <DotButton
                             key={index}
                             onClick={() => onDotButtonClick(index)}

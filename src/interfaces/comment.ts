@@ -6,4 +6,6 @@ export default interface Comment {
     parent?: Partial<Comment>
     replies: Comment[]
     user: Partial<User>
+    createdAt: Date
+    updatedAt: Date
 }
