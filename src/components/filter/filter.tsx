@@ -14,7 +14,7 @@ interface FilterProps {
     showValidationFilter: boolean;
 }
 
-const Filter: React.FC<FilterProps> = ({ apiUrl, showValidationFilter }) => {
+export default function Filter({ apiUrl, showValidationFilter }: FilterProps) {
     const [events, setEvents] = useState<Event[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -157,5 +157,3 @@ const Filter: React.FC<FilterProps> = ({ apiUrl, showValidationFilter }) => {
         </Container>
     );
 };
-
-export default Filter;
