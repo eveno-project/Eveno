@@ -133,5 +133,8 @@ describe('Filter component', () => {
 
         expect(screen.queryByText('Validated')).not.toBeInTheDocument();
         expect(screen.queryByText('Not Validated')).not.toBeInTheDocument();
+
+        expect(screen.getByText('Event 1')).toBeInTheDocument();
+        expect(screen.getByText('Event 2')).toBeInTheDocument();
     });
 });
