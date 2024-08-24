@@ -3,17 +3,21 @@ import EventDto from "@dto/event-dto";
 import EventLocalizationDto from "@dto/event-localization-dto";
 import EventNetworkDto from "@dto/event-network-dto";
 import EventNoteDto from "@dto/event-note-dto";
+import EventSubscribeDto from "@dto/event-subscribe-dto";
 import EventTagDto from "@dto/event-tag-dto";
 import UserDto from "@dto/user-dto";
+import EventSubscribe from "@interfaces/EventSubscribe";
 import Comment from "@interfaces/comment";
 import Event from "@interfaces/event";
 import Image from "@interfaces/image";
 import Localization from "@interfaces/localization";
 import Network from "@interfaces/network";
 import Note from "@interfaces/note";
+import Subscribe from "@interfaces/subscribe";
 import Tag from "@interfaces/tag";
 import User from "@interfaces/user";
 import { JsonValue } from "@prisma/client/runtime/library";
+import { map } from "zod";
 
 export default class Mapper {
     static toEvent(eventDto: EventDto): Event {
@@ -31,6 +35,7 @@ export default class Mapper {
             isValid: eventDto.isValid,
             user: Mapper.toUser(eventDto.user),
             tags: eventDto.eventTags?.map(Mapper.toTags),
+            eventSubscribes: eventDto.eventSubscribes?.map(Mapper.toEventSubscribes),
             networks: eventDto.eventNetworks?.map(Mapper.toNetwork),
             localizations: eventDto.eventLocalizations.map(Mapper.toLocalization),
             endDate: new Date(eventDto.endDate),
@@ -41,11 +46,12 @@ export default class Mapper {
     }
 
     static toComment(commentDto: CommentDto): Comment {
+        // console.log(commentDto);
         return {
             content: commentDto.content,
             id: commentDto.id,
             parent: commentDto.parent ? Mapper.toComment(commentDto.parent) : undefined,
-            replies: commentDto.replies.map(Mapper.toComment),
+            replies: commentDto.replies ? commentDto.replies.map(Mapper.toComment) : [],
             user: Mapper.toUser(commentDto.user),
         };
     }
@@ -68,6 +74,15 @@ export default class Mapper {
         return {
             id: eventTagDto.tag?.id,
             name: eventTagDto.tag?.name
+        };
+    }
+
+    static toEventSubscribes(eventSubscribesDto: EventSubscribeDto): EventSubscribe {
+        return {
+            event: Mapper.toEvent(eventSubscribesDto.event),
+            id: eventSubscribesDto.id,
+            user: Mapper.toUser(eventSubscribesDto.user),
+            type: eventSubscribesDto.type
         };
     }
 

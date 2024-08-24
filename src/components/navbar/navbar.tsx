@@ -6,7 +6,7 @@ import { getServerSession } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
-export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: boolean, noMenu?: boolean }) {
+export default async function NavBar({ noMenu }: { noMenu?: boolean }) {
     const session = await getServerSession();
     const handleLogin = () => {
         redirect('loging')
@@ -16,20 +16,6 @@ export default async function NavBar({ noSearchBar, noMenu }: { noSearchBar?: bo
             <div className={style.navbar__fou}>
                 <Link href="/"><Image src="/fou/classic.svg" alt='logo' width={32} height={32} /></Link>
             </div>
-            {/* {
-                !noSearchBar && (
-                    <input
-                        type="text"
-                        placeholder="Rechercher"
-                        className={style.navbar__searchbar}
-                    />
-                )
-            }
-            {
-                !noMenu && (
-                    <Button color='primary' type='button'><MenuRoundedIcon htmlColor={Color.BLACK} /></Button>
-                )
-            } */}
             {
                 session?.user ? (
                     <></>

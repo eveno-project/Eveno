@@ -6,6 +6,13 @@
     height: 100vh;
 }
 
+.form__container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem; /* Adds spacing between input and button */
+}
+
 .navbar__searchbar {
     background-color: var(--WHITE);
     border: solid 0.125rem var(--BLACK);

@@ -12,11 +12,11 @@ import { Container } from '@mui/material';
 export default async function Page({ params }: { params: { id: number } }) {
     const tags = await getAll();
     const session = await getServerSession(authOptions);
-
+    
     if (session?.user.role !== Role.ADMIN) {
         redirect("/");
     }
-    
+
     return (
         <Container maxWidth="md">
             <h1>Liste des Tags</h1>

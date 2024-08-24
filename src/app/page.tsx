@@ -1,16 +1,10 @@
-import List from "@components/event/list/list";
-import { Container } from "@mui/material";
-import { getAll } from "@services/event";
-import { Suspense } from "react";
-import Loading from "./loading";
+"use client"
 
-export default async function Home() {
-  const events = await getAll();
-  return (
-    <Container maxWidth="md">
-      <Suspense fallback={<Loading />}>
-        <List events={events} />
-      </Suspense>
-    </Container>
-  );
-}
+import React from "react";
+import Filter from "@components/filter/filter";
+
+const Main = () => {
+  return <Filter apiUrl="/api/event" showValidationFilter={false} />;
+};
+
+export default Main;

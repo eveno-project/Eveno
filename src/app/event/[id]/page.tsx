@@ -1,28 +1,83 @@
 import { redirect } from "next/navigation";
 
-import { Container } from "@mui/material";
+import { Container, Divider, Grid, Paper, Avatar } from "@mui/material";
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import validateEvent from "@actions/event/validate";
+import followEvent from "@actions/event/follow";
 import NoAdultContentRoundedIcon from '@mui/icons-material/NoAdultContentRounded';
 import CloudRoundedIcon from '@mui/icons-material/CloudRounded';
 import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableRounded';
 import EventBusyRoundedIcon from '@mui/icons-material/EventBusyRounded';
-
+import Link from '@components/link/link';
 import { getById } from "@services/event";
 import Carousel from "@components/carousel/carousel";
 import { Color } from "@constants/color";
 import DateFormatter from "@services/date";
 import style from "./page.module.css";
 import Button from "@components/button/button";
+import { authOptions } from "@lib/auth";
+import { getServerSession } from 'next-auth';
+import { Role } from "@constants/role";
+import EventFormValidate from "@components/form/event-form-validate";
+import EventFormFollow from "@components/form/event-form-follow";
+import EventSubscribe from "@interfaces/EventSubscribe";
+import EventFormComment from "@components/form/event-form-comment";
+import commentEvent from "@actions/event/comment";
+import CommentList from "@components/event/comment-list";
+import EventFormDelete from "@components/form/event-form-delete";
+import deleteEvent from "@actions/event/delete";
+
+function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): boolean {
+    return eventSubscribes.some(subscribe => subscribe.user.id === userId);
+}
 
 export default async function Page({ params }: { params: { id: number } }) {
     const event = await getById(params.id);
+    const session = await getServerSession(authOptions);
+
+    let myEvent = false;
+    let canValide = false;
+    let canFollow = false;
+    let follow = false;
+
+
+    if (session) {
+        if (event && (event.user.id === session?.user.id)) {
+            myEvent = true;
+        }
+        if (
+            event
+            && event.isValid === false
+            && (session.user.role === Role.ADMIN)
+        ) {
+            canValide = true;
+        }
+
+        if ((session.user.role !== Role.ADMIN || event.user.id !== session?.user.id) && event.isValid === false) {
+            redirect('/');
+        }
+        if (
+            event
+            && event.isValid === true
+        ) {
+            canFollow = true;
+        }
+
+        if (session.user) {
+            if (event.eventSubscribes) {
+                follow = isUserSubscribed(event.eventSubscribes, session.user.id);
+            }
+        }
+
+    }
+
     if (event) {
         return (
             <Container className={style.container} maxWidth="md">
                 <section className={style.header}>
                     <article>
                         {
-                            event.images && event?.images?.length !==0 && (
+                            event.images && event?.images?.length !== 0 && (
                                 <section className={style.carousel}>
                                     <Carousel images={event.images} />
                                 </section>
@@ -86,8 +141,44 @@ export default async function Page({ params }: { params: { id: number } }) {
                     </article>
                 </section>
                 <section className={style.footer}>
-                    <Button className={style.footer__reserved__button} color="primary" type="button">Reserver</Button>
+
+                    {
+                        (event.linkTicketing != undefined) && (
+                            <Button className={style.footer__reserved__button} color="primary" type="button">Reserver</Button>
+                        )
+                    }
+                    {
+                        canValide && (
+                            <EventFormValidate action={validateEvent} event={event} />
+                        )
+                    }
+                    {
+                        myEvent && (
+                            <Link href={`/event/${event.id}/edit`}>
+                                <Button className={style.footer__reserved__button} color="primary" type="button"  >modifier</Button>
+                            </Link>
+                        )
+                    }
+                    {
+                        canFollow && (
+                            <EventFormFollow action={followEvent} event={event} doYouFollow={follow} />
+                        )
+                    }
+                    {
+                        myEvent && (
+                            <EventFormDelete action={deleteEvent} event={event} />
+                        )
+                    }
                 </section>
+                <section className={style.body}>
+                    {
+                        session && (
+                            <EventFormComment action={commentEvent} event={event} />
+                        )
+                    }
+                </section>
+                <CommentList event={event} ></CommentList>
+
             </Container>
         );
     }

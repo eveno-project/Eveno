@@ -1,4 +1,5 @@
 import Event from "@interfaces/event";
+import EventSubscribe from "@interfaces/EventSubscribe";
 import prisma from "@utils/db";
 import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
@@ -16,7 +17,7 @@ export async function create(event: Event) {
                 image: JSON.stringify(event.images),
                 title: event.title,
                 linkTicketing: event.linkTicketing,
-                isValid: event.isValid,
+                isValid: false,
                 user: {
                     connect: { id: event.user.id }
                 },
@@ -39,6 +40,12 @@ export async function create(event: Event) {
 export async function update(event: Event) {
     try {
         if (event.id) {
+            await prisma.eventTag.deleteMany({
+                where: {
+                    eventId: event.id
+                }
+            });
+
             await prisma.event.update({
                 where: { id: event.id },
                 data: {
@@ -48,7 +55,7 @@ export async function update(event: Event) {
                     image: JSON.stringify(event.images),
                     title: event.title,
                     linkTicketing: event.linkTicketing,
-                    isValid: event.isValid,
+                    isValid: false,
                     user: {
                         connect: { id: event.user.id }
                     },
@@ -72,12 +79,114 @@ export async function update(event: Event) {
     }
 }
 
+
+export async function valid(eventId: number) {
+    try {
+        if (eventId) {
+            await prisma.event.update({
+                where: { id: eventId },
+                data: {
+                    isValid: true,
+                }
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function follow(eventId: number, userId: number) {
+    try {
+        if (eventId && userId) {
+            await prisma.eventSubscribe.create({
+                data: {
+                    event: {
+                        connect: { id: eventId }
+                    },
+                    user: {
+                        connect: { id: userId }
+                    },
+                    type: ""
+                }
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function comment(eventId: number, userId: number, comment: string) {
+    try {
+        if (eventId && userId && comment) {
+            await prisma.comment.create({
+                data: {
+                    event: {
+                        connect: { id: eventId }
+                    },
+                    user: {
+                        connect: { id: userId }
+                    },
+                    content: comment
+                }
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function unFollow(eventId: number, userId: number): Promise<void> {
+    try {
+        if (eventId && userId) {
+            await prisma.eventSubscribe.deleteMany({
+                where: {
+                    eventId: eventId,
+                    userId: userId,
+                },
+            });
+        }
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 export async function getById(id: number): Promise<Event> {
     try {
-        const event = (await prisma.event.findUnique({
+        const event = await prisma.event.findUnique({
             where: { id: +id },
-            include: { eventLocalizations: true, user: true, eventTags: true, eventNetworks: true, eventNotes: true }
-        })) as unknown as EventDto;
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true,
+                    }
+                },
+                comments: {
+                    include: {
+                        user: true,
+                    },
+                    orderBy: {
+                        id: 'desc',
+                    },
+                },
+                eventSubscribes: {
+                    include: {
+                        user: true,
+                        event: {
+                            include: {
+                                user: true,
+                                eventLocalizations: true,
+                                eventNotes: true,
+                            }
+                        },
+                    }
+                },
+                eventNotes: true,
+            }
+        }) as unknown as EventDto;
 
         if (!event) {
             redirect("/");
@@ -86,17 +195,28 @@ export async function getById(id: number): Promise<Event> {
         if (!event.user.id) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
-        
         return Mapper.toEvent(event);
     } catch (error) {
         throw error;
     }
 }
 
-export async function deleteOne(eventId: number): Promise<void> {
+
+export async function deleteOne(eventId: number, userId: number): Promise<void> {
     try {
+        const event = await prisma.event.findFirst({
+            where: {
+                id: eventId,
+                userId: userId,
+            },
+        });
+
+        if (!event) {
+            throw new Error("Event not found or you don't have permission to delete this event");
+        }
+
         await prisma.event.delete({
-            where: { id: eventId }
+            where: { id: eventId },
         });
 
     } catch (error) {
@@ -118,6 +238,11 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
                 eventNetworks: true,
                 eventNotes: true
             },
+            where: {
+                eventTags: {
+                    some: {}
+                }
+            },
             orderBy: {
                 createdAt: sort
             }
@@ -130,6 +255,44 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
         throw error;
     }
 }
+
+
+export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
+    try {
+        const events = (await prisma.event.findMany({
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true
+            },
+            where: {
+                isValid: isValid,
+                eventTags: {
+                    some: {}
+                }
+            },
+            orderBy: {
+                createdAt: sort
+            }
+        })) as unknown as EventDto[];
+
+        return events.map(
+            Mapper.toEvent
+        );
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
+
 
 export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
@@ -159,6 +322,53 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
         throw error;
     }
 }
+
+
+export async function getByUserEmailFollow(userEmail: string): Promise<Event[]> {
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                eventSubscribes: {
+                    some: {
+                        user: {
+                            email: userEmail
+                        }
+                    }
+                }
+            },
+            include: {
+                eventLocalizations: true,
+                user: true,
+                eventTags: {
+                    include: {
+                        tag: true
+                    }
+                },
+                eventNetworks: true,
+                eventNotes: true,
+                eventSubscribes: {
+                    include: {
+                        user: true,
+                        event: {
+                            include: {
+                                user: true,
+                                eventLocalizations: true,
+                                eventNotes: true,
+                            }
+                        },
+                    }
+                },
+            }
+        }) as unknown as EventDto[];
+
+        return events.map(Mapper.toEvent);
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
 
 export async function getByTagName(name: string): Promise<Event[]> {
     try {
