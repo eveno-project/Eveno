@@ -1,16 +1,19 @@
-import { NextResponse } from "next/server";
-import { deleteOne, getById, update } from "@services/event";
-import { redirect } from "next/navigation";
+import prisma from "@utils/db";
+
+import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from "next-auth";
+import { getAll, getByUserEmailFollow } from "@services/event";
 import { Role } from "@constants/role";
 
-
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-    const parsedId = parseInt(params.id);
+export async function GET(req: NextRequest) {
+    if (req.method !== "GET") {
+        return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+    }
 
     try {
         const session = await getServerSession(authOptions);
+
         if (!session || !session.user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
@@ -18,18 +21,14 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const event = await getById(parsedId);
-        if (!event) {
-            return NextResponse.json({ error: 'Event not found' }, { status: 404 });
-        }
+        const events = await getAll();
 
-        event.isValid = true;
-
-        const updatedEvent = await update(event);
-
-        return NextResponse.json({ data: event }, { status: 200 });
-    } catch (e) {
-        throw NextResponse.json({ error: e }, { status: 500 });
+        return NextResponse.json({ data: events }, { status: 200 });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
-
 }
+
