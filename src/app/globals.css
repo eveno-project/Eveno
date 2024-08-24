@@ -22,16 +22,10 @@
 }
 :root {
   --max-width: 1100px;
-
-  background-color: var(--WHITE);
-  color: var(--BLACK);
-  font: var(--PARAGRAPH);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    color: var(--WHITE);
-    background-color: var(--BLACK);
   }
 }
 
