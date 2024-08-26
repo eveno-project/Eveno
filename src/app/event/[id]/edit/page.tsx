@@ -7,7 +7,7 @@ import { getAll } from "@services/tag";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';
 import { redirect } from "next/navigation";
-import Button from "@components/button/button";
+import { Container } from "@mui/material";
 
 export default async function Page({ params }: { params: { id: number } }) {
     const event = await getById((params.id));
@@ -19,9 +19,9 @@ export default async function Page({ params }: { params: { id: number } }) {
         redirect("/");
     }
     return (
-        <div>
+        <Container component="main" maxWidth="md">
             <EventForm action={updateEventWithId} event={event} tags={tags} />
             <EventFormDelete action={deleteEvent} event={event} />
-        </div>
+        </Container>
     );
 };

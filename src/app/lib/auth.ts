@@ -22,7 +22,7 @@ export const authOptions : NextAuthOptions = {
 				const user = await getUser(credentials.email);
 
 				if (!user) {
-					throw new Error('No user found');
+					throw new Error('Email ou mot de passe incorrect');
 				}
 
 				if (user && credentials?.password) {

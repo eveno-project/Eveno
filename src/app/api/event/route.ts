@@ -6,7 +6,8 @@ export async function GET() {
     try {
         const events = await getAll();
         return NextResponse.json({ data: events }, { status: 200 });
-    } catch (e) {
-        throw NextResponse.json({ error: e }, { status: 500 });
+    } catch (error) {
+        console.error({error});
+        throw NextResponse.json({ error }, { status: 500 });
     }
 }

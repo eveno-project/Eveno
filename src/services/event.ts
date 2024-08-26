@@ -79,7 +79,6 @@ export async function update(event: Event) {
     }
 }
 
-
 export async function valid(eventId: number) {
     try {
         if (eventId) {
@@ -151,7 +150,6 @@ export async function unFollow(eventId: number, userId: number): Promise<void> {
     }
 }
 
-
 export async function getById(id: number): Promise<Event> {
     try {
         const event = await prisma.event.findUnique({
@@ -169,7 +167,7 @@ export async function getById(id: number): Promise<Event> {
                         user: true,
                     },
                     orderBy: {
-                        id: 'desc',
+                        createdAt: 'desc',
                     },
                 },
                 eventSubscribes: {
@@ -187,7 +185,7 @@ export async function getById(id: number): Promise<Event> {
                 eventNotes: true,
             }
         }) as unknown as EventDto;
-
+        console.log({image: event.comments[0]});
         if (!event) {
             redirect("/");
         }
@@ -224,10 +222,11 @@ export async function deleteOne(eventId: number, userId: number): Promise<void> 
     }
 }
 
-export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
+export async function getAll(sort: 'asc' | 'desc' = 'asc', skip = 0, take = 10, published = true): Promise<{ events: Event[], count: number}> {
     try {
         const events = (await prisma.event.findMany({
             include: {
+                _count: true,
                 eventLocalizations: true,
                 user: true,
                 eventTags: {
@@ -238,26 +237,28 @@ export async function getAll(sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
                 eventNetworks: true,
                 eventNotes: true
             },
+            skip,
+            take,
             where: {
                 eventTags: {
                     some: {}
-                }
+                },
+                published,
             },
             orderBy: {
                 createdAt: sort
             }
         })) as unknown as EventDto[];
-
-        return events.map(
+        const count = await prisma.event.count();
+        return { events: events.map(
             Mapper.toEvent
-        );
+        ), count};
     } catch (error) {
         throw error;
     }
 }
 
-
-export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): Promise<Partial<Event>[]> {
+export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): Promise<Event[]> {
     try {
         const events = (await prisma.event.findMany({
             include: {
@@ -290,10 +291,6 @@ export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): P
     }
 }
 
-
-
-
-
 export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     try {
         const events = (await prisma.event.findMany({
@@ -323,8 +320,7 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
     }
 }
 
-
-export async function getByUserEmailFollow(userEmail: string): Promise<Event[]> {
+export async function getByUserEmailFollow(userEmail: string): Promise<Partial<Event[]>> {
     try {
         const events = await prisma.event.findMany({
             where: {
@@ -366,9 +362,6 @@ export async function getByUserEmailFollow(userEmail: string): Promise<Event[]> 
         throw error;
     }
 }
-
-
-
 
 export async function getByTagName(name: string): Promise<Event[]> {
     try {
@@ -426,4 +419,8 @@ export async function getManyByName(name: string): Promise<Event[]> {
     } catch (error) {
         throw error;
     }
+}
+
+export function isUserSubscribed(eventSubscribes: EventSubscribe[], userId: number): boolean {
+    return eventSubscribes.some(subscribe => subscribe.user.id === userId);
 }

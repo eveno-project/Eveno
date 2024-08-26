@@ -1,29 +1,29 @@
-// import { Color } from "./color";
+import { ThemeOptions } from '@mui/material/styles';
 
-// export const THEME = (mode: PaletteMode) => ({
-//     palette: {
-//       mode,
-//       ...(mode === 'light'
-//         ? {
-//             // palette values for light mode
-//             primary: Color.PRIMARY,
-//             text: {
-//               primary: Color.BLACK,
-//               secondary: Color.BLACK,
-//             },
-//           }
-//         : {
-//             // palette values for dark mode
-//             primary: deepOrange,
-//             divider: deepOrange[700],
-//             background: {
-//               default: deepOrange[900],
-//               paper: deepOrange[900],
-//             },
-//             text: {
-//               primary: '#fff',
-//               secondary: grey[500],
-//             },
-//           }),
-//     },
-//   });
+export const THEME: ThemeOptions = {
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#AF4319',
+    },
+    secondary: {
+      main: '#EF9C42',
+    },
+    common: {
+        black: '#0D1F26',
+        white: '#FBF3EA'
+    },
+    success: {
+        main: '#84B59F'
+    },
+    error: {
+        main: '#B20D30'
+    },
+    info: {
+        main: '#6BC4CF'
+    },
+    warning: {
+        main: '#EF9C42'
+    },
+  },
+};

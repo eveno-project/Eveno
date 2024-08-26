@@ -12,6 +12,6 @@ export default class DateFormatter {
     }
 
     static complete(date: Date) {
-        return this.toDayjs(date).format('dddd DD MMMM YYYY HH:MM');
+        return this.toDayjs(date).format('dddd DD MMMM YYYY à HH');
     }
 }

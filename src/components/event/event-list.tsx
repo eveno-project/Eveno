@@ -1,14 +1,13 @@
 import EventCard from "@components/event/card/card";
 import Event from "@interfaces/event";
+import { Box } from "@mui/material";
 
-const EventList = ({ events }: { events: Partial<Event>[] }) => {
+export default function EventList({ events }: { events: Partial<Event>[] }) {
     return (
-        <div>
-            {events.map(event => (
-                <EventCard key={event.id} event={event} />
+        <Box component="section">
+            {events.map((event, index) => (
+                <EventCard key={index} event={event} index={index}/>
             ))}
-        </div>
+        </Box>
     );
 }
-
-export default EventList;

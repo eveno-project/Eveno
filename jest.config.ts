@@ -191,6 +191,9 @@ const config: Config = {
 
   // A map from regular expressions to paths to transformers
   transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json',
+    }],
     '^.+\\.tsx?$': 'ts-jest',
     '^.+\\.(js|jsx|mjs|cjs)$': 'babel-jest'
   },
@@ -212,6 +215,7 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+  
 };
 
 export default config;

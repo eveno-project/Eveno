@@ -34,11 +34,17 @@
       "@dto/*": [
         "./src/interfaces/dto/*.ts"
       ],
+      "@enums/*": [
+        "./src/enums/*.ts"
+      ],
       "@interfaces/*": [
         "./src/interfaces/*.ts"
       ],
       "@lib/*": [
         "./src/app/lib/*"
+      ],
+      "@providers/*": [
+        "./src/providers/*"
       ],
       "@services/*": [
         "./src/services/*.ts"
@@ -54,7 +60,7 @@
       ],
       "@validators/*": [
         "./src/validators/*"
-      ]
+      ],
     }
   },
   "include": [

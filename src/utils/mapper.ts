@@ -22,51 +22,52 @@ import { map } from "zod";
 export default class Mapper {
     static toEvent(eventDto: EventDto): Event {
         return {
-            adult: eventDto.adult,
-            comments: eventDto.comments?.map(Mapper.toComment),
-            createdAt: new Date(eventDto.createdAt),
-            description: eventDto.description,
-            id: eventDto.id,
-            images: eventDto.image as unknown as Image[],
-            updatedAt: new Date(eventDto.updatedAt),
-            publishedAt: eventDto.publishedAt ? new Date(eventDto.publishedAt) : undefined,
-            title: eventDto.title,
-            linkTicketing: eventDto.linkTicketing ? eventDto.linkTicketing : undefined,
-            isValid: eventDto.isValid,
-            user: Mapper.toUser(eventDto.user),
-            tags: eventDto.eventTags?.map(Mapper.toTags),
-            eventSubscribes: eventDto.eventSubscribes?.map(Mapper.toEventSubscribes),
-            networks: eventDto.eventNetworks?.map(Mapper.toNetwork),
-            localizations: eventDto.eventLocalizations.map(Mapper.toLocalization),
-            endDate: new Date(eventDto.endDate),
-            notes: eventDto.eventNotes.map(Mapper.toNote),
-            published: eventDto.published,
-            startDate: new Date(eventDto.startDate),
+            adult: eventDto?.adult,
+            comments: eventDto?.comments?.map(Mapper.toComment),
+            createdAt: new Date(eventDto?.createdAt),
+            description: eventDto?.description,
+            id: eventDto?.id,
+            images: eventDto?.image as unknown as Image[],
+            updatedAt: new Date(eventDto?.updatedAt),
+            publishedAt: eventDto?.publishedAt ? new Date(eventDto?.publishedAt) : undefined,
+            title: eventDto?.title,
+            linkTicketing: eventDto?.linkTicketing ? eventDto?.linkTicketing : undefined,
+            isValid: eventDto?.isValid,
+            user: Mapper.toUser(eventDto?.user),
+            tags: eventDto?.eventTags?.map(Mapper.toTags),
+            eventSubscribes: eventDto?.eventSubscribes?.map(Mapper.toEventSubscribes),
+            networks: eventDto?.eventNetworks?.map(Mapper.toNetwork),
+            localizations: eventDto?.eventLocalizations.map(Mapper.toLocalization),
+            endDate: new Date(eventDto?.endDate),
+            notes: eventDto?.eventNotes.map(Mapper.toNote),
+            published: eventDto?.published,
+            startDate: new Date(eventDto?.startDate),
         };
     }
 
     static toComment(commentDto: CommentDto): Comment {
-        // console.log(commentDto);
         return {
             content: commentDto.content,
             id: commentDto.id,
             parent: commentDto.parent ? Mapper.toComment(commentDto.parent) : undefined,
             replies: commentDto.replies ? commentDto.replies.map(Mapper.toComment) : [],
             user: Mapper.toUser(commentDto.user),
+            createdAt: commentDto?.createdAt,
+            updatedAt: commentDto?.updateAt
         };
     }
 
     static toUser(userDto: Partial<UserDto>): Partial<User> {
         return {
-            adult: userDto.adult,
-            birthday: userDto.birthday,
-            email: userDto.email,
-            id: userDto.id,
-            image: userDto.email,
-            password: userDto.password,
-            role: userDto.role,
-            token: userDto.token,
-            username: userDto.username
+            adult: userDto?.adult,
+            birthday: userDto?.birthday,
+            email: userDto?.email,
+            id: userDto?.id,
+            image: userDto?.image,
+            password: userDto?.password,
+            role: userDto?.role,
+            token: userDto?.token,
+            username: userDto?.username
         };
     }
 
