@@ -40,7 +40,10 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                         <>
                             {
                                 session ? (
-                                    <Button onClick={handleSignOut}>Se déconnecter</Button>
+                                    <div>
+                                        <Button href="/profile">Profil</Button>
+                                        <Button onClick={handleSignOut}>Se déconnecter</Button>
+                                    </div>
                                 ) : (
                                     <Button href="/authentication/login">Se connecter</Button>
                                 )
