@@ -1,8 +1,9 @@
 "use server";
-import { comment } from "@services/event";
+import { createComment } from "@services/event";
 import { redirect } from "next/navigation";
 import { authOptions } from "@lib/auth";
 import { getServerSession } from 'next-auth';
+import { getSession } from "next-auth/react";
 
 export default async function commentEvent(_prevState: any, params: FormData) {
     const idEvent = params.get('id')?.toString();
@@ -15,7 +16,7 @@ export default async function commentEvent(_prevState: any, params: FormData) {
 
 
     if (idEvent && userId && commentContent) {
-        await comment(+idEvent, userId, commentContent);
+        createComment(+idEvent, userId, commentContent);
     }
     redirect('/event/' + idEvent);
 }

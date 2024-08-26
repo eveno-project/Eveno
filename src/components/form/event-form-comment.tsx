@@ -1,23 +1,16 @@
 "use client";
-import Button from "@components/button/button";
 import Event from "@interfaces/event";
-import Tag from "@interfaces/tag";
-import type { FormProps } from "@types/form-props";
-import { useFormState } from "react-dom";
-import style from "./event.module.css"
+import { Button, TextField } from "@mui/material";
 
-export default function EventFormComment({ action, event }: { action: FormProps, event: Event }) {
-    const [formState, formAction] = useFormState(action, { errors: [] },);
-
+export default function EventFormComment({ event }: { event: Event }) {
     return (
-        <form action={formAction} className={style.form__container}>
+        <form action="/api/comment" method="POST">
             <input type="hidden" name="id" value={event.id} />
-            <input
+            <TextField
                 name="comment"
-                className={style.navbar__searchbar}
                 placeholder="Commenter"
             />
             <Button color="primary" type="submit">Commenter</Button>
         </form>
     );
-};
+}

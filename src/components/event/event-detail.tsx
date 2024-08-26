@@ -9,7 +9,7 @@ import EventFormComment from "@components/form/event-form-comment";
 import EventFormDelete from "@components/form/event-form-delete";
 import EventFormFollow from "@components/form/event-form-follow";
 import EventFormValidate from "@components/form/event-form-validate";
-import { Box, Typography, Button, Paper } from "@mui/material";
+import { Box, Typography, Paper, Button } from "@mui/material";
 import DateFormatter from "@services/date";
 import Link from "next/link";
 import CommentList from "./comment/list";
@@ -28,17 +28,21 @@ interface EventDetailProps {
     event: Event;
 }
 
-export default function EventDetail({session, event}: EventDetailProps) {
+export default function EventDetail({ session, event }: EventDetailProps) {
     const [isMyEvent, setIsMyEvent] = useState(false);
     const [canValid, setCanValid] = useState(false);
     const [canFollow, setCanFollow] = useState(false);
     const [follow, setFollow] = useState(false);
     useEffect(() => {
-        if (session) {
-                setIsMyEvent(event.user.id === session?.user.id);
-                setCanValid(!!event.isValid && session.user.role === Role.ADMIN)
-                setCanFollow(!!event?.isValid);
-            if ((session.user.role !== Role.ADMIN || event.user.id !== session?.user.id) && event.isValid === false) {
+        if (event && session) {
+            setIsMyEvent(event.user.id === session?.user.id);
+
+            setCanValid(!!!event.isValid && session.user.role === Role.ADMIN
+                // && event.user.id !== session?.user.id
+            );
+            setCanFollow(!!event?.isValid);
+            console.log(!!event.isValid, session.user.role === Role.ADMIN);
+            if ((session.user.role !== Role.ADMIN) && event.isValid === false) {
                 redirect('/');
             }
             if (session.user) {
@@ -46,12 +50,12 @@ export default function EventDetail({session, event}: EventDetailProps) {
                     setFollow(isUserSubscribed(event.eventSubscribes, session.user.id));
                 }
             }
-    
+
         }
     }, [event.eventSubscribes, event.isValid, event.user.id, session])
 
     return (
-        <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 3}}>
+        <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box component="section" className={style.header}>
                 <Box component="article">
                     {
@@ -127,7 +131,7 @@ export default function EventDetail({session, event}: EventDetailProps) {
             <Box component="section">
                 {
                     canValid && (
-                        <EventFormValidate action={validateEvent} event={event} />
+                        <EventFormValidate event={event} />
                     )
                 }
                 {
@@ -151,11 +155,11 @@ export default function EventDetail({session, event}: EventDetailProps) {
             <Box component="section" className={style.body}>
                 {
                     session && (
-                        <EventFormComment action={commentEvent} event={event} />
+                        <EventFormComment event={event} />
                     )
                 }
             </Box>
-            <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: 2}}>
+            <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="h6">Commentaires</Typography>
                 <Paper>
                     {

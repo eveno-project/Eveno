@@ -9,6 +9,8 @@ const localizationBaseSchema = z.object({
     city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }),
     regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: "Région invalid" }),
     zipCode: z.string().transform((arg) => Number(arg)).refine((arg) => arg !== undefined && 9, { message: "Code postal invalid" }),
+    longitude: z.number().optional(),
+    latitude: z.number().optional(),
 })
 
 const eventBaseSchema = z.object({
@@ -18,6 +20,7 @@ const eventBaseSchema = z.object({
     startDate: stringToZodDate,
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
+    linkTicketing: z.string().optional(),
     user: z.object({
         id: z.number().optional()
     }),
@@ -26,9 +29,15 @@ const eventBaseSchema = z.object({
     })).optional(),
 });
 
+const imageSchema = z.object({
+    alt: z.string().min(1, { message: "Le texte alternatif de l'image est requis" }),
+    src: z.string().url({ message: "L'URL de l'image doit être valide" }),
+});
+
 export const eventSchema = eventBaseSchema
     .extend({
-        localizations: localizationBaseSchema
+        localizations: localizationBaseSchema,
+        images: z.array(imageSchema).optional(),
     })
     .refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
@@ -46,3 +55,7 @@ export const updateEventSchema = eventBaseSchema
         path: ["endDate"],
         message: "La date de fin ne peut-être inférieur à la date de départ",
     });
+
+export type EventValue = z.infer<typeof eventSchema>;
+
+export type EventUpdateValue = z.infer<typeof updateEventSchema>;
