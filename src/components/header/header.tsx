@@ -36,7 +36,7 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                 </Link>
                 <Box sx={{ flex: '1 1' }}></Box>
                 {
-                    hasLoginLayout && (
+                    !hasLoginLayout && (
                         <>
                             {
                                 session ? (
