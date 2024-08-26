@@ -6,6 +6,7 @@ import { Avatar, Box, Button, Card, CardContent, Container, Paper, Typography } 
 import SessionUser from "@interfaces/sessionUser";
 import { deepPurple } from "@mui/material/colors";
 import Grid from "@mui/material/Unstable_Grid2";
+import DeleteAccountModal from "@components/users/delete-modal/delete-modal";
 
 export default function Profile({ user }: { user: UserSession }) {
 
@@ -36,6 +37,9 @@ export default function Profile({ user }: { user: UserSession }) {
 								<Button variant="contained" color="primary" href="/profile/edit/password" >
 									Modifier le mot de passe
 								</Button>
+							</Box>
+							<Box sx={{ mt: 3 }}>
+								<DeleteAccountModal user={user}/>
 							</Box>
 						</CardContent>
 					</Grid>
