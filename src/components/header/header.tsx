@@ -1,11 +1,13 @@
 'use client';
 import { AppBar, Box, Button, Link, Toolbar } from "@mui/material";
 import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Header({ rootLayout = true }: { rootLayout?: boolean }) {
+export default function Header({ hasLoginLayout = false, hasAdminLayout = false }: { hasLoginLayout?: boolean, hasAdminLayout?: boolean }) {
+    const router = useRouter();
     const [session, setSession] = useState<Session | null>(null);
     useEffect(() => {
         const get = async () => {
@@ -13,6 +15,11 @@ export default function Header({ rootLayout = true }: { rootLayout?: boolean }) 
         }
         get();
     }, [])
+
+    const handleSignOut = async () => {
+        await signOut();
+        router.push("/");
+    }
 
     return (
         <AppBar position="static" color="inherit" sx={{
@@ -29,11 +36,11 @@ export default function Header({ rootLayout = true }: { rootLayout?: boolean }) 
                 </Link>
                 <Box sx={{ flex: '1 1' }}></Box>
                 {
-                    rootLayout && (
+                    hasLoginLayout && (
                         <>
                             {
                                 session ? (
-                                    <Button href="/api/signout">Se déconnecter</Button>
+                                    <Button onClick={handleSignOut}>Se déconnecter</Button>
                                 ) : (
                                     <Button href="/authentication/login">Se connecter</Button>
                                 )

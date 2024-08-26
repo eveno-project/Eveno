@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Container, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, TextField, Typography } from "@mui/material";
@@ -37,7 +37,7 @@ export default function LoginPage() {
 		if (signInResponse?.error) {
 			setSignInResponseError(signInResponse.error);
 		} else {
-			redirect('/');
+			router.push('/');
 		}
 	};
 
