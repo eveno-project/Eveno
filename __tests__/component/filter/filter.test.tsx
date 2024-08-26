@@ -1,8 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Filter from '@components/filter/filter';
 import '@testing-library/jest-dom';
+import { useRouter } from "next/navigation";
 
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+}));
 
 global.fetch = jest.fn((url: string) => {
     if (typeof url === 'string' && url.includes('/api/tag')) {
@@ -78,14 +82,21 @@ global.fetch = jest.fn((url: string) => {
 
 describe('Filter component', () => {
     beforeEach(() => {
+        (useRouter as jest.Mock).mockReturnValue({
+            push: jest.fn(),
+            query: {},
+            pathname: '',
+            asPath: '',
+            route: '/'
+        });
         jest.clearAllMocks();
     });
 
     it('renders correctly with all events', async () => {
         render(<Filter apiUrl="/api/events" showValidationFilter={false} />);
 
-        expect(await screen.findByText('Event 1')).toBeInTheDocument();
-        expect(await screen.findByText('Event 2')).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText('Event 1')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText('Event 2')).toBeInTheDocument());
     });
 
     it('filters events by text', async () => {

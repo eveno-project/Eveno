@@ -104,6 +104,9 @@ const config: Config = {
     '^@constants/(.*)$': '<rootDir>/src/constants/$1',
     '^@actions/(.*)$': '<rootDir>/src/app/actions/$1',
     '^@validators/(.*)$': '<rootDir>/src/validators/$1',
+    '^@dto/(.*)$': '<rootDir>/src/interfaces/dto/$1',
+    '^@enums/(.*)$': '<rootDir>/src/enums/$1',
+    '^@types/(.*)$': '<rootDir>/src/types/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
   },
 
@@ -215,7 +218,7 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  
+
 };
 
 export default config;
