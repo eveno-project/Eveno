@@ -14,6 +14,15 @@ const localizationBaseSchema = z.object({
     zipCode: z.number().refine((arg) => arg.toString().length === 5, { message: "Code postal invalid" }).optional(),
     longitude: z.number().optional(),
     latitude: z.number().optional(),
+}).refine(data => {
+    const { address, city, regionName, zipCode } = data;
+    const filledFields = [address, city, regionName, zipCode].filter(field => field !== undefined && field !== "" && field !== 0);
+    console.log(filledFields);
+    // If some fields are filled but not all, trigger an error
+    return filledFields.length === 0 || filledFields.length === 4;
+}, {
+    message: "Si un champ de localisation est rempli, tous les champs de localisation sont requis",
+    path: ["localizations.address"]
 });
 
 const eventBaseSchema = z.object({
@@ -50,15 +59,19 @@ export const eventSchema = eventBaseSchema
 export const updateEventSchema = eventBaseSchema
     .extend({
         id: z.number(),
-        localizations: localizationBaseSchema.extend({
-            id: z.number()
+        localizations: z.object({
+            id: z.number(),
+            address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }).optional(),
+            city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }).optional(),
+            regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: "Région invalid" }).optional(),
+            zipCode: z.number().refine((arg) => arg.toString().length === 5, { message: "Code postal invalid" }).optional(),
+            longitude: z.number().optional(),
+            latitude: z.number().optional(),
         }).optional()
-
     }).refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
         message: "La date de fin ne peut-être inférieur à la date de départ",
     });
 
 export type EventValue = z.infer<typeof eventSchema>;
-
 export type EventUpdateValue = z.infer<typeof updateEventSchema>;
