@@ -43,48 +43,40 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
 
 
-
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions);
-    const id = parseInt(params.id);
     const userId = session?.user.id;
 
     if (!userId) {
         return NextResponse.redirect('/');
     }
 
-    const formData = await req.formData();
-    console.log(formData);
-    const validation = updateEventSchema.safeParse({
-        id: +id,
-        adult: formData.get('adult') === 'on',
-        description: formData.get('description')?.toString(),
-        endDate: formData.get('endDate')?.toString(),
-        linkTicketing: formData.get('linkTicketing')?.toString(),
-        startDate: formData.get('startDate')?.toString(),
-        publishedAt: formData.get('publishedAt')?.toString() ?? undefined,
-        title: formData.get('title')?.toString(),
-        localizations: {
-            id: +formData.get('idLocalization')!.toString(),
-            address: formData.get('address')?.toString(),
-            city: formData.get('city')?.toString(),
-            regionName: formData.get('regionName')?.toString(),
-            zipCode: formData.get('zipCode')?.toString(),
-            longitude: 0,
-            latitude: 0,
-        },
-        tags: formData.getAll('tags').map(tag => ({ id: Number(tag) })),
-        user: {
-            id: userId
+    try {
+        const data = await req.json();
+
+        data.id = parseInt(params.id);
+
+        if (data.localizations) {
+            const { address, city, regionName, zipCode, latitude, longitude } = data.localizations;
+            data.localizations = {
+                address: address || '',
+                city: city || '',
+                regionName: regionName || '',
+                zipCode: parseInt(zipCode) || 0,
+                latitude: latitude || 0,
+                longitude: longitude || 0
+            };
+        } else {
+            delete data.localizations;
         }
-    });
 
-    if (!validation.success) {
-        console.error({ error: validation.error.issues });
-        return NextResponse.json({ errors: validation.error.issues[0].path }, { status: 400 });
+
+        // Mettre à jour l'événement avec les données validées
+        await update(data);
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Erreur lors du traitement de la requête :', error);
+        return NextResponse.json({ error: 'Erreur lors du traitement des données.' }, { status: 500 });
     }
-
-    await update(validation.data);
-
-    return NextResponse.redirect(new URL('/event/userEvent', req.url));
 }

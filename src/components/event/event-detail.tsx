@@ -38,10 +38,9 @@ export default function EventDetail({ session, event }: EventDetailProps) {
             setIsMyEvent(event.user.id === session?.user.id);
 
             setCanValid(!!!event.isValid && session.user.role === Role.ADMIN
-                // && event.user.id !== session?.user.id
+                && event.user.id !== session?.user.id
             );
             setCanFollow(!!event?.isValid);
-            console.log(!!event.isValid, session.user.role === Role.ADMIN);
             if ((session.user.role !== Role.ADMIN) && event.isValid === false) {
                 redirect('/');
             }

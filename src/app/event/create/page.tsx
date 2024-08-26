@@ -16,7 +16,7 @@ export default async function EventCreate() {
 
     return (
         <Container component="main" maxWidth="md">
-            <EventForm action={createEvent} tags={tags} userId={session.user.id} />
+            <EventForm tags={tags} userId={session.user.id} />
         </Container>
     );
 };

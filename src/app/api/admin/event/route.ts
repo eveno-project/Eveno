@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
         }
 
         const events = await getAll('asc');
-        console.log(events);
 
         return NextResponse.json({ data: events }, { status: 200 });
     } catch (error) {

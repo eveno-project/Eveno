@@ -47,13 +47,21 @@ export async function create(event: Event) {
 export async function update(event: Event) {
     try {
         if (event.id) {
+            // Suppression des anciens tags et localisations de l'événement
             await prisma.eventTag.deleteMany({
                 where: {
                     eventId: event.id
                 }
             });
 
-            await prisma.event.update({
+            await prisma.eventLocalization.deleteMany({
+                where: {
+                    eventId: event.id
+                }
+            });
+
+            // Mise à jour de l'événement
+            const updatedEvent = await prisma.event.update({
                 where: { id: event.id },
                 data: {
                     adult: event.adult,
@@ -62,29 +70,29 @@ export async function update(event: Event) {
                     image: JSON.stringify(event.images),
                     title: event.title,
                     linkTicketing: event.linkTicketing,
-                    isValid: false,
+                    isValid: event.isValid,
                     user: {
                         connect: { id: event.user.id }
                     },
                     startDate: event.startDate,
-                    eventLocalizations: {
-                        update: {
-                            where: { id: (event.localizations as unknown as Localization).id },
-                            data: { ...event.localizations as unknown as Localization }
-                        }
-                    },
                     eventTags: {
                         create: event.tags.map(tag => ({
                             tag: { connect: { id: tag.id } }
                         }))
+                    },
+                    eventLocalizations: {
+                        create: event.localizations
                     }
                 }
             });
+
+            return updatedEvent;
         }
     } catch (error) {
         throw error;
     }
 }
+
 
 export async function valid(eventId: number) {
     try {
@@ -263,7 +271,7 @@ export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Ev
                 createdAt: sort
             }
         })) as unknown as EventDto[];
-        // console.log(events);
+
         const count = await prisma.event.count();
         return {
             events: events.map(

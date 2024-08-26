@@ -29,7 +29,6 @@ export async function POST(req: Request) {
 
     try {
         const data = await req.json();
-        console.log('Données reçues :', data);
         const { localizations } = data;
 
         if (localizations) {

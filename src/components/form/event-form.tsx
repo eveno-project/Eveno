@@ -7,7 +7,7 @@ import { EventValue, eventSchema } from "@validators/event.schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export default function EventForm({ action, event, tags, userId }: { action: string, event?: Event, tags: Tag[], userId: number }) {
+export default function EventForm({ event, tags, userId }: { event?: Event, tags: Tag[], userId: number }) {
     const {
         control,
         handleSubmit,
@@ -30,9 +30,10 @@ export default function EventForm({ action, event, tags, userId }: { action: str
     });
 
     const onSubmit = async (eventValue: EventValue) => {
-        console.log(eventValue);
-        const response = await fetch('/api/event', {
-            method: 'POST',
+        const method = event?.id ? 'PUT' : 'POST';
+        const url = event?.id ? `/api/event/${event.id}` : '/api/event';
+        const response = await fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -40,7 +41,6 @@ export default function EventForm({ action, event, tags, userId }: { action: str
         });
         if (response.ok) {
             const result = await response.json();
-            console.log(result);
         } else {
             console.error('Failed to submit');
         }
@@ -100,6 +100,7 @@ export default function EventForm({ action, event, tags, userId }: { action: str
                                 InputLabelProps={{ shrink: true }}
                                 error={!!errors.startDate}
                                 helperText={errors.startDate?.message}
+                                value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
                             />
                         )}
                     />
@@ -116,6 +117,7 @@ export default function EventForm({ action, event, tags, userId }: { action: str
                                 InputLabelProps={{ shrink: true }}
                                 error={!!errors.endDate}
                                 helperText={errors.endDate?.message}
+                                value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
                             />
                         )}
                     />
@@ -189,15 +191,18 @@ export default function EventForm({ action, event, tags, userId }: { action: str
                         <TextField
                             {...field}
                             label="Code postal"
-                            // type="number"
+                            type="number"
                             variant="outlined"
                             fullWidth
                             error={!!errors.localizations?.zipCode}
                             helperText={errors.localizations?.zipCode?.message}
+                            onChange={(e) => field.onChange(Number(e.target.value))}
                         />
                     )}
                 />
             </FormControl>
+
+
             <FormControl fullWidth margin="normal" error={!!errors.localizations?.regionName}>
                 <Controller
                     name="localizations.regionName"
