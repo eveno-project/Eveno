@@ -4,7 +4,6 @@ import Event from "@interfaces/event";
 import { NotificationAddOutlined, NotificationsActive } from "@mui/icons-material";
 
 export default function EventFormFollow({ event, follow }: { event: Event, follow: boolean }) {
-
     return (
         <Box>
             {

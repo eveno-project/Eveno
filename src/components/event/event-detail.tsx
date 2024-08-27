@@ -11,7 +11,7 @@ import CommentList from "./comment/list";
 import { Session } from "next-auth";
 import style from './event.module.css';
 import Event from "@interfaces/event";
-import { CloudRounded, EventAvailableRounded, EventBusyRounded, LocationOnRounded, NoAdultContentRounded } from "@mui/icons-material";
+import { CloudRounded, Edit, EventAvailableRounded, EventBusyRounded, LocationOnRounded, NoAdultContentRounded } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { Role } from "@constants/role";
@@ -47,7 +47,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
 
     return (
         <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <Toolbar component="section">
+            <Toolbar component="section" sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                 {
                     canValid && (
                         <EventFormValidate event={event} />
@@ -55,9 +55,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                 }
                 {
                     isMyEvent && (
-                        <Link href={`/event/${event.id}/edit`}>
-                            <Button type="button" >modifier</Button>
-                        </Link>
+                        <Button type="button" variant="contained" color="secondary" href={`/event/${event.id}/edit`} endIcon={<Edit />}>Éditer</Button>
                     )
                 }
                 {
