@@ -1,6 +1,47 @@
 {
   "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "jsx": "react-jsx"
-    }
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
+  "paths": {
+    "@actions/*": [
+      "./src/app/actions/*"
+    ],
+    "@components/*": [
+      "./src/components/*"
+    ],
+    "@constants/*": [
+      "./src/constants/*"
+    ],
+    "@dto/*": [
+      "./src/interfaces/dto/*.ts"
+    ],
+    "@enums/*": [
+      "./src/enums/*.ts"
+    ],
+    "@interfaces/*": [
+      "./src/interfaces/*.ts"
+    ],
+    "@lib/*": [
+      "./src/app/lib/*"
+    ],
+    "@providers/*": [
+      "./src/providers/*"
+    ],
+    "@services/*": [
+      "./src/services/*.ts"
+    ],
+    "@styles/*": [
+      "./src/styles/*"
+    ],
+    "@type/*": [
+      "./src/types/*"
+    ],
+    "@utils/*": [
+      "./src/utils/*"
+    ],
+    "@validators/*": [
+      "./src/validators/*"
+    ],
+  }
 }
