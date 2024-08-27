@@ -1,24 +1,24 @@
 "use client";
-import { Button } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import Event from "@interfaces/event";
 
 export default function EventFormFollow({ event, doYouFollow }: { event: Event, doYouFollow: boolean }) {
 
     if (doYouFollow == false) {
         return (
-            <form action="/api/event/follow" method="POST">
-                <input type="hidden" name="id" value={event.id} />
-                <input type="hidden" name="boolean" value={doYouFollow.toString()} />
+            <Box component="form" action="/api/event/follow" method="POST">
+                <TextField type="hidden" name="id" value={event.id} />
+                <TextField type="hidden" name="boolean" value={doYouFollow.toString()} />
                 <Button color="primary" type="submit">Suivre L&apos;évènement</Button>
-            </form>
+            </Box>
         );
     } else if (doYouFollow == true) {
         return (
-            <form action="/api/event/follow" method="POST">
-                <input type="hidden" name="id" value={event.id} />
-                <input type="hidden" name="boolean" value={doYouFollow.toString()} />
+            <Box component="form" action="/api/event/follow" method="POST">
+                <TextField type="hidden" name="id" value={event.id} />
+                <TextField type="hidden" name="boolean" value={doYouFollow.toString()} />
                 <Button color="primary" type="submit">Ne plus suivre L&apos;évènement</Button>
-            </form>
+            </Box>
         );
     }
 
