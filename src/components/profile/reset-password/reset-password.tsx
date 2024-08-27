@@ -20,7 +20,6 @@ export default function ResetPassword({ session }: { session: Session }) {
 	useEffect(() => {
 		const getUser = async () => {
 			setUser(session.user);
-			console.log(session.user);
 		}
 		getUser();
 

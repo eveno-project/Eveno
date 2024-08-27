@@ -16,8 +16,6 @@ export async function DELETE(req: NextRequest) {
 			return NextResponse.json({ message: 'Mauvaise reqûete' }, { status: 400 });
 		}
 
-		console.log('password', password);
-		console.log('email', email);
 
 		const user = await prisma.user.findUnique({
 			where: {

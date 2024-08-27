@@ -40,8 +40,6 @@ export default function DeleteAccountModal({ user }: { user: UserSession }) {
 					callbackUrl: '/',
 				});
 
-				console.log('Compte supprimé avec succès');
-
 			} else {
 				setError('Échec de la suppression. Mot de passe incorrect.');
 			}
