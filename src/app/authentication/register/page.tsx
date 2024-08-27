@@ -51,6 +51,7 @@ const RegisterPage = () => {
 				<div>
 					<label htmlFor="username">Username*</label>
 					<input
+						id="username"
 						type="text"
 						name="username"
 						value={formData.username}
@@ -61,6 +62,7 @@ const RegisterPage = () => {
 				<div>
 					<label htmlFor="email">Email*</label>
 					<input
+						id="email"
 						type="email"
 						name="email"
 						value={formData.email}
@@ -71,6 +73,7 @@ const RegisterPage = () => {
 				<div>
 					<label htmlFor="password">Password*</label>
 					<input
+						id="password"
 						type="password"
 						name="password"
 						value={formData.password}
@@ -81,6 +84,7 @@ const RegisterPage = () => {
 				<div>
 					<label htmlFor="confirmPassword">Confirm Password*</label>
 					<input
+						id="confirmPassword"
 						type="password"
 						name="confirmPassword"
 						value={formData.confirmPassword}
@@ -91,6 +95,7 @@ const RegisterPage = () => {
 				<div>
 					<label htmlFor="adult">Adult</label>
 					<input
+						id="adult"
 						type="checkbox"
 						name="adult"
 						checked={formData.adult}
@@ -102,6 +107,7 @@ const RegisterPage = () => {
 				<div>
 					<label htmlFor="birthday">Birthday*</label>
 					<input
+						id="birthday"
 						type="date"
 						name="birthday"
 						value={formData.birthday}

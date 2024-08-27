@@ -107,6 +107,7 @@ const config: Config = {
     '^@dto/(.*)$': '<rootDir>/src/interfaces/dto/$1',
     '^@enums/(.*)$': '<rootDir>/src/enums/$1',
     '^@types/(.*)$': '<rootDir>/src/types/$1',
+    '^@api/(.*)$': '<rootDir>/src/app/api/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
   },
 
