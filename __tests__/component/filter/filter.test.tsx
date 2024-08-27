@@ -9,7 +9,7 @@ jest.mock('next/navigation', () => ({
 }));
 
 global.fetch = jest.fn((url: string) => {
-    if (typeof url === 'string' && url.includes('/api/tag')) {
+    if (url.includes('/api/tag')) {
         return Promise.resolve({
             ok: true,
             json: () => Promise.resolve({
@@ -21,66 +21,67 @@ global.fetch = jest.fn((url: string) => {
             status: 200,
             statusText: 'OK',
             headers: new Headers(),
-            url,
         } as Response);
-    } else {
+    } else if (url.includes('/api/events')) {
         return Promise.resolve({
             ok: true,
             json: () => Promise.resolve({
-                data: [
-                    {
-                        id: 1,
-                        title: 'Event 1',
-                        startDate: new Date(),
-                        endDate: new Date(),
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        publishedAt: null,
-                        published: false,
-                        description: 'Description for event 1',
-                        image: null,
-                        linkTicketing: null,
-                        adult: false,
-                        isValid: true,
-                        comments: [],
-                        eventTags: [{ tag: { id: 1, name: 'Tag1' } }],
-                        eventNetworks: [],
-                        eventLocalizations: [],
-                        eventSubscribes: [],
-                        eventNotes: [],
-                    },
-                    {
-                        id: 2,
-                        title: 'Event 2',
-                        startDate: new Date(),
-                        endDate: new Date(),
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        publishedAt: null,
-                        published: false,
-                        description: 'Description for event 2',
-                        image: null,
-                        linkTicketing: null,
-                        adult: false,
-                        isValid: false,
-                        comments: [],
-                        eventTags: [{ tag: { id: 2, name: 'Tag2' } }],
-                        eventNetworks: [],
-                        eventLocalizations: [],
-                        eventSubscribes: [],
-                        eventNotes: [],
-                    }
-                ]
+                data: {
+                    events: [
+                        {
+                            id: 1,
+                            title: 'Event 1',
+                            startDate: new Date().toISOString(),
+                            endDate: new Date().toISOString(),
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString(),
+                            publishedAt: null,
+                            published: false,
+                            description: 'Description for event 1',
+                            image: null,
+                            linkTicketing: null,
+                            adult: false,
+                            isValid: true,
+                            tags: [{ name: 'Tag1' }],  // Assurez-vous que chaque événement a un tableau `tags`
+                            eventTags: [{ tag: { id: 1, name: 'Tag1' } }],
+                            eventNetworks: [],
+                            eventLocalizations: [],
+                            eventSubscribes: [],
+                            eventNotes: [],
+                        },
+                        {
+                            id: 2,
+                            title: 'Event 2',
+                            startDate: new Date().toISOString(),
+                            endDate: new Date().toISOString(),
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString(),
+                            publishedAt: null,
+                            published: false,
+                            description: 'Description for event 2',
+                            image: null,
+                            linkTicketing: null,
+                            adult: false,
+                            isValid: false,
+                            tags: [{ name: 'Tag2' }],  // Assurez-vous que chaque événement a un tableau `tags`
+                            eventTags: [{ tag: { id: 2, name: 'Tag2' } }],
+                            eventNetworks: [],
+                            eventLocalizations: [],
+                            eventSubscribes: [],
+                            eventNotes: [],
+                        }
+                    ]
+                }
             }),
             status: 200,
             statusText: 'OK',
             headers: new Headers(),
-            url,
         } as Response);
     }
 }) as jest.Mock<Promise<Response>>;
 
-describe('Filter component', () => {
+
+describe('Composant Filter', () => {
     beforeEach(() => {
         (useRouter as jest.Mock).mockReturnValue({
             push: jest.fn(),
@@ -92,60 +93,73 @@ describe('Filter component', () => {
         jest.clearAllMocks();
     });
 
-    it('renders correctly with all events', async () => {
-        render(<Filter apiUrl="/api/events" showValidationFilter={false} />);
+    it('rendre correctement avec tous les événements', async () => {
+        render(<Filter apiUrl="/api/events" showValidationFilter={true} />);
 
         await waitFor(() => expect(screen.getByText('Event 1')).toBeInTheDocument());
         await waitFor(() => expect(screen.getByText('Event 2')).toBeInTheDocument());
     });
 
-    it('filters events by text', async () => {
-        render(<Filter apiUrl="/api/events" showValidationFilter={false} />);
+    it('filtre les événements par texte', async () => {
+        render(<Filter apiUrl="/api/events" showValidationFilter={true} />);
 
         await screen.findByText('Event 1');
 
         fireEvent.change(screen.getByPlaceholderText('Filter Events'), { target: { value: 'Event 1' } });
 
-        expect(screen.getByText('Event 1')).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText('Event 1')).toBeInTheDocument());
         expect(screen.queryByText('Event 2')).not.toBeInTheDocument();
     });
 
-    it('filters events by tags', async () => {
-        render(<Filter apiUrl="/api/events" showValidationFilter={false} />);
-
-        await screen.findByText('Event 1');
-
-        fireEvent.change(screen.getByRole('button', { name: /select tags/i }), { target: { value: ['Tag1'] } });
-
-        expect(screen.getByText('Event 1')).toBeInTheDocument();
-        expect(screen.queryByText('Event 2')).not.toBeInTheDocument();
-    });
-
-    it('filters events by validation status', async () => {
+    it('filtre les événements par tags', async () => {
         render(<Filter apiUrl="/api/events" showValidationFilter={true} />);
 
         await screen.findByText('Event 1');
 
-        fireEvent.click(screen.getByText('Validated'));
+        // Trouvez le champ de sélection des tags et sélectionnez la valeur
+        const select = screen.getByRole('combobox', { name: /tags/i });
+        fireEvent.mouseDown(select); // Simule un clic pour ouvrir la liste des options
 
-        expect(screen.getByText('Event 1')).toBeInTheDocument();
+        // Trouvez et cliquez sur l'option Tag1
+        const tagOption = screen.getByRole('option', { name: 'Tag1' });
+        fireEvent.click(tagOption);
+
+        await waitFor(() => expect(screen.getByText('Event 1')).toBeInTheDocument());
         expect(screen.queryByText('Event 2')).not.toBeInTheDocument();
-
-        fireEvent.click(screen.getByText('Not Validated'));
-
-        expect(screen.queryByText('Event 1')).not.toBeInTheDocument();
-        expect(screen.getByText('Event 2')).toBeInTheDocument();
     });
 
-    it('renders correctly without validation filter', async () => {
-        render(<Filter apiUrl="/api/events" showValidationFilter={false} />);
+
+    it('filtre les événements par statut de validation', async () => {
+        render(<Filter apiUrl="/api/events" showValidationFilter={true} />);
 
         await screen.findByText('Event 1');
 
-        expect(screen.queryByText('Validated')).not.toBeInTheDocument();
-        expect(screen.queryByText('Not Validated')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText('Validé'));
 
-        expect(screen.getByText('Event 1')).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText('Event 1')).toBeInTheDocument());
+        expect(screen.queryByText('Event 2')).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByText(/À validé/i)); // Ajustez le texte si nécessaire
+
+        await waitFor(() => expect(screen.queryByText('Event 1')).not.toBeInTheDocument());
         expect(screen.getByText('Event 2')).toBeInTheDocument();
+    });
+
+
+    it('rendra correctement sans filtre de validation', async () => {
+        render(<Filter apiUrl="/api/events" showValidationFilter={false} />);
+
+        // Attendez que les événements soient affichés
+        await screen.findByText('Event 1');
+
+        // Les événements avec isValid: false ne doivent pas être affichés
+        await waitFor(() => expect(screen.queryByText('Event 2')).not.toBeInTheDocument());
+
+        // Les filtres de validation ne sont pas affichés
+        expect(screen.queryByText('Validé')).not.toBeInTheDocument();
+        expect(screen.queryByText('À valider')).not.toBeInTheDocument();
+
+        // Assurez-vous que l'événement valide est affiché
+        expect(screen.getByText('Event 1')).toBeInTheDocument();
     });
 });
