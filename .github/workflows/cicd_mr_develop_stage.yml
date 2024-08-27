@@ -1,0 +1,30 @@
+name: Test, Lint, and Build on Pull Request to Stage from Develop
+run-name: ${{ github.actor }} pull request from develop to stage
+on:
+  pull_request:
+    branches:
+      - stage
+    types: [opened, synchronize]
+
+jobs:
+  lint-test-build:
+    if: github.base_ref == 'stage' && github.head_ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+
+      # Linting step (non-blocking)
+      - name: Run Lint
+        run: npm run lint
+
+      # Testing step (blocking)
+      - name: Run Tests
+        run: npm run test
+        continue-on-error: false # Fail if tests fail
+
+      # Build step (blocking)
+      - name: Run Build
+        run: npm run build
+        continue-on-error: false # Fail if build fails

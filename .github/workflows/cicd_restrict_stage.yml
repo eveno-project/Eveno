@@ -1,0 +1,17 @@
+name: Restrict Merge to Stage from Develop Only
+run-name: ${{ github.actor }} trying to merge to stage
+on:
+  pull_request:
+    branches:
+      - stage
+
+jobs:
+  restrict-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is from develop
+        run: |
+          if [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "Merges to stage are only allowed from the develop branch."
+            exit 1
+          fi
