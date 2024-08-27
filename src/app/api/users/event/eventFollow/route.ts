@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
         }
 
         const events = await getByUserEmailFollow(session.user.email);
-
         return NextResponse.json({ data: events }, { status: 200 });
     } catch (error) {
         console.error('Error fetching users:', error);

@@ -38,7 +38,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
             setIsMyEvent(event.user.id === session?.user.id);
 
             setCanValid(!!!event.isValid && session.user.role === Role.ADMIN
-                && event.user.id !== session?.user.id
+                // && event.user.id !== session?.user.id
             );
             setCanFollow(!!event?.isValid);
             if ((session.user.role !== Role.ADMIN) && event.isValid === false) {
@@ -51,7 +51,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
             }
 
         }
-    }, [event.eventSubscribes, event.isValid, event.user.id, session])
+    }, [event, session])
 
     return (
         <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

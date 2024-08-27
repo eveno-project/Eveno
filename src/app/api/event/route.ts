@@ -29,9 +29,18 @@ export async function POST(req: Request) {
 
     try {
         const data = await req.json();
+
         const { localizations } = data;
 
-        if (localizations) {
+        if (
+            localizations &&
+            (
+                (localizations.address && localizations.address.trim() !== '') ||
+                (localizations.city && localizations.city.trim() !== '') ||
+                (localizations.regionName && localizations.regionName.trim() !== '') ||
+                (localizations.zipCode && (localizations.zipCode !== 0 && localizations.zipCode !== ''))
+            )
+        ) {
             const { address, city, regionName, zipCode, latitude, longitude } = localizations;
             data.localizations = {
                 address: address || '',
@@ -44,9 +53,10 @@ export async function POST(req: Request) {
         } else {
             delete data.localizations;
         }
-        // Afficher les données dans la console
+
 
         const event = await create(data);
+
         return NextResponse.json({ success: event });
 
     } catch (error) {

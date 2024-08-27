@@ -56,8 +56,18 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
         data.id = parseInt(params.id);
 
-        if (data.localizations) {
-            const { address, city, regionName, zipCode, latitude, longitude } = data.localizations;
+        const { localizations } = data;
+
+        if (
+            localizations &&
+            (
+                (localizations.address && localizations.address.trim() !== '') ||
+                (localizations.city && localizations.city.trim() !== '') ||
+                (localizations.regionName && localizations.regionName.trim() !== '') ||
+                (localizations.zipCode && (localizations.zipCode !== 0 && localizations.zipCode !== ''))
+            )
+        ) {
+            const { address, city, regionName, zipCode, latitude, longitude } = localizations;
             data.localizations = {
                 address: address || '',
                 city: city || '',
@@ -70,11 +80,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
             delete data.localizations;
         }
 
+        const event = await update(data);
+        return NextResponse.json({ success: event });
 
-        // Mettre à jour l'événement avec les données validées
-        await update(data);
-
-        return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Erreur lors du traitement de la requête :', error);
         return NextResponse.json({ error: 'Erreur lors du traitement des données.' }, { status: 500 });

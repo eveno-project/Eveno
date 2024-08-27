@@ -9,7 +9,7 @@ export default function EventFormFollow({ event, doYouFollow }: { event: Event, 
             <form action="/api/event/follow" method="POST">
                 <input type="hidden" name="id" value={event.id} />
                 <input type="hidden" name="boolean" value={doYouFollow.toString()} />
-                <Button color="primary" type="submit">Suivre L'évènement</Button>
+                <Button color="primary" type="submit">Suivre L&apos;évènement</Button>
             </form>
         );
     } else if (doYouFollow == true) {
@@ -17,7 +17,7 @@ export default function EventFormFollow({ event, doYouFollow }: { event: Event, 
             <form action="/api/event/follow" method="POST">
                 <input type="hidden" name="id" value={event.id} />
                 <input type="hidden" name="boolean" value={doYouFollow.toString()} />
-                <Button color="primary" type="submit">Ne plus suivre L'évènement</Button>
+                <Button color="primary" type="submit">Ne plus suivre L&apos;évènement</Button>
             </form>
         );
     }

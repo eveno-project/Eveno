@@ -6,8 +6,10 @@ import { Button, Box, FormControl, TextField, Checkbox, FormControlLabel, Select
 import { EventValue, eventSchema } from "@validators/event.schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 export default function EventForm({ event, tags, userId }: { event?: Event, tags: Tag[], userId: number }) {
+    const router = useRouter();
     const {
         control,
         handleSubmit,
@@ -41,12 +43,13 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
         });
         if (response.ok) {
             const result = await response.json();
+            router.push(`/event/${result.success.id}`);
         } else {
             console.error('Failed to submit');
         }
     };
 
-    useEffect(() => { console.log({ errors }) }, [errors]);
+    // useEffect(() => { console.log({ errors }) }, [errors]);
 
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -151,7 +154,7 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                     )}
                 />
             </FormControl>
-            <FormControl fullWidth margin="normal" error={!!errors.localizations?.address}>
+            <FormControl fullWidth margin="normal" error={!!errors.localizations?.address || !!errors.localizations}>
                 <Controller
                     name="localizations.address"
                     control={control}
@@ -161,13 +164,14 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                             label="Adresse"
                             variant="outlined"
                             fullWidth
-                            error={!!errors.localizations?.address}
-                            helperText={errors.localizations?.address?.message}
+                            error={!!errors.localizations?.address || !!errors.localizations}
+                            helperText={errors.localizations?.address?.message || errors.localizations?.message}
                         />
                     )}
                 />
             </FormControl>
-            <FormControl fullWidth margin="normal" error={!!errors.localizations?.city}>
+
+            <FormControl fullWidth margin="normal" error={!!errors.localizations?.city || !!errors.localizations}>
                 <Controller
                     name="localizations.city"
                     control={control}
@@ -177,13 +181,14 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                             label="Ville"
                             variant="outlined"
                             fullWidth
-                            error={!!errors.localizations?.city}
-                            helperText={errors.localizations?.city?.message}
+                            error={!!errors.localizations?.city || !!errors.localizations}
+                            helperText={errors.localizations?.city?.message || errors.localizations?.message}
                         />
                     )}
                 />
             </FormControl>
-            <FormControl fullWidth margin="normal" error={!!errors.localizations?.zipCode}>
+
+            <FormControl fullWidth margin="normal" error={!!errors.localizations?.zipCode || !!errors.localizations}>
                 <Controller
                     name="localizations.zipCode"
                     control={control}
@@ -194,31 +199,31 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                             type="number"
                             variant="outlined"
                             fullWidth
-                            error={!!errors.localizations?.zipCode}
-                            helperText={errors.localizations?.zipCode?.message}
+                            error={!!errors.localizations?.zipCode || !!errors.localizations}
+                            helperText={errors.localizations?.zipCode?.message || errors.localizations?.message}
                             onChange={(e) => field.onChange(Number(e.target.value))}
                         />
                     )}
                 />
             </FormControl>
 
-
-            <FormControl fullWidth margin="normal" error={!!errors.localizations?.regionName}>
+            <FormControl fullWidth margin="normal" error={!!errors.localizations?.regionName || !!errors.localizations}>
                 <Controller
                     name="localizations.regionName"
                     control={control}
                     render={({ field }) => (
                         <TextField
                             {...field}
-                            label="Region"
+                            label="Région"
                             variant="outlined"
                             fullWidth
-                            error={!!errors.localizations?.regionName}
-                            helperText={errors.localizations?.regionName?.message}
+                            error={!!errors.localizations?.regionName || !!errors.localizations}
+                            helperText={errors.localizations?.regionName?.message || errors.localizations?.message}
                         />
                     )}
                 />
             </FormControl>
+
             <FormControl fullWidth margin="normal" error={!!errors.tags}>
                 <Controller
                     name="tags"
@@ -260,7 +265,7 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                 color="primary"
                 disabled={isSubmitting}
             >
-                {event?.id ? "Modifier l'évènement" : "Créer un évènement"}
+                {event?.id ? "Modifier l&apos;évènement" : "Créer un évènement"}
             </Button>
             {errors && Object.keys(errors).length > 0 && (
                 <Box sx={{ marginTop: '1rem', color: 'red' }}>

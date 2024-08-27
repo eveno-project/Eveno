@@ -8,7 +8,6 @@ import Localization from "@interfaces/localization";
 
 export async function create(event: Event) {
     try {
-
         const data: any = {
             adult: event.adult,
             description: event.description,
@@ -35,9 +34,10 @@ export async function create(event: Event) {
             };
         }
 
-        await prisma.event.create({
+        const eventcreate = await prisma.event.create({
             data
         });
+        return eventcreate;
     } catch (error) {
         throw error;
     }
@@ -247,11 +247,10 @@ export async function deleteOne(eventId: number, userId: number): Promise<boolea
 }
 
 
-export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Event[], count: number }> {
+export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Event[] }> {
     try {
         const events = (await prisma.event.findMany({
             include: {
-                _count: true,
                 eventLocalizations: true,
                 user: true,
                 eventTags: {
@@ -262,21 +261,14 @@ export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Ev
                 eventNetworks: true,
                 eventNotes: true
             },
-            where: {
-                eventTags: {
-                    some: {}
-                },
-            },
             orderBy: {
                 createdAt: sort
             }
         })) as unknown as EventDto[];
-
-        const count = await prisma.event.count();
         return {
             events: events.map(
                 Mapper.toEvent
-            ), count
+            )
         };
     } catch (error) {
         throw error;
@@ -316,7 +308,7 @@ export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): P
     }
 }
 
-export async function getByUserEmail(userEmail: string): Promise<Event[]> {
+export async function getByUserEmail(userEmail: string): Promise<{ events: Event[] }> {
     try {
         const events = (await prisma.event.findMany({
             where: {
@@ -337,15 +329,16 @@ export async function getByUserEmail(userEmail: string): Promise<Event[]> {
             }
         })) as unknown as EventDto[];
 
-        return events.map(
-            Mapper.toEvent
-        );
+        return {
+            events: events.map(Mapper.toEvent)
+        };
     } catch (error) {
         throw error;
     }
 }
 
-export async function getByUserEmailFollow(userEmail: string): Promise<Partial<Event[]>> {
+
+export async function getByUserEmailFollow(userEmail: string): Promise<{ events: Event[] }> {
     try {
         const events = await prisma.event.findMany({
             where: {
@@ -382,11 +375,16 @@ export async function getByUserEmailFollow(userEmail: string): Promise<Partial<E
             }
         }) as unknown as EventDto[];
 
-        return events.map(Mapper.toEvent);
+
+        // Retourner les événements transformés et le nombre total d'événements
+        return {
+            events: events.map(Mapper.toEvent)
+        };
     } catch (error) {
         throw error;
     }
 }
+
 
 export async function getByTagName(name: string): Promise<Event[]> {
     try {
