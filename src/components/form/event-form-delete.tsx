@@ -1,17 +1,44 @@
 "use client";
-import Button from "@components/button/button";
+import { useRouter } from "next/navigation";
 import Event from "@interfaces/event";
-import Tag from "@interfaces/tag";
-import type { FormProps } from "@types/form-props";
-import { useFormState } from "react-dom";
+import { useState } from "react";
+import { Button } from "@mui/material";
 
-export default function EventFormDelete({ action, event }: { action: FormProps, event: Event }) {
-    const [formState, formAction] = useFormState(action, { errors: [] },);
+export default function EventFormDelete({ event }: { event: Event }) {
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleDelete = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`/api/event/${event.id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                router.push("/");
+            } else {
+                const errorData = await response.json();
+                setError(errorData.error || 'Failed to delete the event');
+                setIsLoading(false);
+            }
+        } catch (err) {
+            setError('An unexpected error occurred');
+            setIsLoading(false);
+        }
+    };
 
     return (
-        <form action={formAction}>
+        <form onSubmit={handleDelete}>
             <input type="hidden" name="id" value={event.id} />
-            <Button color="primary" type="submit">Supprimer l'event</Button>
+            <Button color="primary" type="submit" disabled={isLoading}>
+                {isLoading ? 'Deleting...' : 'Supprimer l\'event'}
+            </Button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>
     );
-};
+}

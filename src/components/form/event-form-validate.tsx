@@ -1,17 +1,13 @@
 "use client";
-import Button from "@components/button/button";
 import Event from "@interfaces/event";
-import Tag from "@interfaces/tag";
-import type { FormProps } from "@types/form-props";
-import { useFormState } from "react-dom";
+import style from "./event.module.css";
+import { Button } from "@mui/material";
 
-export default function EventFormValidate({ action, event }: { action: FormProps, event: Event }) {
-    const [formState, formAction] = useFormState(action, { errors: [] },);
-
+export default function EventFormValidate({ event }: { event: Event }) {
     return (
-        <form action={formAction}>
+        <form action="/api/admin/event/validate" method="POST" className={style.form__container}>
             <input type="hidden" name="id" value={event.id} />
-            <Button color="primary" type="submit">Valider l'event</Button>
+            <Button color="primary" type="submit">Valider l&apos;event</Button>
         </form>
     );
 };

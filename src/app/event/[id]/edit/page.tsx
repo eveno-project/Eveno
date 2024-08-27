@@ -10,18 +10,21 @@ import { redirect } from "next/navigation";
 import { Container } from "@mui/material";
 
 export default async function Page({ params }: { params: { id: number } }) {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        redirect("/");
+    }
     const event = await getById((params.id));
     const updateEventWithId = updateEvent.bind(null, +params.id);
     const tags = await getAll();
-    const session = await getServerSession(authOptions);
-    
+
     if (!event || event?.user.id != session?.user.id) {
         redirect("/");
     }
     return (
         <Container component="main" maxWidth="md">
-            <EventForm action={updateEventWithId} event={event} tags={tags} />
-            <EventFormDelete action={deleteEvent} event={event} />
+            <EventForm event={event} tags={tags} userId={session.user.id} />
+            <EventFormDelete event={event} />
         </Container>
     );
 };

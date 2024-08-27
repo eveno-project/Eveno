@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
-        const events = await getAll();
+        const events = await getAll('asc');
 
         return NextResponse.json({ data: events }, { status: 200 });
     } catch (error) {
