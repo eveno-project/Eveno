@@ -14,7 +14,7 @@ jobs:
       - name: Run npm audit
         run: npm audit --audit-level=high
 
-  application-test:
+  application-test-develop-branch:
     if: github.ref_name == 'develop'
     name: Execute Tests
     runs-on: ubuntu-latest
