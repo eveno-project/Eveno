@@ -1,16 +1,15 @@
-// __tests__/eventService.test.ts
 import {
 	create, update, getById, deleteOne,
-	valid, follow, comment, unFollow,
+	valid, follow, createComment, unFollow,
 	getAllValidate, getByUserEmail, getByUserEmailFollow,
 	getByTagName, getManyByName, isUserSubscribed
 } from '@services/event';
 import prisma from '@utils/db';
 import Event from '@interfaces/event';
 import EventSubscribe from '@interfaces/EventSubscribe';
+import Mapper from '@utils/mapper';
 
-
-// Mock du client Prisma
+// Mock the Prisma client
 jest.mock('@utils/db', () => ({
 	event: {
 		create: jest.fn(),
@@ -23,6 +22,9 @@ jest.mock('@utils/db', () => ({
 	eventTag: {
 		deleteMany: jest.fn(),
 	},
+	eventLocalization: {
+		deleteMany: jest.fn(),
+	},
 	eventSubscribe: {
 		create: jest.fn(),
 		deleteMany: jest.fn(),
@@ -30,6 +32,10 @@ jest.mock('@utils/db', () => ({
 	comment: {
 		create: jest.fn(),
 	},
+}));
+
+jest.mock('@utils/mapper', () => ({
+	toEvent: jest.fn(),
 }));
 
 describe('Event Service', () => {
@@ -67,6 +73,10 @@ describe('Event Service', () => {
 				data: expect.objectContaining({
 					title: 'Test Event',
 					description: 'Test Description',
+					user: { connect: { id: 1 } },
+					eventTags: {
+						create: expect.any(Array),
+					},
 				}),
 			});
 		});
@@ -102,11 +112,21 @@ describe('Event Service', () => {
 				where: { eventId: event.id },
 			});
 
+			expect(prisma.eventLocalization.deleteMany).toHaveBeenCalledWith({
+				where: { eventId: event.id },
+			});
+
 			expect(prisma.event.update).toHaveBeenCalledWith({
 				where: { id: event.id },
 				data: expect.objectContaining({
 					title: 'Updated Event',
 					description: 'Updated Description',
+					eventTags: {
+						create: expect.any(Array),
+					},
+					eventLocalizations: {
+						create: expect.any(Array),
+					},
 				}),
 			});
 		});
@@ -124,7 +144,7 @@ describe('Event Service', () => {
 				id: 1,
 				title: 'Test Event',
 				description: 'Test Description',
-				user: null, // Utilisateur non assigné
+				user: null,
 				eventLocalizations: [],
 				eventTags: [],
 				comments: [],
@@ -159,6 +179,7 @@ describe('Event Service', () => {
 			};
 
 			(prisma.event.findUnique as jest.Mock).mockResolvedValue(event);
+			(Mapper.toEvent as jest.Mock).mockReturnValue(event);
 
 			const result = await getById(1);
 
@@ -179,7 +200,7 @@ describe('Event Service', () => {
 
 			(prisma.event.findFirst as jest.Mock).mockResolvedValue(event);
 
-			await deleteOne(1, 1);
+			const result = await deleteOne(1, 1);
 
 			expect(prisma.event.findFirst).toHaveBeenCalledWith({
 				where: { id: 1, userId: 1 },
@@ -188,12 +209,16 @@ describe('Event Service', () => {
 			expect(prisma.event.delete).toHaveBeenCalledWith({
 				where: { id: 1 },
 			});
+
+			expect(result).toBe(true);
 		});
 
-		it('should throw an error if event is not found', async () => {
+		it('should return false if event is not found', async () => {
 			(prisma.event.findFirst as jest.Mock).mockResolvedValue(null);
 
-			await expect(deleteOne(999, 1)).rejects.toThrow("Event not found or you don't have permission to delete this event");
+			const result = await deleteOne(999, 1);
+
+			expect(result).toBe(false);
 		});
 	});
 
@@ -232,9 +257,9 @@ describe('Event Service', () => {
 		});
 	});
 
-	describe('comment', () => {
+	describe('createComment', () => {
 		it('should allow a user to comment on an event', async () => {
-			await comment(1, 1, "Great event!");
+			await createComment(1, 1, "Great event!");
 
 			expect(prisma.comment.create).toHaveBeenCalledWith({
 				data: {
