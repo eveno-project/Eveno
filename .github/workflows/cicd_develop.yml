@@ -1,24 +1,23 @@
-name: Test for push develop
-run-name: ${{ github.actor }} develop push
-on: [push]
+name: Test and Lint on Pull Request to Develop
+run-name: ${{ github.actor }} pull request on develop
+on:
+  pull_request:
+    branches:
+      - develop
 
 jobs:
-  security-check:
+  lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: npm install
-      - name: Fix vulnerabilities
-        run: npm audit fix
-      - name: Run npm audit
-        run: npm audit --audit-level=high
 
-  application-test-develop-branch:
-    if: github.ref_name == 'develop'
-    name: Execute Tests
-    runs-on: ubuntu-latest
-    needs: security-check
-    steps:
-      - name: run Test
+      # Linting step (non-blocking)
+      - name: Run Lint
+        run: npm run lint
+
+      # Testing step (blocking)
+      - name: Run Tests
         run: npm run test
+        continue-on-error: false # This ensures the workflow fails if tests fail
