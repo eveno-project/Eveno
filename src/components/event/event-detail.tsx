@@ -19,7 +19,6 @@ import Event from "@interfaces/event";
 import { CloudRounded, EventAvailableRounded, EventBusyRounded, LocationOnRounded, NoAdultContentRounded } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import EventSubscribe from "@interfaces/EventSubscribe";
 import { Role } from "@constants/role";
 import { isUserSubscribed } from "@services/event";
 
@@ -65,10 +64,10 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         )
                     }
                 </Box>
-                <Box component="article" sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box component="article" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {
                         event.adult && (
-                            <NoAdultContentRounded className={style.icon} />
+                            <NoAdultContentRounded color="error" sx={{ alignSelf: 'center', marginTop: '3px' }} />
                         )
                     }
                     <Typography variant="h4" fontWeight="bold" >{event.title}</Typography>
@@ -86,9 +85,9 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         {
                             event && event.localizations && event.localizations?.length !== 0 && event.localizations[0].zipCode > 0 ? (
                                 <>
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <LocationOnRounded width="8" />
-                                        <Typography variant="h6">Addresse</Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <LocationOnRounded fontSize="small"/>
+                                        <Typography variant="h6">Lieu</Typography>
                                     </Box>
                                     <Box sx={{ margin: 0 }}>
                                         {
@@ -122,7 +121,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         </Box>
                     </Box>
                 </Box>
-                <Box component="article">
+                <Box component="article" sx={{ display: 'flex', flexDirection: 'column' , gap: 1 }}>
                     <Typography variant="h6">Description</Typography>
                     <Typography>{event.description}</Typography>
                 </Box>

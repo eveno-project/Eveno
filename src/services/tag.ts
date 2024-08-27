@@ -1,15 +1,13 @@
 import Tag from "@interfaces/tag";
 import prisma from "@utils/db";
 
-export async function create(tag: Partial<Tag>): Promise<void> {
+export async function create({ name }: Omit<Tag, 'id'>): Promise<Tag> {
     try {
-        if (tag.name) {
-            const newTag = await prisma.tag.create({
-                data: {
-                    name: tag.name,
-                }
-            });
-        }
+        return await prisma.tag.create({
+            data: {
+                name: name[0].toUpperCase() + name.slice(1),
+            }
+        });
     } catch (error) {
         throw error;
     }
@@ -30,16 +28,11 @@ export async function update(tag: Partial<Tag>): Promise<void> {
     }
 }
 
-export async function deleteOne(id: number): Promise<void> {
+export async function deleteOne(id: number): Promise<Tag> {
     try {
-        await prisma.eventTag.deleteMany({
-            where: { tagId: id }
-        })
-
-        await prisma.tag.delete({
+        return await prisma.tag.delete({
             where: { id: id }
         });
-
     } catch (error) {
         throw error;
     }

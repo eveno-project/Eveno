@@ -15,17 +15,20 @@ import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { Session } from "next-auth";
 import { getSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Header({ hasLoginLayout = false, hasAdminLayout = false }: { hasLoginLayout?: boolean, hasAdminLayout?: boolean }) {
+    const pathname = usePathname();
     const router = useRouter();
     const [session, setSession] = useState<Session | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [hasLogin, setHasLogin] = useState(false);
+    const [hasAdmin, setHasAdmin] = useState(false);
+    const get = async () => {
+        setSession(await getSession());
+    }
     useEffect(() => {
-        const get = async () => {
-            setSession(await getSession());
-        }
         get();
     }, [])
 
@@ -38,7 +41,7 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
 
     const handleNavigation = (path: string) => {
         router.push(path);
-        setDrawerOpen(false); // Ferme le drawer après la navigation
+        setDrawerOpen(false);
     };
 
     const handleSignOut = async () => {
@@ -47,7 +50,11 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
             callbackUrl: '/',
         });
     }
-
+    useEffect(() => {
+        get();
+        setHasLogin(pathname.includes('login'));
+        setHasAdmin(pathname.includes('admin'));
+    }, [pathname])
     return (
         <AppBar position="static" color="inherit" sx={{ marginBottom: 2 }}>
             <Toolbar>

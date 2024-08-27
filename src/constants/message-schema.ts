@@ -1,0 +1,11 @@
+export const MIN_PASSWORD = 'Doit contenir 8 caractère minimum';
+export const EMAIL = 'Veuillez entrée un courriel valide';
+export const USERNAME_REQUIRED = "Le nom d'utilisateur est obligatoire";
+export const CONFIRM_PASSWORD = 'Les deux mots de passe doivent être identiques';
+export const CONFIRM_PASSWORD_REQUIRED = 'La confirmation du mot de passe est obligatoire';
+export const BIRTHDAY_REQUIRED = "Votre date d'anniversaire est obligatoire";
+export const BIRTHDAY_MIN_AGE = "Vous devez avoir au moins 13 ans";
+export const BIRTHDAY_MIN = "La date de naissance doit être antérieure à aujourd'hui";
+export const BIRTHDAY_ERROR_TYPE = "La date n'est pas valide. Utilisez le format DD-MM-YYYY";
+export const TAG_NAME_EXISTING = "Un tag avec ce nom existe déjà";
+export const TAG_NAME_REQUIRED = "Le nom est obligatoire";

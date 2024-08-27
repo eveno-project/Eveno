@@ -42,6 +42,7 @@ export default function Card({ event, width = 200, index }: { event: Partial<Eve
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
+                    padding: 1
                 }}>
                     <Button href={`/event/${event.id}`}>Voir plus</Button>
                 </Box>
