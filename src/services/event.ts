@@ -111,19 +111,17 @@ export async function valid(eventId: number) {
 
 export async function follow(eventId: number, userId: number) {
     try {
-        if (eventId && userId) {
-            await prisma.eventSubscribe.create({
-                data: {
-                    event: {
-                        connect: { id: eventId }
-                    },
-                    user: {
-                        connect: { id: userId }
-                    },
-                    type: ""
-                }
-            });
-        }
+        await prisma.eventSubscribe.create({
+            data: {
+                event: {
+                    connect: { id: eventId }
+                },
+                user: {
+                    connect: { id: userId }
+                },
+                type: ""
+            }
+        });
     } catch (error) {
         throw error;
     }
@@ -155,15 +153,12 @@ export async function createComment(eventId: number, userId: number | null, comm
 
 export async function unFollow(eventId: number, userId: number): Promise<void> {
     try {
-        if (eventId && userId) {
-            await prisma.eventSubscribe.deleteMany({
-                where: {
-                    eventId: eventId,
-                    userId: userId,
-                },
-            });
-        }
-
+        await prisma.eventSubscribe.deleteMany({
+            where: {
+                eventId,
+                userId
+            }
+        });
     } catch (error) {
         throw error;
     }
@@ -186,7 +181,7 @@ export async function getById(id: number): Promise<Event> {
                         user: true,
                     },
                     orderBy: {
-                        id: 'desc',
+                        createdAt: 'desc',
                     },
                 },
                 eventSubscribes: {

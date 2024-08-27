@@ -1,15 +1,10 @@
 'use client';
 
-import commentEvent from "@actions/event/comment";
-import deleteEvent from "@actions/event/delete";
-import followEvent from "@actions/event/follow";
-import validateEvent from "@actions/event/validate";
 import Carousel from "@components/carousel/carousel";
-import EventFormComment from "@components/form/event-form-comment";
 import EventFormDelete from "@components/form/event-form-delete";
 import EventFormFollow from "@components/form/event-form-follow";
 import EventFormValidate from "@components/form/event-form-validate";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import { Box, Typography, Paper, Button, Toolbar } from "@mui/material";
 import DateFormatter from "@services/date";
 import Link from "next/link";
 import CommentList from "./comment/list";
@@ -36,9 +31,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
         if (event && session) {
             setIsMyEvent(event.user.id === session?.user.id);
 
-            setCanValid(!!!event.isValid && session.user.role === Role.ADMIN
-                // && event.user.id !== session?.user.id
-            );
+            setCanValid(!!!event.isValid && session.user.role === Role.ADMIN);
             setCanFollow(!!event?.isValid);
             if ((session.user.role !== Role.ADMIN) && event.isValid === false) {
                 redirect('/');
@@ -54,6 +47,25 @@ export default function EventDetail({ session, event }: EventDetailProps) {
 
     return (
         <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Toolbar component="section">
+                {
+                    canValid && (
+                        <EventFormValidate event={event} />
+                    )
+                }
+                {
+                    isMyEvent && (
+                        <Link href={`/event/${event.id}/edit`}>
+                            <Button type="button" >modifier</Button>
+                        </Link>
+                    )
+                }
+                {
+                    isMyEvent && (
+                        <EventFormDelete event={event} />
+                    )
+                }
+            </Toolbar>
             <Box component="section" className={style.header}>
                 <Box component="article">
                     {
@@ -77,6 +89,11 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                             <Button variant="contained" type="button" href={event.linkTicketing}>Reserver</Button>
                         )
                     }
+                    {
+                        canFollow && (
+                            <EventFormFollow event={event} follow={follow} />
+                        )
+                    }
                 </Box>
             </Box>
             <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -86,7 +103,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                             event && event.localizations && event.localizations?.length !== 0 && event.localizations[0].zipCode > 0 ? (
                                 <>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <LocationOnRounded fontSize="small"/>
+                                        <LocationOnRounded fontSize="small" />
                                         <Typography variant="h6">Lieu</Typography>
                                     </Box>
                                     <Box sx={{ margin: 0 }}>
@@ -121,48 +138,20 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         </Box>
                     </Box>
                 </Box>
-                <Box component="article" sx={{ display: 'flex', flexDirection: 'column' , gap: 1 }}>
+                <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                     <Typography variant="h6">Description</Typography>
                     <Typography>{event.description}</Typography>
                 </Box>
             </Box>
-            <Box component="section">
-                {
-                    canValid && (
-                        <EventFormValidate event={event} />
-                    )
-                }
-                {
-                    isMyEvent && (
-                        <Link href={`/event/${event.id}/edit`}>
-                            <Button type="button" >modifier</Button>
-                        </Link>
-                    )
-                }
-                {
-                    canFollow && (
-                        <EventFormFollow action={followEvent} event={event} doYouFollow={follow} />
-                    )
-                }
-                {
-                    isMyEvent && (
-                        <EventFormDelete action={deleteEvent} event={event} />
-                    )
-                }
-            </Box>
             <Box component="section" className={style.body}>
-                {
-                    session && (
-                        <EventFormComment event={event} />
-                    )
-                }
+
             </Box>
             <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="h6">Commentaires</Typography>
                 <Paper>
                     {
                         !!event.comments && (
-                            <CommentList comments={event.comments} />
+                            <CommentList session={session} event={event} />
                         )
                     }
                 </Paper>

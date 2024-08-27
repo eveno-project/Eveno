@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import Event from "@interfaces/event";
 import { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 
 export default function EventFormDelete({ event }: { event: Event }) {
     const router = useRouter();
@@ -34,7 +34,7 @@ export default function EventFormDelete({ event }: { event: Event }) {
 
     return (
         <Box component="form" onSubmit={handleDelete}>
-            <TextField type="hidden" name="id" value={event.id} />
+            <input type="hidden" name="id" value={event.id} />
             <Button color="primary" type="submit" disabled={isLoading}>
                 {isLoading ? 'Deleting...' : 'Supprimer l\'event'}
             </Button>
