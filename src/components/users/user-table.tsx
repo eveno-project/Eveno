@@ -14,7 +14,7 @@ export default function UsersTable() {
 
 	useEffect(() => {
 		const get = async () => {
-			const response = await fetch('/api/users');
+			const response = await fetch('/api/user');
 			if (response.ok) {
 				const data = (await response.json()) as UserDisplay[];
 				setUsers(data);
@@ -28,7 +28,7 @@ export default function UsersTable() {
 	const handleDelete = async (username: string) => {
 		try {
 			setLoading(true);
-			const res = await fetch(`/api/users/${username}`, { method: 'DELETE' });
+			const res = await fetch(`/api/user/${username}`, { method: 'DELETE' });
 			if (res.ok) {
 				setUsers(users.filter(user => user.username !== username));
 			} else {

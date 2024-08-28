@@ -26,7 +26,7 @@ export default function DeleteAccountModal({ user }: { user: UserSession }) {
 		}
 
 		try {
-			const response = await fetch('/api/users/delete-account', {
+			const response = await fetch('/api/user/delete', {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',

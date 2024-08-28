@@ -6,7 +6,7 @@ import { Container } from "@mui/material";
 export default function Page() {
     return (
         <Container component="main" maxWidth="md">
-            <Filter apiUrl="/api/users/event/eventFollow" showValidationFilter={false} />
+            <Filter apiUrl="/api/user/event/follow" showValidationFilter={false} />
         </Container>
     );
 };
