@@ -4,7 +4,6 @@ import prisma from "@utils/db";
 import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
 import { redirect } from 'next/navigation';
-import Localization from "@interfaces/localization";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@lib/auth";
 
@@ -39,7 +38,7 @@ export async function create(event: Event) {
             },
             startDate: event.startDate,
             eventTags: {
-                create: event.tags.map(tag => ({
+                create: event.tags.map((tag: { id: any; }) => ({
                     tag: { connect: { id: tag.id } }
                 }))
             }
@@ -94,7 +93,7 @@ export async function update(event: Event) {
                     },
                     startDate: event.startDate,
                     eventTags: {
-                        create: event.tags.map(tag => ({
+                        create: event.tags.map((tag: { id: any; }) => ({
                             tag: { connect: { id: tag.id } }
                         }))
                     },
