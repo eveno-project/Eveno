@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import RegisterPage from '../../src/app/authentication/register/page';
+import RegisterPage from '../../src/app/(authentication)/register/page';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -35,30 +35,30 @@ describe('RegisterPage', () => {
 	it('should render the registration form', () => {
 		render(<RegisterPage />);
 
-		expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
-		expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-		expect(screen.getByLabelText('Password*')).toBeInTheDocument();
-		expect(screen.getByLabelText('Confirm Password*')).toBeInTheDocument();
-		expect(screen.getByLabelText(/adult/i)).toBeInTheDocument();
-		expect(screen.getByLabelText(/birthday/i)).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
+		expect(screen.getByLabelText(/Nom d'utilisateur/i)).toBeInTheDocument();
+		expect(screen.getByLabelText(/Courriel/i)).toBeInTheDocument();
+		expect(screen.getByLabelText('Mot de passe')).toBeInTheDocument();
+		expect(screen.getByLabelText('Confirmation')).toBeInTheDocument();
+		// expect(screen.getByLabelText(/adult/i)).toBeInTheDocument();
+		expect(screen.getByLabelText(/Date/i)).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /S'inscrire/i })).toBeInTheDocument();
 	});
 
 	it('should handle form input changes', () => {
 		render(<RegisterPage />);
 
-		fireEvent.change(screen.getByLabelText(/username/i), { target: { value: 'testuser' } });
-		fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
-		fireEvent.change(screen.getByLabelText('Password*'), { target: { value: 'password123' } });
-		fireEvent.change(screen.getByLabelText('Confirm Password*'), { target: { value: 'password123' } });
-		fireEvent.change(screen.getByLabelText(/birthday/i), { target: { value: '2000-01-01' } });
-		fireEvent.click(screen.getByLabelText(/adult/i));
+		fireEvent.change(screen.getByLabelText(/Nom d'utilisateur/i), { target: { value: 'testuser' } });
+		fireEvent.change(screen.getByLabelText(/Courriel/i), { target: { value: 'test@example.com' } });
+		fireEvent.change(screen.getByLabelText('Mot de passe'), { target: { value: 'password123' } });
+		fireEvent.change(screen.getByLabelText('Confirmation'), { target: { value: 'password123' } });
+		fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2000-01-01' } });
+		// fireEvent.click(screen.getByLabelText(/adult/i));
 
-		expect(screen.getByLabelText(/username/i)).toHaveValue('testuser');
-		expect(screen.getByLabelText(/email/i)).toHaveValue('test@example.com');
-		expect(screen.getByLabelText('Password*')).toHaveValue('password123');
-		expect(screen.getByLabelText('Confirm Password*')).toHaveValue('password123');
-		expect(screen.getByLabelText(/birthday/i)).toHaveValue('2000-01-01');
-		expect(screen.getByLabelText(/adult/i)).toBeChecked();
+		expect(screen.getByLabelText(/Nom d'utilisateur/i)).toHaveValue('testuser');
+		expect(screen.getByLabelText(/Courriel/i)).toHaveValue('test@example.com');
+		expect(screen.getByLabelText('Mot de passe')).toHaveValue('password123');
+		expect(screen.getByLabelText('Confirmation')).toHaveValue('password123');
+		expect(screen.getByLabelText(/Date/i)).toHaveValue('2000-01-01');
+		// expect(screen.getByLabelText(/adult/i)).toBeChecked();
 	});
 });

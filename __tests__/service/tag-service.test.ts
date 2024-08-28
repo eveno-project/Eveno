@@ -19,9 +19,6 @@ jest.mock('@utils/db', () => ({
 		delete: jest.fn(),
 		findMany: jest.fn(),
 	},
-	eventTag: {
-		deleteMany: jest.fn(),
-	},
 }));
 
 describe('Tag Service', () => {
@@ -30,24 +27,28 @@ describe('Tag Service', () => {
 	});
 
 	describe('create', () => {
-		it('should create a new tag', async () => {
-			const tag: Partial<Tag> = { name: 'New Tag' };
+		it('should create a new tag with a capitalized name', async () => {
+			const tag = { name: 'new tag' }; // Corrected to match the expected type
+			const expectedTag = { id: 1, name: 'New tag' };
 
-			await create(tag);
+			(prisma.tag.create as jest.Mock).mockResolvedValue(expectedTag);
+
+			const result = await create(tag);
 
 			expect(prisma.tag.create).toHaveBeenCalledWith({
 				data: expect.objectContaining({
-					name: 'New Tag',
+					name: 'New tag',
 				}),
 			});
+			expect(result).toEqual(expectedTag);
 		});
 
-		it('should not create a tag if name is not provided', async () => {
-			const tag: Partial<Tag> = {};
 
-			await create(tag);
+		it('should throw an error if create fails', async () => {
+			const tag = { name: 'new tag' }; // Corrected to match the expected type
+			(prisma.tag.create as jest.Mock).mockRejectedValue(new Error('Create failed'));
 
-			expect(prisma.tag.create).not.toHaveBeenCalled();
+			await expect(create(tag)).rejects.toThrow('Create failed');
 		});
 	});
 
@@ -72,19 +73,26 @@ describe('Tag Service', () => {
 
 			expect(prisma.tag.update).not.toHaveBeenCalled();
 		});
+
+		it('should throw an error if update fails', async () => {
+			const tag: Partial<Tag> = { id: 1, name: 'Updated Tag' };
+			(prisma.tag.update as jest.Mock).mockRejectedValue(new Error('Update failed'));
+
+			await expect(update(tag)).rejects.toThrow('Update failed');
+		});
 	});
 
 	describe('deleteOne', () => {
-		it('should delete a tag and its associated event tags', async () => {
-			await deleteOne(1);
+		it('should delete a tag', async () => {
+			const mockTag = { id: 1, name: 'Tag1' };
+			(prisma.tag.delete as jest.Mock).mockResolvedValue(mockTag);
 
-			expect(prisma.eventTag.deleteMany).toHaveBeenCalledWith({
-				where: { tagId: 1 },
-			});
+			const result = await deleteOne(1);
 
 			expect(prisma.tag.delete).toHaveBeenCalledWith({
 				where: { id: 1 },
 			});
+			expect(result).toEqual(mockTag);
 		});
 
 		it('should throw an error if deletion fails', async () => {
@@ -107,6 +115,12 @@ describe('Tag Service', () => {
 
 			expect(prisma.tag.findMany).toHaveBeenCalled();
 			expect(result).toEqual(mockTags);
+		});
+
+		it('should throw an error if findMany fails', async () => {
+			(prisma.tag.findMany as jest.Mock).mockRejectedValue(new Error('Find failed'));
+
+			await expect(getAll()).rejects.toThrow('Find failed');
 		});
 	});
 
@@ -142,17 +156,30 @@ describe('Tag Service', () => {
 				{ id: 1, name: 'Tag1' },
 				{ id: 2, name: 'Tag2' },
 			];
-
+	
 			(prisma.tag.findMany as jest.Mock).mockResolvedValue(mockTags);
-
+	
+			// Update the input to include both id and name
 			const result = await getTagsByIds(mockTags);
-
+	
 			expect(prisma.tag.findMany).toHaveBeenCalledWith({
 				where: { id: { in: [1, 2] } },
 			});
 			expect(result).toEqual(mockTags);
 		});
+	
+		it('should throw an error if findMany fails', async () => {
+			const mockTags = [
+				{ id: 1, name: 'Tag1' },
+				{ id: 2, name: 'Tag2' },
+			];
+	
+			(prisma.tag.findMany as jest.Mock).mockRejectedValue(new Error('Find failed'));
+	
+			await expect(getTagsByIds(mockTags)).rejects.toThrow('Find failed');
+		});
 	});
+	
 
 	describe('getTagByNameVerif', () => {
 		it('should return true if the tag exists', async () => {

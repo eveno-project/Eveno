@@ -1,3 +1,4 @@
+import { Role } from '@constants/role';
 import { getUser, getUsersByRole, deleteUser } from '@services/user';
 import prisma from '@utils/db';
 
@@ -17,13 +18,28 @@ describe('User Service', () => {
 
 	describe('getUser', () => {
 		it('should return a user by email', async () => {
-			const mockUser = { id: 1, email: 'test@example.com', username: 'testuser' };
+			const mockUser = {
+				id: 1,
+				email: 'test@example.com',
+				username: 'testuser',
+				role: 'User',
+				adult: true,
+				password: 'hashedPassword'
+			};
 
 			(prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 
 			const result = await getUser('test@example.com');
 
 			expect(prisma.user.findUnique).toHaveBeenCalledWith({
+				select: {
+					id: true,
+					username: true,
+					email: true,
+					role: true,
+					adult: true,
+					password: true,
+				},
 				where: { email: 'test@example.com' },
 			});
 			expect(result).toEqual(mockUser);
@@ -35,6 +51,14 @@ describe('User Service', () => {
 			const result = await getUser('nonexistent@example.com');
 
 			expect(prisma.user.findUnique).toHaveBeenCalledWith({
+				select: {
+					id: true,
+					username: true,
+					email: true,
+					role: true,
+					adult: true,
+					password: true,
+				},
 				where: { email: 'nonexistent@example.com' },
 			});
 			expect(result).toBeNull();
@@ -50,13 +74,18 @@ describe('User Service', () => {
 
 			(prisma.user.findMany as jest.Mock).mockResolvedValue(mockUsers);
 
-			const result = await getUsersByRole('Admin');
+			const result = await getUsersByRole(Role.ADMIN);
 
 			expect(prisma.user.findMany).toHaveBeenCalledWith({
+				select: {
+					id: true,
+					username: true,
+					email: true
+				},
 				where: {
 					role: {
-						name: 'Admin',
-					},
+						id: Role.ADMIN,
+					}
 				},
 			});
 			expect(result).toEqual(mockUsers);
@@ -65,13 +94,18 @@ describe('User Service', () => {
 		it('should return an empty array if no users are found with the given role', async () => {
 			(prisma.user.findMany as jest.Mock).mockResolvedValue([]);
 
-			const result = await getUsersByRole('NonExistentRole');
+			const result = await getUsersByRole(0);
 
 			expect(prisma.user.findMany).toHaveBeenCalledWith({
+				select: {
+					id: true,
+					username: true,
+					email: true
+				},
 				where: {
 					role: {
-						name: 'NonExistentRole',
-					},
+						id: 0,
+					}
 				},
 			});
 			expect(result).toEqual([]);
