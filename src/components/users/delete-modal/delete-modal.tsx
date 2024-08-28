@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { Button, Modal, Box, Typography, TextField, IconButton } from '@mui/material';
-import { Delete as DeleteIcon, Close as CloseIcon, Close } from '@mui/icons-material';
+import { Delete as DeleteIcon, Close } from '@mui/icons-material';
 
 import UserSession from "@interfaces/sessionUser";
 import { signOut } from "next-auth/react";
