@@ -153,7 +153,7 @@ const config: Config = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ['<rootDir>/jest.setup.ts'],
+  // setupFiles: ['<rootDir>/jest.setup.ts'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -203,11 +203,11 @@ const config: Config = {
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: [
-    '/node_modules/(?!(jose|next-auth|@next-auth|@panva/hkdf|uuid|preact-render-to-string|preact)/)',
-    // "\\\\node_modules\\\\",
-    // "\\.pnp\\.[^\\\\]+$"
-  ],
+  // transformIgnorePatterns: [
+  //   '/node_modules/(?!(jose|next-auth|@next-auth|@panva/hkdf|uuid|preact-render-to-string|preact)/)',
+  //   // "\\\\node_modules\\\\",
+  //   // "\\.pnp\\.[^\\\\]+$"
+  // ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
