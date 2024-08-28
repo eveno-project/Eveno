@@ -170,7 +170,11 @@ export async function getById(id: number): Promise<Event> {
             where: { id: +id },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false,
+                    },
+                },
                 eventTags: {
                     include: {
                         tag: true,
@@ -178,7 +182,11 @@ export async function getById(id: number): Promise<Event> {
                 },
                 comments: {
                     include: {
-                        user: true,
+                        user: {
+                            select: {
+                                password: false,
+                            }
+                        },
                     },
                     orderBy: {
                         createdAt: 'desc',
@@ -186,10 +194,18 @@ export async function getById(id: number): Promise<Event> {
                 },
                 eventSubscribes: {
                     include: {
-                        user: true,
+                        user: {
+                            select: {
+                                password: false,
+                            }
+                        },
                         event: {
                             include: {
-                                user: true,
+                                user: {
+                                    select: {
+                                        password: false,
+                                    }
+                                },
                                 eventLocalizations: true,
                                 eventNotes: true,
                             }
@@ -247,7 +263,11 @@ export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Ev
         const events = (await prisma.event.findMany({
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false
+                    }
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -275,7 +295,11 @@ export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): P
         const events = (await prisma.event.findMany({
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false,
+                    }
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -313,7 +337,11 @@ export async function getByUserEmail(userEmail: string): Promise<{ events: Event
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false,
+                    }
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -347,7 +375,11 @@ export async function getByUserEmailFollow(userEmail: string): Promise<{ events:
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false,
+                    }
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -357,10 +389,18 @@ export async function getByUserEmailFollow(userEmail: string): Promise<{ events:
                 eventNotes: true,
                 eventSubscribes: {
                     include: {
-                        user: true,
+                        user: {
+                            select: {
+                                password: false,
+                            }
+                        },
                         event: {
                             include: {
-                                user: true,
+                                user: {
+                                    select: {
+                                        password: false,
+                                    }
+                                },
                                 eventLocalizations: true,
                                 eventNotes: true,
                             }
@@ -395,7 +435,11 @@ export async function getByTagName(name: string): Promise<Event[]> {
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false,
+                    }
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -423,7 +467,11 @@ export async function getManyByName(name: string): Promise<Event[]> {
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: {
+                        password: false,
+                    }
+                },
                 eventTags: {
                     include: {
                         tag: true
