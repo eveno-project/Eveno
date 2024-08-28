@@ -54,8 +54,9 @@ export async function POST(req: Request) {
             delete data.localizations;
         }
 
+        const { adult, ...result } = data;
 
-        const event = await create(data);
+        const event = await create({...result, adult: !adult });
 
         return NextResponse.json({ success: event });
 

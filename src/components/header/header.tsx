@@ -131,9 +131,9 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                                                 >
                                                     <ListItemButton onClick={() => handleNavigation('/profile')}>
                                                         {
-                                                            session.user && session.user.image && (
+                                                            session.user && (
                                                                 <ListItemAvatar>
-                                                                    <Avatar alt={session.user.username} src={session.user.image} />
+                                                                    <Avatar alt={session.user.username} src={session.user.image ?? session.user.username} />
                                                                 </ListItemAvatar>
                                                             )
                                                         }

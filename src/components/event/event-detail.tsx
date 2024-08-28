@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { Role } from "@constants/role";
 import { isUserSubscribed } from "@services/event";
+import { EventDeleteDialog } from "@components/event/delete-dialog";
 
 interface EventDetailProps {
     session: Session | null;
@@ -60,7 +61,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                 }
                 {
                     isMyEvent && (
-                        <EventFormDelete event={event} />
+                        <EventDeleteDialog event={event}/>
                     )
                 }
             </Toolbar>

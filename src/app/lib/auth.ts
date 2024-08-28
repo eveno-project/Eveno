@@ -30,7 +30,8 @@ export const authOptions : NextAuthOptions = {
 				if (user && credentials?.password) {
 					const isValid = await compare(credentials.password, user.password);
 					if (isValid) {
-						return user;
+						const {password, ...result} = user;
+						return result;
 					}
 				}
 
@@ -52,8 +53,9 @@ export const authOptions : NextAuthOptions = {
 				params.token.id = parseInt(params.user.id, 10)
 				params.token.username = params.user.username
 				params.token.email = params.user.email
-				params.token.role = params.user.roleId
+				params.token.role = params.user.role.id
 				params.token.adult = params.user.adult
+				params.token.picture = params.user.image
 			}
 			return params.token
 		},
@@ -65,6 +67,9 @@ export const authOptions : NextAuthOptions = {
 				session.user.username = token.username;
 				session.user.email = token.email;
 				session.user.adult = token.adult;
+				session.user.image = token.picture;
+				console.log("session")
+				console.log(session)
 			}
 			return session;
 		},

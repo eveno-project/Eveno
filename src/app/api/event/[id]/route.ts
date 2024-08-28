@@ -97,7 +97,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
             delete data.localizations;
         }
 
-        const event = await update(data);
+        const { adult, ...result } = data;
+
+        const event = await update({...result, adult: !adult });
         return NextResponse.json({ success: event });
 
     } catch (error) {
