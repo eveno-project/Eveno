@@ -20,7 +20,7 @@ export default function IssueForm() {
 
     const onSubmit = async (issueValues: IssueValues) => {
         try {
-            const response = await fetch('/api/ticket', {
+            const response = await fetch('/api/report', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

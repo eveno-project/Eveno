@@ -5,11 +5,16 @@ export async function POST(req: Request) {
     const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     const REPO_OWNER = process.env.REPO_OWNER;
     const REPO_NAME = process.env.REPO_NAME;
-    const data: IssueValues = await req.json();
+    let data: IssueValues = await req.json();
 
     if (!GITHUB_TOKEN || !REPO_OWNER || !REPO_NAME) {
         return new Response(JSON.stringify({ error: 'Missing environment variables' }), { status: 500 });
     }
+
+    data = {
+        ...data,
+        labels: [...(data.labels || []), "bug"],
+    };
 
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
 
@@ -31,6 +36,6 @@ export async function POST(req: Request) {
             return new Response(JSON.stringify(errorData), { status: response.status });
         }
     } catch (error) {
-        return new Response(JSON.stringify({ error: 'Failed to create issue' }), { status: 500 });
+        return new Response(JSON.stringify({ error: 'Échec de la création de l\'issue' }), { status: 500 });
     }
 }
