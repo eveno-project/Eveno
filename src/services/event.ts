@@ -225,10 +225,10 @@ export async function getById(id: number): Promise<Event> {
         }) as unknown as EventDto;
 
         if (!event) {
-            redirect("/");
+			throw new Error("Event not found");
         }
 
-        if (!event.user.id) {
+        if (!event.user || !event.user.id) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
         return Mapper.toEvent(event);
