@@ -1,18 +1,13 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { signIn } from "next-auth/react";
-import { Box, Button, Container, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
+import { Box, Container, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { RegisterSchema, RegisterValues } from "@validators/register.shema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Login, Visibility, VisibilityOff } from "@mui/icons-material";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from "dayjs";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { error } from "console";
 
 export default function RegisterPage() {
 	const {
@@ -31,7 +26,7 @@ export default function RegisterPage() {
 	const router = useRouter();
 
 	const onSumbit = async ({ email, birthday, confirm, password, username }: RegisterValues) => {
-		const response = await fetch("/api/register", {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/register`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

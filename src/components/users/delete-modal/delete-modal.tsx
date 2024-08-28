@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Button, Modal, Box, Typography, TextField, IconButton } from '@mui/material';
 import { Delete as DeleteIcon, Close } from '@mui/icons-material';
@@ -6,7 +7,7 @@ import UserSession from "@interfaces/sessionUser";
 import { signOut } from "next-auth/react";
 import { PASSWORD_REQUIRED, REPORT, USER_DELETE_ERROR_ACCOUNT, USER_DELETE_ERROR_PASSWORD, USER_ERROR_NOT_FOUND } from '@constants/message-schema';
 
-export default function DeleteAccountModal({ user }: { user: UserSession }) {
+export default function DeleteAccountModal({ user }: { user: UserSession  }) {
 	const [open, setOpen] = useState(false);
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
