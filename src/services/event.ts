@@ -6,6 +6,22 @@ import Mapper from "@utils/mapper";
 import { redirect } from 'next/navigation';
 import Localization from "@interfaces/localization";
 
+const userSelect = {
+    id: true,
+    username: true,
+    email: true,
+    token: true,
+    image: true,
+    adult: true,
+    birthday: true,
+    roleId: true,
+    role: true,
+    comments: true,
+    events: true,
+    tagFollows: true,
+    eventSubscribes: true,
+    eventNotes: true,
+}
 export async function create(event: Event) {
     try {
         const data: any = {
@@ -171,9 +187,7 @@ export async function getById(id: number): Promise<Event> {
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false,
-                    },
+                    select: userSelect
                 },
                 eventTags: {
                     include: {
@@ -183,9 +197,7 @@ export async function getById(id: number): Promise<Event> {
                 comments: {
                     include: {
                         user: {
-                            select: {
-                                password: false,
-                            }
+                            select: userSelect
                         },
                     },
                     orderBy: {
@@ -195,16 +207,12 @@ export async function getById(id: number): Promise<Event> {
                 eventSubscribes: {
                     include: {
                         user: {
-                            select: {
-                                password: false,
-                            }
+                            select: userSelect
                         },
                         event: {
                             include: {
                                 user: {
-                                    select: {
-                                        password: false,
-                                    }
+                                    select: userSelect
                                 },
                                 eventLocalizations: true,
                                 eventNotes: true,
@@ -264,9 +272,7 @@ export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Ev
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false
-                    }
+                    select: userSelect
                 },
                 eventTags: {
                     include: {
@@ -296,9 +302,7 @@ export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): P
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false,
-                    }
+                    select: userSelect
                 },
                 eventTags: {
                     include: {
@@ -338,9 +342,7 @@ export async function getByUserEmail(userEmail: string): Promise<{ events: Event
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false,
-                    }
+                    select: userSelect
                 },
                 eventTags: {
                     include: {
@@ -376,9 +378,7 @@ export async function getByUserEmailFollow(userEmail: string): Promise<{ events:
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false,
-                    }
+                    select: userSelect
                 },
                 eventTags: {
                     include: {
@@ -390,16 +390,12 @@ export async function getByUserEmailFollow(userEmail: string): Promise<{ events:
                 eventSubscribes: {
                     include: {
                         user: {
-                            select: {
-                                password: false,
-                            }
+                            select: userSelect
                         },
                         event: {
                             include: {
                                 user: {
-                                    select: {
-                                        password: false,
-                                    }
+                                    select: userSelect
                                 },
                                 eventLocalizations: true,
                                 eventNotes: true,
@@ -436,9 +432,7 @@ export async function getByTagName(name: string): Promise<Event[]> {
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false,
-                    }
+                    select: userSelect
                 },
                 eventTags: {
                     include: {
@@ -468,9 +462,7 @@ export async function getManyByName(name: string): Promise<Event[]> {
             include: {
                 eventLocalizations: true,
                 user: {
-                    select: {
-                        password: false,
-                    }
+                    select: userSelect
                 },
                 eventTags: {
                     include: {

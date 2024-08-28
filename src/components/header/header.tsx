@@ -17,7 +17,7 @@ import {
     ListSubheader,
     Toolbar
 } from "@mui/material";
-import { Menu as MenuIcon, Close as CloseIcon, Inbox, Dashboard, Event, Tag, Person, Notifications, Add } from "@mui/icons-material";
+import { Menu as MenuIcon, Close as CloseIcon, Inbox, Dashboard, Event, Tag, Person, Notifications, Add, Report } from "@mui/icons-material";
 import { Session } from "next-auth";
 import { getSession, signOut } from "next-auth/react";
 import Image from "next/image";
@@ -82,137 +82,149 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                 }
                 {
                     !hasLoginLayout && (
-                    <>
-                        <IconButton
-                            edge="end"
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={toggleDrawer(true)}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Drawer
-                            component="nav"
-                            anchor="right"
-                            open={drawerOpen}
-                            onClose={toggleDrawer(false)}
-                        >
-                            <Box
-                                sx={{
-                                    height: '100%',
-                                    width: 250,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'space-between'
-                                }}
-                                role="presentation"
-                                onClick={toggleDrawer(false)}
-                                onKeyDown={toggleDrawer(false)}
+                        <>
+                            <IconButton
+                                edge="end"
+                                color="inherit"
+                                aria-label="menu"
+                                onClick={toggleDrawer(true)}
                             >
-                                <Box>
-                                    <Toolbar sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Box
-                                            sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}
-                                        >
-                                            <IconButton onClick={toggleDrawer(false)}>
-                                                <CloseIcon />
-                                            </IconButton>
-                                        </Box>
-                                    </Toolbar>
-                                    <Divider />
-                                    {session && (
-                                        <>
-                                            <List
-                                                subheader={
-                                                    <ListSubheader component="div" id="nested-list-subheader">
-                                                        Profile
-                                                    </ListSubheader>
-                                                }
+                                <MenuIcon />
+                            </IconButton>
+                            <Drawer
+                                component="nav"
+                                anchor="right"
+                                open={drawerOpen}
+                                onClose={toggleDrawer(false)}
+                            >
+                                <Box
+                                    sx={{
+                                        height: '100%',
+                                        width: 250,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-between'
+                                    }}
+                                    role="presentation"
+                                    onClick={toggleDrawer(false)}
+                                    onKeyDown={toggleDrawer(false)}
+                                >
+                                    <Box>
+                                        <Toolbar sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            <Box
+                                                sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}
                                             >
-                                                <ListItemButton onClick={() => handleNavigation('/profile')}>
-                                                    {
-                                                        session.user && session.user.image && (
-                                                            <ListItemAvatar>
-                                                                <Avatar alt={session.user.username} src={session.user.image} />
-                                                            </ListItemAvatar>
-                                                        )
-                                                    }
-                                                    <ListItemText primary="Mon compte" />
-                                                </ListItemButton>
-                                                <ListItemButton onClick={() => handleNavigation('/user/event')}>
-                                                    <ListItemIcon>
-                                                        <Event />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Mes événements" />
-                                                </ListItemButton>
-                                                <ListItemButton onClick={() => handleNavigation('/user/follow')}>
-                                                    <ListItemIcon>
-                                                        <Notifications />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Mes suivis" />
-                                                </ListItemButton>
-                                            </List>
-                                            <Divider />
-                                            {session.user.role === Role.ADMIN && (
+                                                <IconButton onClick={toggleDrawer(false)}>
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </Box>
+                                        </Toolbar>
+                                        <Divider />
+                                        {session && (
+                                            <>
                                                 <List
                                                     subheader={
                                                         <ListSubheader component="div" id="nested-list-subheader">
-                                                            Administration
+                                                            Profile
                                                         </ListSubheader>
                                                     }
                                                 >
-                                                    <ListItemButton onClick={() => handleNavigation('/admin/event')}>
+                                                    <ListItemButton onClick={() => handleNavigation('/profile')}>
+                                                        {
+                                                            session.user && session.user.image && (
+                                                                <ListItemAvatar>
+                                                                    <Avatar alt={session.user.username} src={session.user.image} />
+                                                                </ListItemAvatar>
+                                                            )
+                                                        }
+                                                        <ListItemText primary="Mon compte" />
+                                                    </ListItemButton>
+                                                    <ListItemButton onClick={() => handleNavigation('/user/event')}>
                                                         <ListItemIcon>
                                                             <Event />
                                                         </ListItemIcon>
-                                                        <ListItemText primary="Événements" />
+                                                        <ListItemText primary="Mes événements" />
                                                     </ListItemButton>
-                                                    <ListItemButton onClick={() => handleNavigation('/admin/tag')}>
+                                                    <ListItemButton onClick={() => handleNavigation('/user/follow')}>
                                                         <ListItemIcon>
-                                                            <Tag />
+                                                            <Notifications />
                                                         </ListItemIcon>
-                                                        <ListItemText primary="Catégories" />
-                                                    </ListItemButton>
-                                                    <ListItemButton onClick={() => handleNavigation('/admin/user')}>
-                                                        <ListItemIcon >
-                                                            <Person />
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="Utilisateurs" />
+                                                        <ListItemText primary="Mes suivis" />
                                                     </ListItemButton>
                                                 </List>
-                                            )}
-                                            <Divider />
-                                        </>
-                                    )
-                                    }
-                                </Box>
-                                <List>
-                                    <ListItem>
-                                        {
-                                            session ? (
-                                                <Button
-                                                    fullWidth
-                                                    variant="contained"
-                                                    onClick={handleSignOut}
-                                                >
-                                                    Se déconnecter
-                                                </Button>
-                                            ) : (
-                                                <Button
-                                                    fullWidth
-                                                    variant="outlined"
-                                                    onClick={() => handleNavigation(Route.LOGIN)}
-                                                >
-                                                    Se connecter
-                                                </Button>
-                                            )
+                                                <Divider />
+                                                {session.user.role === Role.ADMIN && (
+                                                    <List
+                                                        subheader={
+                                                            <ListSubheader component="div" id="nested-list-subheader">
+                                                                Administration
+                                                            </ListSubheader>
+                                                        }
+                                                    >
+                                                        <ListItemButton onClick={() => handleNavigation('/admin/event')}>
+                                                            <ListItemIcon>
+                                                                <Event />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="Événements" />
+                                                        </ListItemButton>
+                                                        <ListItemButton onClick={() => handleNavigation('/admin/tag')}>
+                                                            <ListItemIcon>
+                                                                <Tag />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="Catégories" />
+                                                        </ListItemButton>
+                                                        <ListItemButton onClick={() => handleNavigation('/admin/user')}>
+                                                            <ListItemIcon >
+                                                                <Person />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="Utilisateurs" />
+                                                        </ListItemButton>
+                                                    </List>
+                                                )}
+                                                <Divider />
+                                                {
+                                                    session?.user && (
+                                                        <List>
+                                                            <ListItemButton onClick={() => handleNavigation('/report')}>
+                                                                <ListItemIcon>
+                                                                    <Report />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary="Problème à signaler" />
+                                                            </ListItemButton>
+                                                        </List>
+                                                    )
+                                                }
+                                            </>
+                                        )
                                         }
-                                    </ListItem>
-                                </List>
-                            </Box>
-                        </Drawer>
-                    </>
-                )}
+                                    </Box>
+                                    <List>
+                                        <ListItem>
+                                            {
+                                                session ? (
+                                                    <Button
+                                                        fullWidth
+                                                        variant="contained"
+                                                        onClick={handleSignOut}
+                                                    >
+                                                        Se déconnecter
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        fullWidth
+                                                        variant="outlined"
+                                                        onClick={() => handleNavigation(Route.LOGIN)}
+                                                    >
+                                                        Se connecter
+                                                    </Button>
+                                                )
+                                            }
+                                        </ListItem>
+                                    </List>
+                                </Box>
+                            </Drawer>
+                        </>
+                    )}
             </Toolbar>
         </AppBar >
     );
