@@ -23,7 +23,7 @@ export default function ResetPassword({ session }: { session: Session }) {
 		}
 		getUser();
 
-	}, []);
+	}, [session.user]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();

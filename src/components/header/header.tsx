@@ -75,7 +75,7 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                 <Box sx={{ flex: '1 1' }}></Box>
                 {
                     session && hasMyEvent && (
-                        <Button href="/" variant="contained" endIcon={<Add />} sx={{ marginX: 1 }}>
+                        <Button href="/event/create" variant="contained" endIcon={<Add />} sx={{ marginX: 1 }}>
                             Créer un événement
                         </Button>
                     )
@@ -131,9 +131,9 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                                                 >
                                                     <ListItemButton onClick={() => handleNavigation('/profile')}>
                                                         {
-                                                            session.user && session.user.image && (
+                                                            session.user && (
                                                                 <ListItemAvatar>
-                                                                    <Avatar alt={session.user.username} src={session.user.image} />
+                                                                    <Avatar alt={session.user.username} src={session.user.image ?? session.user.username} />
                                                                 </ListItemAvatar>
                                                             )
                                                         }

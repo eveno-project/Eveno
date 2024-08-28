@@ -7,6 +7,8 @@ import { EventValue, eventSchema } from "@validators/event.schema";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { EventDeleteDialog } from "@components/event/delete-dialog";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function EventForm({ event, tags, userId }: { event?: Event, tags: Tag[], userId: number }) {
     const router = useRouter();
@@ -25,7 +27,7 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
             startDate: event?.startDate ? new Date(event.startDate) : new Date(),
             endDate: event?.endDate ? new Date(event.endDate) : new Date(),
             linkTicketing: event?.linkTicketing || '',
-            adult: event?.adult || false,
+            adult: !event?.adult || false,
             localizations: event?.localizations?.[0],
             tags: event?.tags.map(tag => ({ id: tag.id })) || [],
         }
@@ -257,14 +259,15 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                 {errors.tags && <FormHelperText>{errors.tags.message}</FormHelperText>}
             </FormControl>
 
-            <Button
+            <LoadingButton
+                loading={isSubmitting}
                 type="submit"
                 variant="contained"
                 color="primary"
                 disabled={isSubmitting}
             >
-                {event?.id ? "Modifier l&apos;évènement" : "Créer un évènement"}
-            </Button>
+                {event?.id ? "Modifier l'évènement" : "Créer un évènement"}
+            </LoadingButton>
             {errors && Object.keys(errors).length > 0 && (
                 <Box sx={{ marginTop: '1rem', color: 'red' }}>
                     {Object.values(errors).map((error, index) => (

@@ -232,11 +232,11 @@ export async function getById(id: number): Promise<Event> {
             redirect("/");
         }
 
-        if (!event.published && event.user.id !== userId) {
+        if (event && !event.published && event.user.id !== userId) {
             redirect("/");
         }
 
-        if (!event.user.id) {
+        if (event && (!event.user || !event.user.id)) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
         return Mapper.toEvent(event);

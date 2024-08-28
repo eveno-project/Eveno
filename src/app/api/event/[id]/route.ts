@@ -1,77 +1,34 @@
-import { NextResponse } from "next/server";
-import { deleteOne, getById, update } from "@services/event";
-import { authOptions } from "@lib/auth";
-import { updateEventSchema } from '@validators/event.schema';
-import { getServerSession } from "next-auth";
+import { NextResponse } from 'next/server';
+import { create, getAll, update } from '@services/event';
+import { eventSchema, updateEventSchema } from '@validators/event.schema';
 import { ZodIssue } from 'zod';
-import { Role } from "@constants/role";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@lib/auth';
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-    const parsedId = parseInt(params.id);
-    const session = await getServerSession(authOptions);
 
+export async function GET() {
     try {
-        if (session && session.user) {
-            // verify that the user is the owner of the event
-            const event = await getById(parsedId);
-
-            if (event.user.id !== session.user.id) {
-                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-            }
-
-            const success = await deleteOne(parsedId, session.user.id);
-
-            if (success) {
-                // Return success response
-                return NextResponse.json({ message: "Event deleted successfully" }, { status: 200 });
-            } else {
-                // Return failure response if deletion was unsuccessful
-                return NextResponse.json({ error: "Failed to delete event" }, { status: 500 });
-            }
-        } else {
-            // Return unauthorized response if user is not authenticated
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const events = await getAll();
+        return NextResponse.json({ data: events }, { status: 200 });
     } catch (error) {
-        // Return error response
-        return NextResponse.json({ error: "An error occurred while deleting the event" }, { status: 500 });
-    }
-}
-
-export async function GET(_: Request, { params }: { params: { id: string } }) {
-    try {
-        const session = await getServerSession(authOptions);
-        if (!session || !session.user) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-
-        if (session.user.role !== Role.ADMIN) {
-            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-        }
-
-        const parsedId = parseInt(params.id);
-        const event = await getById(parsedId);
-        return NextResponse.json({ data: event }, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ error: "An error occurred while fetching the event" }, { status: 500 });
+        console.error({ error });
+        throw NextResponse.json({ error }, { status: 500 });
     }
 }
 
 
-
-
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request) {
+    // Récupérer la session utilisateur
     const session = await getServerSession(authOptions);
     const userId = session?.user.id;
 
+    // Vérifier si l'utilisateur est authentifié
     if (!userId) {
         return NextResponse.redirect('/');
     }
 
     try {
         const data = await req.json();
-
-        data.id = parseInt(params.id);
 
         const { localizations } = data;
 
@@ -97,7 +54,10 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
             delete data.localizations;
         }
 
-        const event = await update(data);
+        const { adult, ...result } = data;
+
+        const event = await create({ ...result, adult: !adult });
+
         return NextResponse.json({ success: event });
 
     } catch (error) {
@@ -105,3 +65,4 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         return NextResponse.json({ error: 'Erreur lors du traitement des données.' }, { status: 500 });
     }
 }
+
