@@ -11,6 +11,12 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
 
     try {
         if (session && session.user) {
+            // verify that the user is the owner of the event
+            const event = await getById(parsedId);
+            if (event.userId !== session.user.id) {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+
             const success = await deleteOne(parsedId, session.user.id);
 
             if (success) {
@@ -32,6 +38,11 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
         const parsedId = parseInt(params.id);
         const event = await getById(parsedId);
         return NextResponse.json({ data: event }, { status: 200 });
