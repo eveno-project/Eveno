@@ -4,6 +4,13 @@ on:
   pull_request:
     branches:
       - main
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+  REPO_OWNER: ${{ secrets.REPO_OWNER }}
+  REPO_NAME: ${{ secrets.REPO_NAME }}
 
 jobs:
   test-and-build:
