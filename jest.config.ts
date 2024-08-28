@@ -104,9 +104,13 @@ const config: Config = {
     '^@constants/(.*)$': '<rootDir>/src/constants/$1',
     '^@actions/(.*)$': '<rootDir>/src/app/actions/$1',
     '^@validators/(.*)$': '<rootDir>/src/validators/$1',
+    '^@dto/(.*)$': '<rootDir>/src/interfaces/dto/$1',
+    '^@enums/(.*)$': '<rootDir>/src/enums/$1',
+    '^@types/(.*)$': '<rootDir>/src/types/$1',
+    '^@api/(.*)$': '<rootDir>/src/app/api/$1',
+    '^@lib/(.*)$': '<rootDir>/src/app/lib/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
   },
-
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
 
@@ -215,7 +219,7 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  
+
 };
 
 export default config;

@@ -9,9 +9,7 @@ import Image from "@interfaces/image";
 import styles from './carousel.module.css';
 import { useCallback, useState } from 'react';
 import { useDotButton } from '@services/carousel';
-import DotButton from './dot-button/dot-button';
-import {default as NextImage} from 'next/image';
-import { fakerFR } from '@faker-js/faker';
+import { Box, Radio } from '@mui/material';
 
 export default function Carousel({ images, options }: { images: Image[], options?: EmblaOptionsType }) {
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
@@ -32,29 +30,33 @@ export default function Carousel({ images, options }: { images: Image[], options
         onNavButtonClick
     )
     return (
-        <article className={styles.slider}>
-            <section className={styles.slider__viewport} ref={emblaRef}>
-                <div className={styles.slider__container}>
+        <Box component="article" className={styles.slider}>
+            <Box component="section" className={styles.slider__viewport} ref={emblaRef}>
+                <Box className={styles.slider__container}>
                     {
                         images.map((image, key) => (
-                            <div key={key} className={styles.slider__container__image}>
-                                <img className={styles.slider__image} key={key} src={image.src} alt={image.alt}/>
-                            </div>
+                            <Box key={key} className={styles.slider__container__image}>
+                                <img className={styles.slider__image} key={key} src={image.src} alt={image.alt} />
+                            </Box>
                         ))
                     }
-                </div>
-            </section>
-            <section className={styles.slider__dots__container}>
-                <div className={styles.slider__dots}>
-                    {scrollSnaps.map((_: any, index: number) => (
-                        <DotButton
-                            key={index}
-                            onClick={() => onDotButtonClick(index)}
-                            className={ index !== selectedIndex ? `${styles.slider__dot}` : `${styles.slider__dot_selected}`}
-                        />
-                    ))}
-                </div>
-            </section>
-        </article>
+                </Box>
+            </Box>
+            {
+                images.length > 0 && (
+                    <Box component="section" className={styles.slider__dots__container}>
+                        <Box className={styles.slider__dots}>
+                            {scrollSnaps.map((_: any, index: number) => (
+                                <Radio
+                                    key={index}
+                                    onClick={() => onDotButtonClick(index)}
+                                    checked={index === selectedIndex}
+                                />
+                            ))}
+                        </Box>
+                    </Box>
+                )
+            }
+        </Box>
     );
 }

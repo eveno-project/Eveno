@@ -6,6 +6,22 @@ import Mapper from "@utils/mapper";
 import { redirect } from 'next/navigation';
 import Localization from "@interfaces/localization";
 
+const userSelect = {
+    id: true,
+    username: true,
+    email: true,
+    token: true,
+    image: true,
+    adult: true,
+    birthday: true,
+    roleId: true,
+    role: true,
+    comments: true,
+    events: true,
+    tagFollows: true,
+    eventSubscribes: true,
+    eventNotes: true,
+}
 export async function create(event: Event) {
     try {
         const data: any = {
@@ -111,19 +127,17 @@ export async function valid(eventId: number) {
 
 export async function follow(eventId: number, userId: number) {
     try {
-        if (eventId && userId) {
-            await prisma.eventSubscribe.create({
-                data: {
-                    event: {
-                        connect: { id: eventId }
-                    },
-                    user: {
-                        connect: { id: userId }
-                    },
-                    type: ""
-                }
-            });
-        }
+        await prisma.eventSubscribe.create({
+            data: {
+                event: {
+                    connect: { id: eventId }
+                },
+                user: {
+                    connect: { id: userId }
+                },
+                type: ""
+            }
+        });
     } catch (error) {
         throw error;
     }
@@ -155,15 +169,12 @@ export async function createComment(eventId: number, userId: number | null, comm
 
 export async function unFollow(eventId: number, userId: number): Promise<void> {
     try {
-        if (eventId && userId) {
-            await prisma.eventSubscribe.deleteMany({
-                where: {
-                    eventId: eventId,
-                    userId: userId,
-                },
-            });
-        }
-
+        await prisma.eventSubscribe.deleteMany({
+            where: {
+                eventId,
+                userId
+            }
+        });
     } catch (error) {
         throw error;
     }
@@ -175,7 +186,9 @@ export async function getById(id: number): Promise<Event> {
             where: { id: +id },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true,
@@ -183,18 +196,24 @@ export async function getById(id: number): Promise<Event> {
                 },
                 comments: {
                     include: {
-                        user: true,
+                        user: {
+                            select: userSelect
+                        },
                     },
                     orderBy: {
-                        id: 'desc',
+                        createdAt: 'desc',
                     },
                 },
                 eventSubscribes: {
                     include: {
-                        user: true,
+                        user: {
+                            select: userSelect
+                        },
                         event: {
                             include: {
-                                user: true,
+                                user: {
+                                    select: userSelect
+                                },
                                 eventLocalizations: true,
                                 eventNotes: true,
                             }
@@ -206,10 +225,10 @@ export async function getById(id: number): Promise<Event> {
         }) as unknown as EventDto;
 
         if (!event) {
-            redirect("/");
+			throw new Error("Event not found");
         }
 
-        if (!event.user.id) {
+        if (!event.user || !event.user.id) {
             throw new Error("Pas d'utilisateur d'assigner");
         }
         return Mapper.toEvent(event);
@@ -252,7 +271,9 @@ export async function getAll(sort: 'asc' | 'desc' = 'asc'): Promise<{ events: Ev
         const events = (await prisma.event.findMany({
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -280,7 +301,9 @@ export async function getAllValidate(isValid: boolean, sort?: 'asc' | 'desc'): P
         const events = (await prisma.event.findMany({
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -318,7 +341,9 @@ export async function getByUserEmail(userEmail: string): Promise<{ events: Event
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -352,7 +377,9 @@ export async function getByUserEmailFollow(userEmail: string): Promise<{ events:
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -362,10 +389,14 @@ export async function getByUserEmailFollow(userEmail: string): Promise<{ events:
                 eventNotes: true,
                 eventSubscribes: {
                     include: {
-                        user: true,
+                        user: {
+                            select: userSelect
+                        },
                         event: {
                             include: {
-                                user: true,
+                                user: {
+                                    select: userSelect
+                                },
                                 eventLocalizations: true,
                                 eventNotes: true,
                             }
@@ -400,7 +431,9 @@ export async function getByTagName(name: string): Promise<Event[]> {
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true
@@ -428,7 +461,9 @@ export async function getManyByName(name: string): Promise<Event[]> {
             },
             include: {
                 eventLocalizations: true,
-                user: true,
+                user: {
+                    select: userSelect
+                },
                 eventTags: {
                     include: {
                         tag: true

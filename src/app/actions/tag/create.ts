@@ -1,8 +1,7 @@
 'use server';
 import Tag from '@interfaces/tag';
 import { create, getTagByNameVerif } from '@services/tag';
-import { tagSchema } from '@validators/tag.schema';
-import { error } from 'console';
+import { TagSchema } from '@validators/tag.schema';
 import { redirect } from 'next/navigation';
 import { ZodIssue } from 'zod';
 
@@ -19,7 +18,7 @@ export default async function createTag(_prevState: any, params: FormData) {
             }] as ZodIssue[]
         }
    }
-    const validation = tagSchema.safeParse({
+    const validation = TagSchema.safeParse({
         name: params.get('name')
     });
 
@@ -35,7 +34,7 @@ export default async function createTag(_prevState: any, params: FormData) {
         }
     }
 
-    await create(validation.data as unknown as Partial<Tag>);
+    await create(validation.data as unknown as Omit<Tag, 'id'>);
 
     redirect('/admin/tag');
 }

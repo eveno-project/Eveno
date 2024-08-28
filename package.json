@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prisma:generate": "prisma generate",
     "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts",
     "test": "jest",
     "test:watch": "jest --watch"
@@ -20,6 +21,7 @@
     "@mui/icons-material": "^5.15.18",
     "@mui/lab": "^5.0.0-alpha.173",
     "@mui/material": "^5.16.7",
+    "@mui/x-charts": "^7.14.0",
     "@mui/x-date-pickers": "^7.14.0",
     "@prisma/client": "^5.14.0",
     "bcryptjs": "^2.4.3",
@@ -48,6 +50,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^29.5.12",
     "@types/node": "^20",
+    "@types/node-fetch": "^2.6.11",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "babel-jest": "^29.7.0",
