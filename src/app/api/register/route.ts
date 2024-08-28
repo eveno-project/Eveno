@@ -1,31 +1,29 @@
 import prisma from "@utils/db";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import dayjs from "dayjs";
+import { EMAIL_VALID } from "@constants/message-schema";
 
 export async function POST(NextRequest: NextRequest) {
-	const { username, email, password, confirmPassword, adult, birthday } = await NextRequest.json();
+	const { username, email, password, confirmPassword, birthday } = await NextRequest.json();
 
 	if (!username || !email || !password || !confirmPassword || !birthday) {
-		return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+		return NextResponse.json({ error: "Champs manquant" }, { status: 400 });
 	}
 
 	if (email === "" || !email.includes("@")) {
-		return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+		return NextResponse.json({ error: EMAIL_VALID }, { status: 400 });
 	}
 
 	if (password !== confirmPassword) {
 		return NextResponse.json({ error: "Passwords do not match" }, { status: 400 });
 	}
 
-	if (adult !== true && adult !== false) {
+	const adult = dayjs().diff(dayjs(birthday), "year") >= 13;
+
+	if (typeof adult !== 'boolean') {
 		return NextResponse.json({ error: "Adult must be a boolean" }, { status: 400 });
 	}
-
-	if (birthday.length !== 10) {
-		return NextResponse.json({ error: "Birthday must be in the format 'YYYY-MM-DD'" }, { status: 400 });
-	}
-
-	const dateBirthday = new Date(birthday);
 
 	const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -37,13 +35,14 @@ export async function POST(NextRequest: NextRequest) {
 				password: hashedPassword,
 				token: Math.random().toString(36).slice(2),
 				adult: adult,
-				birthday: dateBirthday,
+				birthday: dayjs(birthday).toDate(),
 				roleId: 1
 			}
 		});
 
 		return NextResponse.json(user, { status: 201 })
 	} catch (error: any) {
+		console.error({ error });
 		if (error.code === "P2002") {
 			if (error.meta.target.includes("email")) {
 				return NextResponse.json({ error: "Email already exists" }, { status: 400 });

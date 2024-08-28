@@ -1,6 +1,7 @@
 import prisma from "@utils/db";
 import { NextRequest, NextResponse } from "next/server";
 import { compare, hash } from "bcryptjs";
+import { PASSWORD_MIN, PASSWORD_ERROR_OLD, PASSWORD_SUCCESSFULLY, SERVER_ERROR_INTERNAL, USER_ERROR_NOT_FOUND } from "@constants/message-schema";
 
 export async function POST(req: NextRequest) {
 	if (req.method !== "POST") {
@@ -17,16 +18,16 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (!user) {
-			return NextResponse.json({ error: 'User not found' }, { status: 404 });
+			return NextResponse.json({ error: USER_ERROR_NOT_FOUND }, { status: 404 });
 		}
 
 		const isPasswordValid = await compare(oldPassword, user.password);
 
 		if (!isPasswordValid) {
-			return NextResponse.json({ message: 'Ancien mot de passe incorrecte' }, { status: 401 });
+			return NextResponse.json({ message: PASSWORD_ERROR_OLD }, { status: 401 });
 		}
 		if(newPassword.length < 8){
-			return NextResponse.json({ message: 'Le mot de passe doit faire au minimum 8 caractères' }, { status: 400 });
+			return NextResponse.json({ message: PASSWORD_MIN }, { status: 400 });
 		}
 
 		const hashedNewPassword = await hash(newPassword, 10);
@@ -36,8 +37,8 @@ export async function POST(req: NextRequest) {
 			data: { password: hashedNewPassword },
 		});
 
-		return NextResponse.json({ message: 'Password updated successfully' }, { status: 200 });
+		return NextResponse.json({ message: PASSWORD_SUCCESSFULLY }, { status: 200 });
 	} catch (error) {
-		return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+		return NextResponse.json({ message: SERVER_ERROR_INTERNAL }, { status: 500 });
 	}
 }

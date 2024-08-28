@@ -14,7 +14,6 @@ export default async function commentEvent(_prevState: any, params: FormData) {
         redirect('/');
     }
 
-
     if (idEvent && userId && commentContent) {
         createComment(+idEvent, userId, commentContent);
     }
