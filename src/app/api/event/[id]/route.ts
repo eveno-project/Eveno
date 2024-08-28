@@ -15,7 +15,7 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
             // verify that the user is the owner of the event
             const event = await getById(parsedId);
 
-            if (event.user.id !== session.user.id) {
+            if (event?.user.id !== session.user.id) {
                 return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
             }
 
