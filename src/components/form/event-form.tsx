@@ -49,8 +49,6 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
         }
     };
 
-    // useEffect(() => { console.log({ errors }) }, [errors]);
-
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {event?.id && (

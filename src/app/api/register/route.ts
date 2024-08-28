@@ -19,7 +19,7 @@ export async function POST(NextRequest: NextRequest) {
 	}
 
 	const adult = dayjs().diff(dayjs(birthday), "year") >= 13;
-	console.log({adult});
+	
 	if (typeof adult !== 'boolean') {
 		return NextResponse.json({ error: "Adult must be a boolean" }, { status: 400 });
 	}
