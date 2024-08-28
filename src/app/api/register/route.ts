@@ -2,6 +2,7 @@ import prisma from "@utils/db";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import dayjs from "dayjs";
+import { EMAIL_VALID } from "@constants/message-schema";
 
 export async function POST(NextRequest: NextRequest) {
 	const { username, email, password, confirmPassword, birthday } = await NextRequest.json();
@@ -11,7 +12,7 @@ export async function POST(NextRequest: NextRequest) {
 	}
 
 	if (email === "" || !email.includes("@")) {
-		return NextResponse.json({ error: "Veuillez courriel valide" }, { status: 400 });
+		return NextResponse.json({ error: EMAIL_VALID }, { status: 400 });
 	}
 
 	if (password !== confirmPassword) {
@@ -19,7 +20,7 @@ export async function POST(NextRequest: NextRequest) {
 	}
 
 	const adult = dayjs().diff(dayjs(birthday), "year") >= 13;
-	
+
 	if (typeof adult !== 'boolean') {
 		return NextResponse.json({ error: "Adult must be a boolean" }, { status: 400 });
 	}

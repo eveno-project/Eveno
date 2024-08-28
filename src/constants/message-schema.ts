@@ -1,5 +1,5 @@
 export const PASSWORD_MIN = 'Doit contenir 8 caractères minimum';
-export const EMAIL = 'Veuillez entrée un courriel valide';
+export const EMAIL_VALID = 'Veuillez entrée un courriel valide';
 export const USERNAME_REQUIRED = "Le nom d'utilisateur est requis";
 export const PASSWORD_REQUIRED = 'Le mot de passe est requis';
 export const CONFIRM_PASSWORD = 'Les deux mots de passe doivent être identiques';
