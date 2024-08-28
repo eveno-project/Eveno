@@ -230,7 +230,7 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                         <Select
                             {...field}
                             multiple
-                            value={field.value.map(tag => tag.id) || []}
+                            value={field.value?.map(tag => tag.id) || []}
                             onChange={(event) => {
                                 const selectedValues = event.target.value as number[];
                                 const selectedTags = selectedValues.map(id => ({ id }));
