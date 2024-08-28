@@ -75,7 +75,7 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                 <Box sx={{ flex: '1 1' }}></Box>
                 {
                     session && hasMyEvent && (
-                        <Button href="/" variant="contained" endIcon={<Add />} sx={{ marginX: 1 }}>
+                        <Button href="/event/create" variant="contained" endIcon={<Add />} sx={{ marginX: 1 }}>
                             Créer un événement
                         </Button>
                     )
