@@ -1,0 +1,17 @@
+name: Restrict Merge to Main from Stage Only
+run-name: ${{ github.actor }} trying to merge to main
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  restrict-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is from stage
+        run: |
+          if [ "${{ github.head_ref }}" != "stage" ]; then
+            echo "Merges to main are only allowed from the stage branch."
+            exit 1
+          fi
