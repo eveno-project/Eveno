@@ -11,6 +11,7 @@ env:
   NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
   REPO_OWNER: ${{ secrets.REPO_OWNER }}
   REPO_NAME: ${{ secrets.REPO_NAME }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   test-and-build:
