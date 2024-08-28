@@ -4,7 +4,7 @@ import Carousel from "@components/carousel/carousel";
 import EventFormDelete from "@components/form/event-form-delete";
 import EventFormFollow from "@components/form/event-form-follow";
 import EventFormValidate from "@components/form/event-form-validate";
-import { Box, Typography, Paper, Button, Toolbar } from "@mui/material";
+import { Box, Typography, Paper, Button, Toolbar, Chip } from "@mui/material";
 import DateFormatter from "@services/date";
 import Link from "next/link";
 import CommentList from "./comment/list";
@@ -91,6 +91,14 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         canFollow && (
                             <EventFormFollow event={event} follow={follow} />
                         )
+                    }
+                </Box>
+                <Box component="article" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2}}>
+                    {
+                        event.tags && event.tags.map((tag, index) => (
+                           //chip component from material ui
+                            <Chip key={index} label={tag.name} />
+                        ))
                     }
                 </Box>
             </Box>
