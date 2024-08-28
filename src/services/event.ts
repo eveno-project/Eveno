@@ -5,6 +5,8 @@ import EventDto from "@dto/event-dto";
 import Mapper from "@utils/mapper";
 import { redirect } from 'next/navigation';
 import Localization from "@interfaces/localization";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@lib/auth";
 
 const userSelect = {
     id: true,
@@ -182,6 +184,9 @@ export async function unFollow(eventId: number, userId: number): Promise<void> {
 
 export async function getById(id: number): Promise<Event> {
     try {
+        const session = await getServerSession(authOptions);
+        const userId = session?.user.id;
+
         const event = await prisma.event.findUnique({
             where: { id: +id },
             include: {
@@ -226,6 +231,10 @@ export async function getById(id: number): Promise<Event> {
 
         if (!event) {
 			throw new Error("Event not found");
+        }
+
+        if (!event.published && event.user.id !== userId) {
+            redirect("/");
         }
 
         if (!event.user || !event.user.id) {

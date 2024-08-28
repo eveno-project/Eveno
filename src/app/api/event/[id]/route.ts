@@ -4,6 +4,7 @@ import { authOptions } from "@lib/auth";
 import { updateEventSchema } from '@validators/event.schema';
 import { getServerSession } from "next-auth";
 import { ZodIssue } from 'zod';
+import { Role } from "@constants/role";
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
     const parsedId = parseInt(params.id);
@@ -13,7 +14,8 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
         if (session && session.user) {
             // verify that the user is the owner of the event
             const event = await getById(parsedId);
-            if (event.userId !== session.user.id) {
+
+            if (event.user.id !== session.user.id) {
                 return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
             }
 
@@ -41,6 +43,10 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
         const session = await getServerSession(authOptions);
         if (!session || !session.user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (session.user.role !== Role.ADMIN) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         }
 
         const parsedId = parseInt(params.id);
