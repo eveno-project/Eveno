@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     data = {
         ...data,
-        labels: [...(data.labels || []), "bug"],
+        labels: [...(data.labels || []), "bug report"],
     };
 
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
