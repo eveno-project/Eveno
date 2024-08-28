@@ -1,12 +1,11 @@
 "use client";
 
 import UserSession from "@interfaces/sessionUser";
-import { Avatar, Box, Button, Card, CardContent, Container, Paper, Typography } from "@mui/material";
-
-import SessionUser from "@interfaces/sessionUser";
+import { Avatar, Box, Button, CardContent, Paper, Typography } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import Grid from "@mui/material/Unstable_Grid2";
 import DeleteAccountModal from "@components/users/delete-modal/delete-modal";
+import { Role } from "@constants/role";
 
 export default function Profile({ user }: { user: UserSession }) {
 
@@ -31,10 +30,10 @@ export default function Profile({ user }: { user: UserSession }) {
 								{user?.email}
 							</Typography>
 							<Typography variant="body1" color="textSecondary">
-								{ user?.role === 2 ? "Rôle: Administrateur" : "Rôle: Utilisateur" }
+								{ user?.role === Role.USER ? "Rôle: Administrateur" : "Rôle: Utilisateur" }
 							</Typography>
 							<Box sx={{ mt: 3 }}>
-								<Button variant="contained" color="primary" href="/profile/edit/password" >
+								<Button variant="contained" color="warning" href="/profile/edit/password" >
 									Modifier le mot de passe
 								</Button>
 							</Box>

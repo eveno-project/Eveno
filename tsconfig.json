@@ -31,6 +31,9 @@
       "@constants/*": [
         "./src/constants/*"
       ],
+      "@contexts/*": [
+        "./src/contexts/*"
+      ],
       "@dto/*": [
         "./src/interfaces/dto/*.ts"
       ],

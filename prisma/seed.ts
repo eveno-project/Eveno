@@ -95,7 +95,7 @@ async function main() {
                 password: await bcrypt.hash('Whacky-Snowman2-Untoasted-Provided', 10),
                 role: {
                     connect: {
-                        id: 2
+                        id: 1
                     }
                 },
                 token: randomUUID(),

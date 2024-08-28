@@ -4,8 +4,6 @@ import { getServerSession } from 'next-auth';
 import EventDetail from "@components/event/event-detail";
 import { getById } from "@services/event";
 
-
-
 export default async function Page({ params }: { params: { id: number } }) {
     const session = await getServerSession(authOptions);
     const event = await getById(params.id);

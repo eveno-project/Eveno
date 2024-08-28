@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 			return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 		}
 
-		const users = await getUsersByRole('user');
+		const users = await getUsersByRole(1);
 
 		return NextResponse.json(users, { status: 200 });
 	} catch (error) {
