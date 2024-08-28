@@ -23,3 +23,14 @@ jobs:
       - name: Run Build
         run: npm run build
         continue-on-error: false # Fail if build fails
+
+      # Install GitHub CLI
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh
+
+      # Auto-merge PR if tests and build succeed
+      - name: Auto-Merge PR
+        if: success() # This ensures the step only runs if all previous steps succeeded
+        run: gh pr merge ${{ github.event.pull_request.number }} --merge --admin
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token to authenticate with the CLI
