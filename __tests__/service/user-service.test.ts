@@ -24,6 +24,7 @@ describe('User Service', () => {
 				username: 'testuser',
 				role: 'User',
 				adult: true,
+				image: null,
 				password: 'hashedPassword'
 			};
 
@@ -38,6 +39,7 @@ describe('User Service', () => {
 					email: true,
 					role: true,
 					adult: true,
+					image: true,
 					password: true,
 				},
 				where: { email: 'test@example.com' },
@@ -57,6 +59,7 @@ describe('User Service', () => {
 					email: true,
 					role: true,
 					adult: true,
+					image: true,
 					password: true,
 				},
 				where: { email: 'nonexistent@example.com' },
