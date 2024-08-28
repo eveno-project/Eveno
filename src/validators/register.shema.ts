@@ -1,4 +1,4 @@
-import { BIRTHDAY_ERROR_TYPE, BIRTHDAY_MIN_AGE, BIRTHDAY_REQUIRED, CONFIRM_PASSWORD, CONFIRM_PASSWORD_REQUIRED, EMAIL, MIN_PASSWORD, USERNAME_REQUIRED } from '@constants/message-schema';
+import { BIRTHDAY_ERROR_TYPE, BIRTHDAY_MIN_AGE, BIRTHDAY_REQUIRED, CONFIRM_PASSWORD, CONFIRM_PASSWORD_REQUIRED, EMAIL, PASSWORD_MIN, USERNAME_REQUIRED } from '@constants/message-schema';
 import dayjs from 'dayjs';
 import { z } from 'zod';
 
@@ -16,7 +16,7 @@ const RegisterBaseSchema = z.object({
 });
 
 const RegisterPasswordSchema = z.object({
-    password: z.string().min(8, { message: MIN_PASSWORD}),
+    password: z.string().min(8, { message: PASSWORD_MIN}),
     confirm: z.string({ message: CONFIRM_PASSWORD_REQUIRED}),
 });
 

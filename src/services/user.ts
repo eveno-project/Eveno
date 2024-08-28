@@ -1,25 +1,28 @@
 import prisma from "@utils/db";
-import Role from "@interfaces/role";
 
 export async function getUser(email: string) {
-	return prisma.user.findUnique({
+	return await prisma.user.findUnique({
 		where: {email: email},
 	});
 }
 
-export async function getUsersByRole(roleName: string) {
-
-	return prisma.user.findMany({
+export async function getUsersByRole(id: number) {
+	return await prisma.user.findMany({
+		select: {
+			id: true,
+			username: true,
+			email: true
+		},
 		where: {
 			role: {
-				name: roleName
+				id
 			}
 		},
 	});
 }
 
 export async function deleteUser(username: string) {
-	return prisma.user.delete({
+	return await prisma.user.delete({
 		where: {username: username},
 	});
 }

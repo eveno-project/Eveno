@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from 'react';
 import { Button, Modal, Box, Typography, TextField, IconButton } from '@mui/material';
-import { Delete as DeleteIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Close as CloseIcon, Close } from '@mui/icons-material';
 
 import UserSession from "@interfaces/sessionUser";
 import { signOut } from "next-auth/react";
+import { PASSWORD_REQUIRED, REPORT, USER_DELETE_ERROR_ACCOUNT, USER_DELETE_ERROR_PASSWORD, USER_ERROR_NOT_FOUND } from '@constants/message-schema';
 
 export default function DeleteAccountModal({ user }: { user: UserSession }) {
 	const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ export default function DeleteAccountModal({ user }: { user: UserSession }) {
 
 	const handleDelete = async () => {
 		if (password === '') {
-			setError('Le mot de passe est requis');
+			setError(PASSWORD_REQUIRED);
 			return;
 		}
 
@@ -41,10 +42,10 @@ export default function DeleteAccountModal({ user }: { user: UserSession }) {
 				});
 
 			} else {
-				setError('Échec de la suppression. Mot de passe incorrect.');
+				setError(USER_DELETE_ERROR_PASSWORD);
 			}
 		} catch (error) {
-			setError('Erreur lors de la suppression du compte.');
+			setError(USER_DELETE_ERROR_ACCOUNT + REPORT);
 		}
 	};
 
@@ -77,7 +78,7 @@ export default function DeleteAccountModal({ user }: { user: UserSession }) {
 							Supprimer le compte
 						</Typography>
 						<IconButton onClick={handleClose}>
-							<CloseIcon />
+							<Close />
 						</IconButton>
 					</Box>
 					<Typography id="delete-account-modal-description" sx={{ mt: 2 }}>

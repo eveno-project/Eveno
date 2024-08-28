@@ -1,3 +1,4 @@
+import { Role } from "@constants/role";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -12,7 +13,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(url);
       }
   
-      if (token.role !== 2) {
+      if (token.role !== Role.ADMIN) {
         return NextResponse.redirect(url);
       }
     }

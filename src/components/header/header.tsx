@@ -23,6 +23,8 @@ import { getSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Route from "@enums/routes.enum";
+import { Role } from "@constants/role";
 
 export default function Header({ hasLoginLayout = false, hasAdminLayout = false }: { hasLoginLayout?: boolean, hasAdminLayout?: boolean }) {
     const pathname = usePathname();
@@ -151,7 +153,7 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                                                 </ListItemButton>
                                             </List>
                                             <Divider />
-                                            {session.user.role === 2 && (
+                                            {session.user.role === Role.ADMIN && (
                                                 <List
                                                     subheader={
                                                         <ListSubheader component="div" id="nested-list-subheader">
@@ -199,7 +201,7 @@ export default function Header({ hasLoginLayout = false, hasAdminLayout = false 
                                                 <Button
                                                     fullWidth
                                                     variant="outlined"
-                                                    onClick={() => handleNavigation('/authentication/login')}
+                                                    onClick={() => handleNavigation(Route.LOGIN)}
                                                 >
                                                     Se connecter
                                                 </Button>

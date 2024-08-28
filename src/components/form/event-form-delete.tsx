@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import Event from "@interfaces/event";
 import { useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, FormHelperText, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Delete, Login } from "@mui/icons-material";
 
@@ -49,7 +49,7 @@ export default function EventFormDelete({ event }: { event: Event }) {
 				>
 					<span>Supprimer</span>
 				</LoadingButton>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <FormHelperText >{error}</FormHelperText>}
         </Box>
     );
 }
