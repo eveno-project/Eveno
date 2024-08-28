@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function Card({ event, width = 200, index }: { event: Partial<Event>, width?: number, index: number }) {
     const { title, images, localizations, linkTicketing, id } = event;
     return (
-        <Zoom in={!!id} style={{ transitionDelay: `${index === 0 ? 100 : 200+(index * 50)}ms` }}>
+        <Zoom in={!!id} style={{ transitionDelay: `${index === 0 ? 100 : 200 + (index * 50)}ms` }}>
             <Paper sx={{ maxWidth: width }}>
                 <Box>
                     {
@@ -18,11 +18,12 @@ export default function Card({ event, width = 200, index }: { event: Partial<Eve
                                 src={images[0].src}
                                 alt={images[0].alt}
                             />
-                        ) : (<Image width={width} height={140} src="/fou/nothing-image.png" alt="Nothing image"  />)
+                        ) : (<Image width={width} height={140} src="/fou/nothing-image.png" alt="Nothing image" />)
                     }
                 </Box>
                 <Box sx={{
-                    padding: 1
+                    padding: 1,
+                    marginY: 1
                 }}>
                     <Box sx={{
                         whiteSpace: 'nowrap',
@@ -31,17 +32,20 @@ export default function Card({ event, width = 200, index }: { event: Partial<Eve
                     }}>
                         <Typography>{title}</Typography>
                     </Box>
-                    {
-                        localizations && localizations.length !== 0 ? (
-                            <Typography className={styles.address}>{localizations[0].address}, {localizations[0].zipCode} {localizations[0].city}</Typography>
-                        ) : (
-                            <Typography className={styles.address}>À distance </Typography>
-                        )
-                    }
+                    <Box sx={{ height: 32 }}>
+                        {
+                            localizations && localizations.length !== 0 && localizations[0].zipCode !== 0 ? (
+                                <Typography className={styles.address}>{localizations[0].address}, {localizations[0].zipCode} {localizations[0].city}</Typography>
+                            ) : (
+                                <Typography className={styles.address}>À distance </Typography>
+                            )
+                        }
+                    </Box>
                 </Box>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
+                    padding: 1
                 }}>
                     <Button href={`/event/${event.id}`}>Voir plus</Button>
                 </Box>

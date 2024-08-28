@@ -49,8 +49,6 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
         }
     };
 
-    // useEffect(() => { console.log({ errors }) }, [errors]);
-
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {event?.id && (
@@ -232,7 +230,7 @@ export default function EventForm({ event, tags, userId }: { event?: Event, tags
                         <Select
                             {...field}
                             multiple
-                            value={field.value.map(tag => tag.id) || []}
+                            value={field.value?.map(tag => tag.id) || []}
                             onChange={(event) => {
                                 const selectedValues = event.target.value as number[];
                                 const selectedTags = selectedValues.map(id => ({ id }));

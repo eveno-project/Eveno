@@ -89,10 +89,10 @@ model Event {
 model EventTag {
   id      Int @id @default(autoincrement())
   eventId Int
-  tagId   Int
+  tagId   Int?
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  tag   Tag   @relation(fields: [tagId], references: [id])
+  tag   Tag?   @relation(fields: [tagId], references: [id], onDelete: Cascade)
 }
 
 model EventNetwork {
