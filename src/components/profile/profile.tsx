@@ -30,7 +30,7 @@ export default function Profile({ user }: { user: UserSession }) {
 								{user?.email}
 							</Typography>
 							<Typography variant="body1" color="textSecondary">
-								{ user?.role === Role.USER ? "Rôle: Administrateur" : "Rôle: Utilisateur" }
+								{ user?.role === Role.ADMIN ? "Rôle: Administrateur" : "Rôle: Utilisateur" }
 							</Typography>
 							<Box sx={{ mt: 3 }}>
 								<Button variant="contained" color="warning" href="/profile/edit/password" >

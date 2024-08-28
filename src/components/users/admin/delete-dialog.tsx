@@ -39,8 +39,7 @@ export function UserDeleteDialog({ user, delete: deleteUser, isLoading }: { user
 				<DialogTitle>Supprimer le compte de <span>{user.email}</span></DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-slide-description">
-						Êtes-vous sûr de vouloir supprimer le compte de ${user.email} ? Cette action est irréversible.
-						Veuillez entrer votre mot de passe pour confirmer.
+						Êtes-vous sûr de vouloir supprimer le compte de {user.email} ? Cette action est irréversible.
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

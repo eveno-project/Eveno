@@ -17,7 +17,10 @@ export interface UserAuth extends AdapterUser {
     id: string,
     username: string,
     email: string,
-    roleId: number,
+    role: {
+        id: number
+    },
     adult: boolean
     emailVerified: Date | null
+    image: string | null
 }

@@ -8,7 +8,8 @@ export async function getUser(email: string) {
 			email: true,
 			role: true,
 			adult: true,
-			password: true
+			password: true,
+			image: true,
 		},
 		where: {email: email},
 	});

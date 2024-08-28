@@ -6,6 +6,7 @@ import { JWT } from "next-auth/jwt";
 import { UserAuth } from "@interfaces/user";
 import Route from "@enums/routes.enum";
 import { INVALID_CREDENTIALS } from "@constants/message-schema";
+import { AdapterUser } from "next-auth/adapters";
 
 export const authOptions : NextAuthOptions = {
 	providers: [
@@ -30,7 +31,8 @@ export const authOptions : NextAuthOptions = {
 				if (user && credentials?.password) {
 					const isValid = await compare(credentials.password, user.password);
 					if (isValid) {
-						return user;
+						const {password, ...result} = user;
+						return result;
 					}
 				}
 
@@ -46,16 +48,17 @@ export const authOptions : NextAuthOptions = {
 		signIn: Route.LOGIN,
 	},
 	callbacks: {
-		async jwt(params : {token: JWT; user: UserAuth | User} ) {
-			if (params.user) {
-				params.user = params.user as UserAuth;
-				params.token.id = parseInt(params.user.id, 10)
-				params.token.username = params.user.username
-				params.token.email = params.user.email
-				params.token.role = params.user.roleId
-				params.token.adult = params.user.adult
+		async jwt({ token, user }: { token: JWT; user?: UserAuth | User | AdapterUser | undefined }) {
+			if (user) {
+				const userAuth = user as UserAuth;
+				token.id = parseInt(userAuth.id, 10);
+				token.username = userAuth.username;
+				token.email = userAuth.email;
+				token.role = userAuth.role.id;
+				token.adult = userAuth.adult;
+				token.picture = userAuth.image;
 			}
-			return params.token
+			return token;
 		},
 		async session({ session, token }) {
 
@@ -65,6 +68,7 @@ export const authOptions : NextAuthOptions = {
 				session.user.username = token.username;
 				session.user.email = token.email;
 				session.user.adult = token.adult;
+				session.user.image = token.picture;
 			}
 			return session;
 		},
