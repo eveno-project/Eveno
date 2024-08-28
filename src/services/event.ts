@@ -229,7 +229,7 @@ export async function getById(id: number): Promise<Event> {
         }) as unknown as EventDto;
 
         if (!event) {
-			throw new Error("Event not found");
+			redirect("/");
         }
 
         if (!event.published && event.user.id !== userId) {
