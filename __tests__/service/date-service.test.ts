@@ -15,7 +15,7 @@ describe('DateFormatter', () => {
 	describe('complete', () => {
 		it('should format the date correctly in French locale', () => {
 			const formattedDate = DateFormatter.complete(sampleDate);
-			const expectedDate = dayjs(sampleDate).format('dddd DD MMMM YYYY à HH');
+			const expectedDate = dayjs(sampleDate).format('dddd DD MMMM YYYY à HH') + 'h';
 
 			expect(formattedDate).toBe(expectedDate);
 		});
@@ -24,7 +24,7 @@ describe('DateFormatter', () => {
 			const dateInDifferentTimezone = new Date('2023-08-27T00:00:00-05:00');
 			const formattedDate = DateFormatter.complete(dateInDifferentTimezone);
 
-			const expectedDate = dayjs(dateInDifferentTimezone).format('dddd DD MMMM YYYY à HH');
+			const expectedDate = dayjs(dateInDifferentTimezone).format('dddd DD MMMM YYYY à HH') + 'h';
 			expect(formattedDate).toBe(expectedDate);
 		});
 
@@ -32,7 +32,7 @@ describe('DateFormatter', () => {
 			const midnightDate = new Date('2023-08-27T00:00:00Z');
 			const formattedDate = DateFormatter.complete(midnightDate);
 
-			const expectedDate = dayjs(midnightDate).format('dddd DD MMMM YYYY à HH');
+			const expectedDate = dayjs(midnightDate).format('dddd DD MMMM YYYY à HH') + 'h';
 			expect(formattedDate).toBe(expectedDate);
 		});
 	});

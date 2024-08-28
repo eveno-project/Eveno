@@ -4,7 +4,7 @@ import Carousel from "@components/carousel/carousel";
 import EventFormDelete from "@components/form/event-form-delete";
 import EventFormFollow from "@components/form/event-form-follow";
 import EventFormValidate from "@components/form/event-form-validate";
-import { Box, Typography, Paper, Button, Toolbar } from "@mui/material";
+import { Box, Typography, Paper, Button, Toolbar, Chip } from "@mui/material";
 import DateFormatter from "@services/date";
 import Link from "next/link";
 import CommentList from "./comment/list";
@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { Role } from "@constants/role";
 import { isUserSubscribed } from "@services/event";
+import { EventDeleteDialog } from "@components/event/delete-dialog";
 
 interface EventDetailProps {
     session: Session | null;
@@ -33,7 +34,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
 
             setCanValid(!!!event.isValid && session.user.role === Role.ADMIN);
             setCanFollow(!!event?.isValid);
-            if ((session.user.role !== Role.ADMIN) && event.isValid === false) {
+            if ((session.user.role !== Role.ADMIN) && event.isValid === false && event.user.id !== session.user.id) {
                 redirect('/');
             }
             if (session.user) {
@@ -60,7 +61,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                 }
                 {
                     isMyEvent && (
-                        <EventFormDelete event={event} />
+                        <EventDeleteDialog event={event}/>
                     )
                 }
             </Toolbar>
@@ -91,6 +92,14 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         canFollow && (
                             <EventFormFollow event={event} follow={follow} />
                         )
+                    }
+                </Box>
+                <Box component="article" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2}}>
+                    {
+                        event.tags && event.tags.map((tag, index) => (
+                           //chip component from material ui
+                            <Chip key={index} label={tag.name} />
+                        ))
                     }
                 </Box>
             </Box>

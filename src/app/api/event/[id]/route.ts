@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { deleteOne, getById, update } from "@services/event";
 import { authOptions } from "@lib/auth";
-import { updateEventSchema } from '@validators/event.schema';
 import { getServerSession } from "next-auth";
-import { ZodIssue } from 'zod';
+import { Role } from "@constants/role";
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
     const parsedId = parseInt(params.id);
@@ -11,6 +10,13 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
 
     try {
         if (session && session.user) {
+            // verify that the user is the owner of the event
+            const event = await getById(parsedId);
+
+            if (event?.user.id !== session.user.id) {
+                return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+            }
+
             const success = await deleteOne(parsedId, session.user.id);
 
             if (success) {
@@ -32,6 +38,15 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (session.user.role !== Role.ADMIN) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
+
         const parsedId = parseInt(params.id);
         const event = await getById(parsedId);
         return NextResponse.json({ data: event }, { status: 200 });
@@ -80,7 +95,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
             delete data.localizations;
         }
 
-        const event = await update(data);
+        const { adult, ...result } = data;
+
+        const event = await update({...result, adult: !adult });
         return NextResponse.json({ success: event });
 
     } catch (error) {

@@ -24,7 +24,6 @@ export default async function Page({ params }: { params: { id: number } }) {
     return (
         <Container component="main" maxWidth="md">
             <EventForm event={event} tags={tags} userId={session.user.id} />
-            <EventFormDelete event={event} />
         </Container>
     );
 };

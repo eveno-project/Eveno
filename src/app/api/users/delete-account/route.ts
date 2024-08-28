@@ -1,8 +1,15 @@
 import prisma from "@utils/db";
 import { NextRequest, NextResponse } from "next/server";
 import { compare } from "bcryptjs";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@lib/auth";
 
 export async function DELETE(req: NextRequest) {
+	const session = await getServerSession(authOptions);
+	if (!session || !session.user) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
 	if (req.method !== "DELETE") {
 		return NextResponse.json({ message: 'Méthode non autorisée' }, { status: 405 });
 	}
@@ -10,12 +17,9 @@ export async function DELETE(req: NextRequest) {
 	try {
 		const { password, email } = await req.json();
 
-
-
 		if(!password || !email){
 			return NextResponse.json({ message: 'Mauvaise reqûete' }, { status: 400 });
 		}
-
 
 		const user = await prisma.user.findUnique({
 			where: {

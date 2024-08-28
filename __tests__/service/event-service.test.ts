@@ -5,9 +5,8 @@ import {
 	getByTagName, getManyByName, isUserSubscribed
 } from '@services/event';
 import prisma from '@utils/db';
-import Event from '@interfaces/event';
-import EventSubscribe from '@interfaces/EventSubscribe';
 import Mapper from '@utils/mapper';
+import { redirect } from "next/navigation";
 
 // Mock the Prisma client
 jest.mock('@utils/db', () => ({
@@ -34,6 +33,14 @@ jest.mock('@utils/db', () => ({
 	},
 }));
 
+jest.mock('next/navigation', () => ({
+	redirect: jest.fn(),
+}));
+
+jest.mock('next-auth/next', () => ({
+	getServerSession: jest.fn(),
+}));
+
 jest.mock('@utils/mapper', () => ({
 	toEvent: jest.fn(),
 }));
@@ -45,7 +52,7 @@ describe('Event Service', () => {
 
 	describe('create', () => {
 		it('should create a new event', async () => {
-			const event: Event = {
+			const event = {
 				id: 1,
 				title: 'Test Event',
 				description: 'Test Description',
@@ -84,7 +91,7 @@ describe('Event Service', () => {
 
 	describe('update', () => {
 		it('should update an existing event', async () => {
-			const event: Event = {
+			const event = {
 				id: 1,
 				title: 'Updated Event',
 				description: 'Updated Description',
@@ -133,10 +140,12 @@ describe('Event Service', () => {
 	});
 
 	describe('getById', () => {
-		it('should throw an error if event is not found', async () => {
+		it('should redirect if event is not found', async () => {
 			(prisma.event.findUnique as jest.Mock).mockResolvedValue(null);
 
-			await expect(getById(999)).rejects.toThrow('Event not found');
+			await getById(999);  // Call the function
+
+			expect(redirect).toHaveBeenCalledWith('/');  // Check if redirect was called with "/"
 		});
 
 		it('should throw an error if no user is assigned', async () => {
@@ -343,7 +352,7 @@ describe('Event Service', () => {
 
 	describe('isUserSubscribed', () => {
 		it('should check if a user is subscribed to an event', () => {
-			const eventSubscribes: EventSubscribe[] = [
+			const eventSubscribes = [
 				{ user: { id: 1 }, event: { id: 1 }, type: 'follow' },
 				{ user: { id: 2 }, event: { id: 2 }, type: 'follow' },
 			];

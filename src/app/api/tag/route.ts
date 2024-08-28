@@ -4,6 +4,9 @@ import { NextApiRequest } from "next";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { z } from "zod";
 import { TAG_NAME_EXISTING } from "@constants/message-schema";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@lib/auth";
+import { Role } from "@constants/role";
 
 
 export async function GET() {
@@ -17,6 +20,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (session.user.role !== Role.ADMIN) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
         const body = await request.json();
         const { name } = body;
         if (!name) {
@@ -33,6 +44,14 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || !session.user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (session.user.role !== Role.ADMIN) {
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        }
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
         if (!id) {
