@@ -64,6 +64,9 @@
       "@validators/*": [
         "./src/validators/*"
       ],
+      "@api/*": [
+        "./src/app/api/*"
+      ],
     }
   },
   "include": [
