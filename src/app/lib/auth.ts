@@ -4,6 +4,8 @@ import { compare } from "bcryptjs";
 import { getUser } from "@services/user";
 import { JWT } from "next-auth/jwt";
 import { UserAuth } from "@interfaces/user";
+import Route from "@enums/routes.enum";
+import { INVALID_CREDENTIALS } from "@constants/message-schema";
 
 export const authOptions : NextAuthOptions = {
 	providers: [
@@ -22,7 +24,7 @@ export const authOptions : NextAuthOptions = {
 				const user = await getUser(credentials.email);
 
 				if (!user) {
-					throw new Error('Email ou mot de passe incorrect');
+					throw new Error(INVALID_CREDENTIALS);
 				}
 
 				if (user && credentials?.password) {
@@ -41,7 +43,7 @@ export const authOptions : NextAuthOptions = {
 		strategy: 'jwt',
 	},
 	pages: {
-		signIn: '/login',
+		signIn: Route.LOGIN,
 	},
 	callbacks: {
 		async jwt(params : {token: JWT; user: UserAuth | User} ) {

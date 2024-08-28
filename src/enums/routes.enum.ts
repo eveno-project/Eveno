@@ -1,5 +1,5 @@
 enum Route {
-    LOGIN = '/authentication/login'
+    LOGIN = '/login',
 }
 
 export default Route;

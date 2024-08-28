@@ -1,3 +1,4 @@
+import { DATE_END_NOT_INF_STARTED, DATE_NOT_INF_NOW, EVENT_DESCRIPTION_MIN, EVENT_TITLE_MIN, IMAGE_ALT_MIN, IMAGE_ALT_REQUIRED, IMAGE_SRC_REQUIRED, IMAGE_SRC_VALID, LOCALIZATION_ADDRESS_INVALID, LOCALIZATION_ADDRESS_REQUIRED, LOCALIZATION_CITY_INVALID, LOCALIZATION_CITY_REQUIRED, LOCALIZATION_REGION_INVALID, LOCALIZATION_REGION_REQUIRED, LOCALIZATION_REQUIRED, LOCALIZATION_ZIPCODE_INVALID, LOCALIZATION_ZIPCODE_REQUIRED } from "@constants/message-schema";
 import { Message } from "@mui/icons-material";
 import path from "path";
 import { argv } from "process";
@@ -5,13 +6,13 @@ import { z } from "zod";
 
 const stringToZodDate = z.preprocess((arg) => {
     if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
-}, z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), { message: "La date ne peut-être inférieur à aujourd’hui" }));
+}, z.date().min(new Date(new Date().setHours(0, 0, 0, 0)), { message: DATE_NOT_INF_NOW }));
 
 const localizationBaseSchema = z.object({
-    address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }).optional(),
-    city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }).optional(),
-    regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: "Région invalid" }).optional(),
-    zipCode: z.number().refine((arg) => arg === 0 || arg.toString().length === 5, { message: "Code postal invalid" }).optional(),
+    address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: LOCALIZATION_ADDRESS_INVALID }).optional(),
+    city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: LOCALIZATION_CITY_INVALID }).optional(),
+    regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: LOCALIZATION_REGION_INVALID }).optional(),
+    zipCode: z.number().refine((arg) => arg === 0 || arg.toString().length === 5, { message: LOCALIZATION_ZIPCODE_INVALID }).optional(),
     longitude: z.number().optional(),
     latitude: z.number().optional(),
 }).refine(data => {
@@ -19,14 +20,14 @@ const localizationBaseSchema = z.object({
     const filledFields = [address, city, regionName, zipCode].filter(field => field !== undefined && field !== "" && field !== 0);
     return filledFields.length === 0 || filledFields.length === 4;
 }, {
-    message: "Si un champ de localisation est rempli, tous les champs de localisation sont requis",
+    message: LOCALIZATION_REQUIRED,
     path: ["localizations.address"]
 });
 
 const eventBaseSchema = z.object({
     adult: z.boolean(),
-    title: z.string().min(3, { message: "minimum 3 caractères" }),
-    description: z.string().min(20, { message: "mininum 20 caractères" }),
+    title: z.string().min(3, { message: EVENT_TITLE_MIN }),
+    description: z.string().min(20, { message: EVENT_DESCRIPTION_MIN }),
     startDate: stringToZodDate,
     endDate: stringToZodDate,
     publishedAt: z.date().optional(),
@@ -40,8 +41,8 @@ const eventBaseSchema = z.object({
 });
 
 const imageSchema = z.object({
-    alt: z.string().min(1, { message: "Le texte alternatif de l'image est requis" }),
-    src: z.string().url({ message: "L'URL de l'image doit être valide" }),
+    alt: z.string({ message: IMAGE_ALT_REQUIRED }).min(5, { message: IMAGE_ALT_MIN }),
+    src: z.string({ message: IMAGE_SRC_REQUIRED }).url({ message: IMAGE_SRC_VALID }),
 });
 
 export const eventSchema = eventBaseSchema
@@ -51,7 +52,7 @@ export const eventSchema = eventBaseSchema
     })
     .refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
-        message: "La date de fin ne peut-être inférieur à la date de départ",
+        message: DATE_END_NOT_INF_STARTED,
     });
 
 export const updateEventSchema = eventBaseSchema
@@ -59,16 +60,16 @@ export const updateEventSchema = eventBaseSchema
         id: z.number(),
         localizations: z.object({
             id: z.number(),
-            address: z.string().refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: "Adresse invalid" }).optional(),
-            city: z.string().refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: "Ville invalid" }).optional(),
-            regionName: z.string().refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: "Région invalid" }).optional(),
-            zipCode: z.number().refine((arg) => arg.toString().length === 5, { message: "Code postal invalid" }).optional(),
-            longitude: z.number().optional(),
-            latitude: z.number().optional(),
+            address: z.string({ message: LOCALIZATION_ADDRESS_REQUIRED}).refine((arg) => arg !== undefined && arg.length >= 9 || arg.length === 0, { message: LOCALIZATION_ADDRESS_INVALID }).optional(),
+            city: z.string({ message: LOCALIZATION_CITY_REQUIRED}).refine((arg) => arg !== undefined && arg.length >= 2 || arg.length === 0, { message: LOCALIZATION_CITY_INVALID }).optional(),
+            regionName: z.string({ message: LOCALIZATION_REGION_REQUIRED}).refine((arg) => arg !== undefined && arg.length > 2 || arg.length === 0, { message: LOCALIZATION_REGION_INVALID }).optional(),
+            zipCode: z.number({ message: LOCALIZATION_ZIPCODE_REQUIRED}).refine((arg) => arg.toString().length === 5, { message: LOCALIZATION_ZIPCODE_INVALID }).optional(),
+            longitude: z.number({ message: LOCALIZATION_ADDRESS_REQUIRED}).optional(),
+            latitude: z.number({ message: LOCALIZATION_ADDRESS_REQUIRED}).optional(),
         }).optional()
     }).refine((arg) => (arg.startDate <= arg.endDate), {
         path: ["endDate"],
-        message: "La date de fin ne peut-être inférieur à la date de départ",
+        message: DATE_END_NOT_INF_STARTED,
     });
 
 export type EventValue = z.infer<typeof eventSchema>;

@@ -1,25 +1,19 @@
 'use client';
 
-import commentEvent from "@actions/event/comment";
-import deleteEvent from "@actions/event/delete";
-import followEvent from "@actions/event/follow";
-import validateEvent from "@actions/event/validate";
 import Carousel from "@components/carousel/carousel";
-import EventFormComment from "@components/form/event-form-comment";
 import EventFormDelete from "@components/form/event-form-delete";
 import EventFormFollow from "@components/form/event-form-follow";
 import EventFormValidate from "@components/form/event-form-validate";
-import { Box, Typography, Paper, Button } from "@mui/material";
+import { Box, Typography, Paper, Button, Toolbar } from "@mui/material";
 import DateFormatter from "@services/date";
 import Link from "next/link";
 import CommentList from "./comment/list";
 import { Session } from "next-auth";
 import style from './event.module.css';
 import Event from "@interfaces/event";
-import { CloudRounded, EventAvailableRounded, EventBusyRounded, LocationOnRounded, NoAdultContentRounded } from "@mui/icons-material";
+import { CloudRounded, Edit, EventAvailableRounded, EventBusyRounded, LocationOnRounded, NoAdultContentRounded } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import EventSubscribe from "@interfaces/EventSubscribe";
 import { Role } from "@constants/role";
 import { isUserSubscribed } from "@services/event";
 
@@ -37,9 +31,7 @@ export default function EventDetail({ session, event }: EventDetailProps) {
         if (event && session) {
             setIsMyEvent(event.user.id === session?.user.id);
 
-            setCanValid(!!!event.isValid && session.user.role === Role.ADMIN
-                // && event.user.id !== session?.user.id
-            );
+            setCanValid(!!!event.isValid && session.user.role === Role.ADMIN);
             setCanFollow(!!event?.isValid);
             if ((session.user.role !== Role.ADMIN) && event.isValid === false) {
                 redirect('/');
@@ -55,6 +47,23 @@ export default function EventDetail({ session, event }: EventDetailProps) {
 
     return (
         <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Toolbar component="section" sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                {
+                    canValid && (
+                        <EventFormValidate event={event} />
+                    )
+                }
+                {
+                    isMyEvent && (
+                        <Button type="button" variant="contained" color="secondary" href={`/event/${event.id}/edit`} endIcon={<Edit />}>Éditer</Button>
+                    )
+                }
+                {
+                    isMyEvent && (
+                        <EventFormDelete event={event} />
+                    )
+                }
+            </Toolbar>
             <Box component="section" className={style.header}>
                 <Box component="article">
                     {
@@ -65,10 +74,10 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         )
                     }
                 </Box>
-                <Box component="article" sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box component="article" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {
                         event.adult && (
-                            <NoAdultContentRounded className={style.icon} />
+                            <NoAdultContentRounded color="error" sx={{ alignSelf: 'center', marginTop: '3px' }} />
                         )
                     }
                     <Typography variant="h4" fontWeight="bold" >{event.title}</Typography>
@@ -76,6 +85,11 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                     {
                         (event.linkTicketing != undefined) && (
                             <Button variant="contained" type="button" href={event.linkTicketing}>Reserver</Button>
+                        )
+                    }
+                    {
+                        canFollow && (
+                            <EventFormFollow event={event} follow={follow} />
                         )
                     }
                 </Box>
@@ -86,9 +100,9 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         {
                             event && event.localizations && event.localizations?.length !== 0 && event.localizations[0].zipCode > 0 ? (
                                 <>
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <LocationOnRounded width="8" />
-                                        <Typography variant="h6">Addresse</Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <LocationOnRounded fontSize="small" />
+                                        <Typography variant="h6">Lieu</Typography>
                                     </Box>
                                     <Box sx={{ margin: 0 }}>
                                         {
@@ -122,48 +136,20 @@ export default function EventDetail({ session, event }: EventDetailProps) {
                         </Box>
                     </Box>
                 </Box>
-                <Box component="article">
+                <Box component="article" sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                     <Typography variant="h6">Description</Typography>
                     <Typography>{event.description}</Typography>
                 </Box>
             </Box>
-            <Box component="section">
-                {
-                    canValid && (
-                        <EventFormValidate event={event} />
-                    )
-                }
-                {
-                    isMyEvent && (
-                        <Link href={`/event/${event.id}/edit`}>
-                            <Button type="button" >modifier</Button>
-                        </Link>
-                    )
-                }
-                {
-                    canFollow && (
-                        <EventFormFollow action={followEvent} event={event} doYouFollow={follow} />
-                    )
-                }
-                {
-                    isMyEvent && (
-                        <EventFormDelete action={deleteEvent} event={event} />
-                    )
-                }
-            </Box>
             <Box component="section" className={style.body}>
-                {
-                    session && (
-                        <EventFormComment event={event} />
-                    )
-                }
+
             </Box>
             <Box component="section" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="h6">Commentaires</Typography>
                 <Paper>
                     {
                         !!event.comments && (
-                            <CommentList comments={event.comments} />
+                            <CommentList session={session} event={event} />
                         )
                     }
                 </Paper>
