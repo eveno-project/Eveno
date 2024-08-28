@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Container, ButtonGroup, Button, Box, TextField } from "@mui/material";
 import List from "@components/event/list/list";

@@ -6,41 +6,8 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import { Role } from '@constants/role';
 import { UserDeleteDialog } from './admin/delete-dialog';
 
-type UserDisplay = Pick<User, 'id' | 'username' | 'email'>;
 
-export default function UsersTable() {
-	const [users, setUsers] = useState<UserDisplay[]>([]);
-	const [isLoading, setLoading] = useState(false);
-
-	useEffect(() => {
-		const get = async () => {
-			const response = await fetch('/api/user');
-			if (response.ok) {
-				const data = (await response.json()) as UserDisplay[];
-				setUsers(data);
-			} else {
-				console.error('erreur');
-			}
-		}
-		get();
-	}, []);
-
-	const handleDelete = async (username: string) => {
-		try {
-			setLoading(true);
-			const res = await fetch(`/api/user/${username}`, { method: 'DELETE' });
-			if (res.ok) {
-				setUsers(users.filter(user => user.username !== username));
-			} else {
-				console.error('Failed to delete user');
-			}
-			setLoading(false);
-		} catch (error) {
-			setLoading(false);
-			console.error('Error deleting user:', error);
-		}
-	};
-
+export default function UsersTable({ users, handleDelete }: { users: Pick<User, 'id' | 'username' | 'email'>[], handleDelete: (username: string) => Promise<void>}) {
 	return (
 		<Box component="section">
 			<TableContainer component={Paper}>
@@ -69,7 +36,6 @@ export default function UsersTable() {
 										<UserDeleteDialog
 											user={user}
 											delete={handleDelete}
-											isLoading={isLoading}
 										/>
 									</TableCell>
 								</TableRow>

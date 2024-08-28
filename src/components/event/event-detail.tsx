@@ -6,7 +6,6 @@ import EventFormFollow from "@components/form/event-form-follow";
 import EventFormValidate from "@components/form/event-form-validate";
 import { Box, Typography, Paper, Button, Toolbar } from "@mui/material";
 import DateFormatter from "@services/date";
-import Link from "next/link";
 import CommentList from "./comment/list";
 import { Session } from "next-auth";
 import style from './event.module.css';

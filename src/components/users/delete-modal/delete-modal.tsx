@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from 'react';
 import { Button, Modal, Box, Typography, TextField, IconButton } from '@mui/material';
 import { Delete as DeleteIcon, Close } from '@mui/icons-material';

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Filter from "@components/filter/filter";
 import { Container } from "@mui/material";

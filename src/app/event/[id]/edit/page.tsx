@@ -1,5 +1,4 @@
 import updateEvent from "@actions/event/update";
-import deleteEvent from "@actions/event/delete";
 import EventForm from "@components/form/event-form";
 import EventFormDelete from "@components/form/event-form-delete";
 import { getById } from "@services/event";

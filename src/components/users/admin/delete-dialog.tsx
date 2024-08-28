@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
   });
 
-export function UserDeleteDialog({ user, delete: deleteUser, isLoading }: { user: Pick<User, 'id' | 'email' | 'username'>, delete: (username: string) => Promise<void>, isLoading: boolean }) {
+export function UserDeleteDialog({ user, delete: deleteUser }: { user: Pick<User, 'id' | 'email' | 'username'>, delete: (username: string) => Promise<void>}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -46,8 +46,6 @@ export function UserDeleteDialog({ user, delete: deleteUser, isLoading }: { user
 				<DialogActions>
                 <LoadingButton
                     color="error"
-					disabled={isLoading}
-					loading={isLoading}
                     endIcon={<Delete />}
 					loadingPosition="end"
 					variant="contained"
@@ -55,7 +53,7 @@ export function UserDeleteDialog({ user, delete: deleteUser, isLoading }: { user
 				>
 					<span>Supprimer</span>
 				</LoadingButton>
-					<Button disabled={isLoading} onClick={handleClose}>Annuler</Button>
+					<Button onClick={handleClose}>Annuler</Button>
 				</DialogActions>
 			</Dialog>
 		</>
