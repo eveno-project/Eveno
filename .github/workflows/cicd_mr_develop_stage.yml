@@ -20,6 +20,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      pull-requests: write # Ensure the job can interact with pull requests
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
@@ -37,14 +38,6 @@ jobs:
       # Build step (blocking)
       - name: Run Build
         run: npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          REPO_OWNER: ${{ secrets.REPO_OWNER }}
-          REPO_NAME: ${{ secrets.REPO_NAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: false # Fail if build fails
 
       # Install GitHub CLI
@@ -56,4 +49,4 @@ jobs:
         if: success() # This ensures the step only runs if all previous steps succeeded
         run: gh pr merge ${{ github.event.pull_request.number }} --merge --admin
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Use GitHub token to authenticate with the CLI
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # Use PAT instead of default GITHUB_TOKEN
