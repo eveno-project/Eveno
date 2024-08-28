@@ -108,9 +108,9 @@ const config: Config = {
     '^@enums/(.*)$': '<rootDir>/src/enums/$1',
     '^@types/(.*)$': '<rootDir>/src/types/$1',
     '^@api/(.*)$': '<rootDir>/src/app/api/$1',
+    '^@lib/(.*)$': '<rootDir>/src/app/lib/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
   },
-
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
 
