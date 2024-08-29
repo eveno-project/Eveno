@@ -7,7 +7,6 @@ import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
 export default function ResetPassword({ session }: { session: Session }) {
-
 	const [user, setUser] = useState<SessionUser | null>(null);
 	const [oldPassword, setOldPassword] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
