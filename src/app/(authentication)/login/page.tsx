@@ -8,6 +8,7 @@ import { Box, Container, FormControl, FormHelperText, IconButton, InputAdornment
 import { LoginValues, LoginSchema } from '@validators/login.schema';
 import { VisibilityOff, Visibility, Login } from '@mui/icons-material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { INVALID_CREDENTIALS } from "@constants/message-schema";
 
 export default function LoginPage() {
 	const {
@@ -35,7 +36,7 @@ export default function LoginPage() {
 			password,
 		});
 		if (signInResponse?.error) {
-			setSignInResponseError(signInResponse.error);
+			setSignInResponseError(INVALID_CREDENTIALS);
 		} else {
 			router.push('/');
 		}

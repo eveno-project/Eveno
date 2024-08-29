@@ -93,7 +93,7 @@ export async function update(event: Event) {
                     image: JSON.stringify(event.images),
                     title: event.title,
                     linkTicketing: event.linkTicketing,
-                    isValid: event.isValid,
+                    isValid: false,
                     user: {
                         connect: { id: event.user.id }
                     },

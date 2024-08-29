@@ -8,6 +8,13 @@ export async function middleware(req: NextRequest) {
     const token = await getToken({ req, secret });
     const url = req.nextUrl.clone();
 
+    if(url.pathname.startsWith("/report")) {
+        if (!token) {
+            url.pathname = "/login";
+            return NextResponse.redirect(url);
+        }
+    }
+
     if (url.pathname.startsWith("/admin")) {
       if (!token) {
           url.pathname = "/";
@@ -23,5 +30,5 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-export const config = { matcher: ["/admin/:path*"] };
+export const config = { matcher: ["/admin/:path*", "/report"] };
 
